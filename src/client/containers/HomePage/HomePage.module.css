@@ -1,0 +1,54 @@
+.Box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.BoxInput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 10%;
+  width: 60%;
+  border: 1px solid tomato;
+  box-sizing: border-box;
+  background-color: rgba(10, 10, 10, 0.781);
+}
+
+.BoxTitle {
+  color: #d40e0e;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 10px;
+  margin: 5%;
+  font-weight: bold;
+}
+
+.Invalid {
+  color: red;
+}
+
+.InvalidField {
+  border: 1px solid red;
+  background-color: #fda49a;
+}
+
+.Logo img {
+  display: flex;
+  margin: 10px;
+  width: 100%;
+}
+
+@media (min-width: 500px) {
+  .Logo img {
+    display: flex;
+    width: 50%;
+  }
+}

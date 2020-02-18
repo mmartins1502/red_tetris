@@ -1,0 +1,35 @@
+.Grid {
+  display: flex;
+  flex-direction: column;
+  width: 40vh;
+  /* max-width: 500px; */
+  height: 80vh;
+  border: 2px solid tomato;
+  box-sizing: border-box;
+  box-shadow: transparent;
+  background-color: rgba(10, 10, 10, 0.781);
+}
+
+.Line {
+  display: flex;
+  width: 100%;
+  height: 5%;
+}
+
+.Case {
+  width: 100%;
+  height: 100%;
+  color: rgba(10, 10, 10, 0.514);
+  border: rgba(255, 255, 255, 0.253) solid 1px;
+}
+
+@media (max-width: 499px) {
+  .Grid {
+    width: 30vh;
+    height: 60vh;
+  }
+
+  .Case {
+    border: 0.2px solid rgba(255, 255, 255, 0.253);
+  }
+}
