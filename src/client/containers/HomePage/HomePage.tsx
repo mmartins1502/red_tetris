@@ -6,10 +6,11 @@ import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 
 //COMPONENTS
-import Formulaire from "../../components/HomePage/Formulaire";
+import Formulaire2 from "../../components/HomePage/Forrmulaire2";
 import * as actions from "../../store/actions/socket";
 import { IAppState } from "../../store";
 import { Redirect } from "react-router-dom";
+import Logo from "../../components/UI/Logo/Logo";
 
 // CSS & IMG
 const classes = require("./HomePage.module.css");
@@ -51,10 +52,10 @@ const HomePage: FC<IProps> = (props) => {
 
   return (
     <div className={classes.Box}>
-      <h1>HomePage</h1>
+      <Logo />
       <div className={classes.BoxInput}>
-        <h2 className={classes.BoxTitle}>WELCOME ON RED TETRIS</h2>
-        <Formulaire onFormValidated={(formData) => formValidation(formData)} />
+        <h2 className={classes.BoxTitle}>WELCOME</h2>
+        <Formulaire2 onFormValidated={(formData) => formValidation(formData)} />
         <p className={classes.Invalid}>{props.error}</p>
       </div>
     </div>

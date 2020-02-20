@@ -8,6 +8,7 @@ import { Room } from "../../models/Room";
 
 import PlayersList from "../../components/Room/roomPlayersList";
 import RoomActions from "../../components/Room/roomActions";
+import Logo from "../../components/UI/Logo/Logo";
 // import Game from "../Game/Game";
 
 import * as actions from "../../store/actions/index";
@@ -43,14 +44,17 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
   };
 
   let playersAndButtons = (
-    <div className={classes.Players_actions}>
-      <PlayersList room={props.room ? props.room : null} player={me} />
-      <RoomActions
-        room={props.room ? props.room : null}
-        me={me}
-        leaveRoom={() => leaveRoom()}
-        startGame={() => startGame()}
-      />
+    <div className={classes.Box}>
+      <h4>ROOM #{props.room ? props.room.id : null}</h4>
+      <div className={classes.Players_actions}>
+        <PlayersList room={props.room} player={me} />
+        <RoomActions
+          room={props.room}
+          me={me}
+          leaveRoom={() => leaveRoom()}
+          startGame={() => startGame()}
+        />
+      </div>
     </div>
   );
 
@@ -62,9 +66,8 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
 
   return (
     <div className={classes.RoomHome}>
-      <h1>ROOM #{props.room ? props.room.id : null} HOME PAGE</h1>
+      <Logo />
       {playersAndButtons}
-      {/* {props.room ? playersAndButtons : props.error} */}
     </div>
   );
 };

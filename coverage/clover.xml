@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1582195348010" clover="3.2.0">
+  <project timestamp="1582195348010" name="All files">
+    <metrics statements="45" coveredstatements="44" conditionals="10" coveredconditionals="9" methods="8" coveredmethods="8" elements="63" coveredelements="61" complexity="0" loc="45" ncloc="45" packages="3" files="3" classes="3"/>
+    <package name="HomePage">
+      <metrics statements="30" coveredstatements="30" conditionals="8" coveredconditionals="8" methods="6" coveredmethods="6"/>
+      <file name="Formulaire.tsx" path="/Users/mmartins/projects/Red_Tetris_git/src/client/components/HomePage/Formulaire.tsx">
+        <metrics statements="30" coveredstatements="30" conditionals="8" coveredconditionals="8" methods="6" coveredmethods="6"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="70" count="4" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="90" count="4" type="stmt"/>
+        <line num="91" count="4" type="stmt"/>
+        <line num="92" count="8" type="stmt"/>
+        <line num="98" count="4" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="104" count="8" type="stmt"/>
+        <line num="113" count="2" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="UI.Button">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="Button.tsx" path="/Users/mmartins/projects/Red_Tetris_git/src/client/components/UI/Button/Button.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="UI.Input">
+      <metrics statements="11" coveredstatements="10" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <file name="Input.tsx" path="/Users/mmartins/projects/Red_Tetris_git/src/client/components/UI/Input/Input.tsx">
+        <metrics statements="11" coveredstatements="10" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="8" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+        <line num="21" count="8" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="42" count="8" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

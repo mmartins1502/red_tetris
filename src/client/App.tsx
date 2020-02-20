@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 // import { Task } from "./models/task";
 import HomePage from "./containers/HomePage/HomePage";
@@ -9,14 +9,12 @@ const App: FC<any> = () => {
   // const [tasks, setTasks] = useState<Task[]>([]);
 
   return (
-    <div>
-      <Switch>
-        <Route path="/" exact component={HomePage} />
-        <Route path="/:room[:playerName]" exact component={RoomHome} />
-        {/* <Route path="/game" exact component={Game} /> */}
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/" exact component={HomePage} />
+      <Route path="/:room[:playerName]" exact component={RoomHome} />
+      {/* <Route path="/game" exact component={Game} /> */}
+    </Switch>
   );
 };
 
-export default withRouter(App);
+export default App;

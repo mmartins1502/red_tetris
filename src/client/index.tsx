@@ -9,11 +9,11 @@ import * as serviceWorker from "./serviceWorker";
 import configureStore, { IAppState } from "./store/index";
 import { Store } from "redux";
 
-interface IProps {
+export interface IProps {
   store: Store<IAppState>;
 }
 
-const Root: React.SFC<IProps> = (props) => {
+export const Root: React.SFC<IProps> = (props) => {
   return (
     <BrowserRouter>
       <Provider store={props.store}>

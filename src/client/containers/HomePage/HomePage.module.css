@@ -14,9 +14,12 @@
   margin: auto;
   margin-top: 10%;
   width: 60%;
-  border: 1px solid tomato;
+  max-width: 500px;
+  border-radius: 10px;
+  border: 1px solid #d40e0e;
   box-sizing: border-box;
-  background-color: rgba(10, 10, 10, 0.781);
+  box-shadow: transparent;
+  background-color: rgba(255, 255, 255, 0.781);
 }
 
 .BoxTitle {
@@ -32,7 +35,7 @@
 }
 
 .Invalid {
-  color: red;
+  color: #d40e0e;
 }
 
 .InvalidField {
