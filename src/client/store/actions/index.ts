@@ -4,5 +4,6 @@ export {
   roomHomeInfos,
   leaveRoom,
   refreshRoom,
-  startGame
-} from "./socket";
+  startGame,
+  ready
+} from "./roomActions";

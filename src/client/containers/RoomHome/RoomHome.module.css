@@ -6,20 +6,6 @@
   color: #d40e0e;
 }
 
-/* .PlayersList {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10%;
-  padding: 10% auto;
-  width: 60%;
-  border: 1px solid tomato;
-  box-sizing: border-box;
-  box-shadow: transparent;
-  background-color: rgba(10, 10, 10, 0.781);
-} */
-
 .Box {
   margin-top: 10%;
   display: flex;
@@ -40,5 +26,4 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  /* align-items: center; */
 }

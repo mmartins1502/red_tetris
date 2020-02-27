@@ -6,14 +6,18 @@ import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 
 //COMPONENTS
-import Formulaire2 from "../../components/HomePage/Forrmulaire2";
-import * as actions from "../../store/actions/socket";
+import Formulaire from "../../components/HomePage/Formulaire";
+import * as actions from "../../store/actions/roomActions";
 import { IAppState } from "../../store";
 import { Redirect } from "react-router-dom";
 import Logo from "../../components/UI/Logo/Logo";
 
+import { Alert } from "@material-ui/lab";
+import Slide from "@material-ui/core/Slide";
+
 // CSS & IMG
-const classes = require("./HomePage.module.css");
+// const classes = require("./HomePage.module.css");
+import "./HomePage.css";
 
 interface IProps {
   room: Room;
@@ -24,17 +28,19 @@ interface IProps {
   onRoomNumber: () => void;
 }
 
-const HomePage: FC<IProps> = (props) => {
+export const HomePage: FC<IProps> = (props) => {
   console.log("[HomePage] props", props);
   const [state, setState] = useState<any>({
     redirect: false
   });
 
+  const { onCreatePlayerId } = props;
+
   useEffect(() => {
     console.log("[useEffect] call onCreatePlayerId()");
-    props.onCreatePlayerId();
+    onCreatePlayerId();
     // eslint-disable-next-line
-  }, []);
+  }, [onCreatePlayerId]);
 
   const formValidation = (formData: Player) => {
     formData.id = props.player.id;
@@ -50,14 +56,31 @@ const HomePage: FC<IProps> = (props) => {
     return <Redirect to={`/${props.room.id}[${props.player.name}]`} />;
   }
 
+  // let error = props.error ? (
+  //   <Slide direction="left" in={props.error !== ""} mountOnEnter unmountOnExit>
+  //     <Alert style={{ margin: "10px" }} severity="error">
+  //       {props.error}
+  //     </Alert>
+  //   </Slide>
+  // ) : null;
+
   return (
-    <div className={classes.Box}>
+    <div className="Box">
       <Logo />
-      <div className={classes.BoxInput}>
-        <h2 className={classes.BoxTitle}>WELCOME</h2>
-        <Formulaire2 onFormValidated={(formData) => formValidation(formData)} />
-        <p className={classes.Invalid}>{props.error}</p>
+      <div className="BoxInput">
+        <h2 className="BoxTitle">WELCOME</h2>
+        <Formulaire onFormValidated={(formData) => formValidation(formData)} />
       </div>
+      <Slide
+        direction="left"
+        in={props.error !== ""}
+        mountOnEnter
+        unmountOnExit
+      >
+        <Alert style={{ margin: "10px" }} severity="error">
+          {props.error}
+        </Alert>
+      </Slide>
     </div>
   );
 };

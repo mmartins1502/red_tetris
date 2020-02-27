@@ -4,8 +4,10 @@ module.exports = {
   roots: ["<rootDir>/src/client"],
   moduleNameMapper: {
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-      "<rootDir>/__mocks__/fileMock.js",
-    "\\.(scss|sass|css)$": "identity-obj-proxy"
+      "<rootDir>/mocks/fileMock.js",
+
+    // "\\.(scss|sass|css)$": "identity-obj-proxy",
+    "\\.(css|less)$": "<rootDir>/mocks/styleMock.js"
   },
 
   // Jest transformations -- this adds support for TypeScript
@@ -13,6 +15,7 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
+  resolver: null,
 
   // Runs special logic, such as cleaning up components
   // when using React Testing Library and adds special

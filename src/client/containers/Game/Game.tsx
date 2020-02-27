@@ -4,17 +4,11 @@ import { connect } from "react-redux";
 import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 
-import Button from "../../components/UI/Button/Button";
-
 import * as actions from "../../store/actions/index";
 import { IAppState } from "../../store";
 import { History } from "history";
 import { withRouter } from "react-router";
 import Grid from "../../components/Game/Grid/Grid";
-
-// import Grid from "../../components/Grid/Grid";
-// import arrows from "../../assets/images/keyArrows.png";
-// import space from "../../assets/images/space_bar.png";
 
 const classes = require("./Game.module.css");
 
@@ -36,9 +30,7 @@ const Game: FC<IProps> = (props) => {
 
   return (
     <div>
-      <Button btnType="Danger" clicked={() => leaveRoom()}>
-        QUIT
-      </Button>
+      <button onClick={() => leaveRoom()}>QUIT</button>
       <div className={classes.Game}>
         <Grid />
         <div className={classes.Side}>

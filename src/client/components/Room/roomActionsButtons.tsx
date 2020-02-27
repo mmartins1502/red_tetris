@@ -7,11 +7,12 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { makeStyles } from "@material-ui/core/styles";
 
-interface IProps {
+export interface IProps {
   me: Player;
   room: Room;
   startGame: () => void;
   leaveRoom: () => void;
+  ready: () => void;
 }
 
 const roomActions: SFC<IProps> = (props) => {
@@ -26,12 +27,27 @@ const roomActions: SFC<IProps> = (props) => {
 
   const classes = usestyles();
 
-  let start =
-    props.room.star.id !== props.me.id ? null : (
-      <Button onClick={props.startGame} style={{ color: "#d40e0e" }}>
+  let startAndReady =
+    props.room.star.id !== props.me.id ? (
+      <Button
+        name="ready"
+        data-testid="ready"
+        onClick={props.ready}
+        style={{ color: "#d40e0e" }}
+      >
+        READY
+      </Button>
+    ) : (
+      <Button
+        name="start"
+        data-testid="start"
+        onClick={props.startGame}
+        style={{ color: "#d40e0e" }}
+      >
         START
       </Button>
     );
+
   return (
     <div className={classes.root}>
       <ButtonGroup
@@ -40,8 +56,13 @@ const roomActions: SFC<IProps> = (props) => {
         aria-label="vertical outlined primary button group"
         style={{ border: "#d40e0e" }}
       >
-        {start}
-        <Button onClick={props.leaveRoom} style={{ color: "#d40e0e" }}>
+        {startAndReady}
+        <Button
+          name="quit"
+          data-testid="quit"
+          onClick={props.leaveRoom}
+          style={{ color: "#d40e0e" }}
+        >
           QUIT
         </Button>
       </ButtonGroup>

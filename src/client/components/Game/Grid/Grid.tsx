@@ -10,7 +10,7 @@ const Grid = () => {
   return (
     <div className={classes.Grid}>
       {lines.map((i) => {
-        return <Line />;
+        return <Line key={i} />;
       })}
     </div>
   );

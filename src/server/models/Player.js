@@ -3,6 +3,7 @@ module.exports = class Player {
     this.id = id;
     this.name = name;
     this.room = room;
+    this.state = false;
   }
 
   setName(name) {

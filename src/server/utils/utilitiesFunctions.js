@@ -33,15 +33,17 @@ const findRoomByPlayerId = (id, players, rooms) => {
   return room;
 };
 
-const refresh = (socket, room, error) => {
-  console.log("room", room);
+const refresh = (socket, room, error, all) => {
+  console.log("[refresh : Room Infos]", room);
   if (room) {
-    room.inGame
-      ? socket.emit("RefreshRoom", { room: room, error: error })
-      : null;
     room.players.map((player) => {
-      socket.to(player.id).emit("RefreshRoom", { room: room, error: error });
+      return socket
+        .to(player.id)
+        .emit("RefreshRoom", { room: room, error: error });
     });
+    if (all) {
+      socket.emit("RefreshRoom", { room: room, error: error });
+    }
   }
 };
 

@@ -14,22 +14,15 @@ function renderFormulaire(props: Partial<Props> = {}) {
 }
 
 describe("<Formulaire />", () => {
-  test("should display a blank login form, with name and room", async () => {
-    const { findByTestId } = renderFormulaire();
-
-    const formulaire = await findByTestId("login-form");
-
-    expect(formulaire).toHaveFormValues({});
-  });
-
-  test("should submit the form with username, password, and remember", async () => {
+  test("should test name and room input and the submit button", async () => {
     const onFormValidated = jest.fn();
-    const { findByTestId } = renderFormulaire({
+    const { getByTestId } = renderFormulaire({
       onFormValidated
     });
-    const name = await findByTestId("name");
-    const roomChoice = await findByTestId("roomChoice");
-    const submit = await findByTestId("submit");
+
+    const name = await getByTestId("name");
+    const roomChoice = await getByTestId("room");
+    const submit = await getByTestId("submit");
 
     fireEvent.change(name, { target: { value: "test Name" } });
     fireEvent.change(roomChoice, { target: { value: "test Room" } });
@@ -38,7 +31,8 @@ describe("<Formulaire />", () => {
     expect(onFormValidated).toHaveBeenCalledWith({
       id: "",
       name: "test Name",
-      room: "test Room"
+      room: "test Room",
+      state: false
     });
   });
 });

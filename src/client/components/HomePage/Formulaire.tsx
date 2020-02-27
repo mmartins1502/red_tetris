@@ -1,124 +1,76 @@
-import React, { useState, FC, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 
 import { Player } from "../../models/Player";
 
-import Input from "../../components/UI/Input/Input";
-import Button from "../UI/Button/Button";
-
-const classes = require("./Formulaire.module.css");
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import "./Formulaire.css";
 
 export interface Props {
   onFormValidated: (formData: Player) => void;
 }
 
-const Formulaire: FC<Props> = (props: Props) => {
-  const [state, setstate] = useState({
-    form: {
-      name: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          placeholder: "Name"
-        },
-        value: "",
-        touched: false
-      },
-      roomChoice: {
-        elementType: "input",
-        elementConfig: {
-          type: "text",
-          placeholder: "#Room"
-        },
-        value: "",
-        touched: false
-      }
-    },
-    formIsValid: false
+const Forrmulaire2: React.FC<Props> = (props) => {
+  const [state, setState] = useState<Player>({
+    id: "",
+    name: "",
+    room: "",
+    state: false
   });
 
-  const inputChangedHandler = (
-    e: ChangeEvent<HTMLInputElement>,
-    inputIdentifer: string
-  ) => {
-    const updatedForm = {
-      ...state.form
-    };
-    let updatedFormElement;
-    inputIdentifer === "name"
-      ? (updatedFormElement = {
-          ...updatedForm.name
-        })
-      : (updatedFormElement = {
-          ...updatedForm.roomChoice
-        });
-    updatedFormElement.value = e.target.value;
-
-    updatedFormElement.touched = true;
-    inputIdentifer === "name"
-      ? (updatedForm.name = updatedFormElement)
-      : (updatedForm.roomChoice = updatedFormElement);
-
-    let formIsValid = true;
-
-    setstate({
+  const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setState({
       ...state,
-      form: updatedForm,
-      formIsValid: formIsValid
+      name: e.target.value
     });
   };
 
-  const formHandler = (props: Props, e: FormEvent) => {
+  const changeRoomHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      room: e.target.value
+    });
+  };
+
+  const formHandler = (e: FormEvent) => {
     e.preventDefault();
-
-    const formData: Player = {
-      id: "",
-      name: "",
-      room: ""
-    };
-
-    for (let formElementIdentifer in state.form) {
-      if (formElementIdentifer === "name") {
-        formData.name = state.form.name.value;
-      } else {
-        formData.room = state.form.roomChoice.value;
-      }
-    }
-
+    const formData: Player = { ...state };
     props.onFormValidated(formData);
   };
 
-  const formElementsArray = [];
-  for (let key in state.form) {
-    formElementsArray.push({
-      id: key,
-      config: key === "name" ? state.form.name : state.form.roomChoice
-    });
-  }
-
   return (
-    <form
-      data-testid="login-form"
-      className={classes.Form}
-      onSubmit={(e) => formHandler(props, e)}
-    >
-      {formElementsArray.map((formElement) => (
-        <Input
-          key={formElement.id}
-          name={formElement.id}
-          elementType={formElement.config.elementType}
-          elementConfig={formElement.config.elementConfig}
-          value={formElement.config.value}
-          touched={formElement.config.touched}
-          changed={(e: ChangeEvent<HTMLInputElement>) =>
-            inputChangedHandler(e, formElement.id)
-          }
+    <form className="Form" noValidate autoComplete="off">
+      <div className="Input">
+        <TextField
+          inputProps={{
+            "data-testid": "name"
+          }}
+          color="secondary"
+          label="Name"
+          variant="outlined"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changeNameHandler(e)}
         />
-      ))}
-      <Button btnType="Danger" disabled={!state.formIsValid}>
-        PLAY
+      </div>
+      <div className="Input">
+        <TextField
+          inputProps={{
+            "data-testid": "room"
+          }}
+          color="secondary"
+          label="Room"
+          variant="outlined"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changeRoomHandler(e)}
+        />
+      </div>
+      <Button
+        data-testid="submit"
+        onClick={(e: FormEvent) => formHandler(e)}
+        classes={{ label: "Button" }}
+      >
+        Go to room
       </Button>
     </form>
   );
 };
 
-export default Formulaire;
+export default Forrmulaire2;

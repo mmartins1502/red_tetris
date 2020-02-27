@@ -9,10 +9,11 @@ module.exports = class Room {
     playerId && playerName ? this.addPlayer(playerId, playerName) : null;
   }
 
-  addPlayer(playerId, playerName) {
+  addPlayer(playerId, playerName, playerState) {
     let player = {
       id: playerId,
-      name: playerName
+      name: playerName,
+      state: playerState
     };
     this.players.push(player);
     !this.star ? (this.star = player) : (this.star = this.players[0]);
@@ -36,6 +37,16 @@ module.exports = class Room {
       ? (this.star = this.players[0])
       : (rooms = rooms.filter((room) => room.id !== this.id));
     return rooms;
+  }
+
+  updatePlayer(updatedPlayer) {
+    this.players = this.players.map((player) => {
+      if (player.id === updatedPlayer.id) {
+        return { ...player, state: updatedPlayer.state };
+      } else {
+        return player;
+      }
+    });
   }
 
   endGame() {

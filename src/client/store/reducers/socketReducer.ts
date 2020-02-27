@@ -1,10 +1,9 @@
 import * as actionTypes from "../actions/actionTypes";
-// import { createPlayerId } from "./actions";
 
 import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 
-import { SocketActions } from "../actions/socket";
+import { RoomActions } from "../actions/roomActions";
 import { Reducer } from "redux";
 
 export interface iState {
@@ -16,7 +15,8 @@ const initialState: iState = {
   player: {
     id: "",
     name: "",
-    room: ""
+    room: "",
+    state: false
   },
   room: {
     id: "",
@@ -25,13 +25,14 @@ const initialState: iState = {
     star: {
       id: "",
       name: "",
-      room: ""
+      room: "",
+      state: false
     }
   },
   error: ""
 };
 
-export const socketReducer: Reducer<iState, SocketActions> = (
+export const socketReducer: Reducer<iState, RoomActions> = (
   state = initialState,
   action
 ) => {
@@ -44,7 +45,6 @@ export const socketReducer: Reducer<iState, SocketActions> = (
           id: action.payload
         }
       };
-    // return createPlayerId(state, action);
     case actionTypes.CHECK_ROOM:
       return state;
     case actionTypes.ROOM_AND_PLAYER:
@@ -53,11 +53,8 @@ export const socketReducer: Reducer<iState, SocketActions> = (
         player: action.player,
         room: action.room,
         error: action.error
-        // loading: false
       };
-    // return roomHome(state, action);
     case actionTypes.LEAVE_ROOM:
-      console.log("[REDUCER] LEAVE_ROOM");
       return {
         ...state,
         player: {
@@ -65,7 +62,8 @@ export const socketReducer: Reducer<iState, SocketActions> = (
           name: initialState.player.name,
           room: initialState.player.room
         },
-        room: { ...initialState.room }
+        room: { ...initialState.room },
+        error: initialState.error
       };
     case actionTypes.REFRESH_ROOM:
       return {
@@ -73,13 +71,11 @@ export const socketReducer: Reducer<iState, SocketActions> = (
         room: action.room,
         error: action.error
       };
-    // return refreshRoom(state, action);
     case actionTypes.START_GAME:
       return state;
-    // return startGame(state, action);
+    case actionTypes.READY:
+      return state;
     default:
       return state;
   }
 };
-
-// export default socketReducer;

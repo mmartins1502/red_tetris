@@ -20,8 +20,21 @@ export enum SocketActionTypes {
   ROOM_AND_PLAYER = "ROOM_AND_PLAYER",
   LEAVE_ROOM = "LEAVE_ROOM",
   REFRESH_ROOM = "REFRESH_ROOM",
-  START_GAME = "START_GAME"
+  START_GAME = "START_GAME",
+  READY = "READY"
 }
+
+const initialRoom: Room = {
+  id: "",
+  players: [],
+  inGame: false,
+  star: {
+    id: "",
+    name: "",
+    room: "",
+    state: false
+  }
+};
 
 interface createPlayerIdAction {
   event: string;
@@ -111,16 +124,7 @@ export const leaveRoom = (me: Player, room: Room) => {
     });
     dispatch({
       type: SocketActionTypes.LEAVE_ROOM,
-      room: {
-        id: "",
-        players: [],
-        inGame: false,
-        star: {
-          id: "",
-          name: "",
-          room: ""
-        }
-      }
+      room: initialRoom
     });
   };
 };
@@ -164,10 +168,28 @@ export const startGame = (room: Room) => {
   };
 };
 
-export type SocketActions =
+interface readyAction {
+  event: string;
+  emit: boolean;
+  handle: { player: Player; room: Room };
+  type: SocketActionTypes.READY;
+  player: Player;
+  room: Room;
+}
+
+export const ready = (me: Player, room: Room) => {
+  return {
+    event: "Ready",
+    emit: true,
+    handle: { player: me, room: room }
+  };
+};
+
+export type RoomActions =
   | createPlayerIdAction
   | checkRoomAction
   | roomHomeInfosAction
   | leaveRoomAction
   | refreshRoomAction
-  | startGameAction;
+  | startGameAction
+  | readyAction;
