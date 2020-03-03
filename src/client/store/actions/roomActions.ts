@@ -3,18 +3,9 @@ import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 import { Dispatch } from "redux";
 
-interface Res_roomInfos {
-  player: Player;
-  room: Room;
-  error: string;
-}
-
-interface Res_refreshRoom {
-  room: Room;
-  error: string;
-}
 
 export enum SocketActionTypes {
+  DEFAULT = "DEFAULT",
   CREATE_PLAYER_ID = "CREATE_PLAYER_ID",
   CHECK_ROOM = "CHECK_ROOM",
   ROOM_AND_PLAYER = "ROOM_AND_PLAYER",
@@ -36,9 +27,14 @@ const initialRoom: Room = {
   }
 };
 
+
+interface defaultAction {
+  type: SocketActionTypes.DEFAULT
+}
+
+// event: string;
+// handle: (data: string) => void;
 interface createPlayerIdAction {
-  event: string;
-  handle: (data: string) => void;
   type: SocketActionTypes.CREATE_PLAYER_ID;
   payload: string;
 }
@@ -46,26 +42,30 @@ interface createPlayerIdAction {
 export const createPlayerId = () => {
   console.log("[createPlayerId] action creator");
   return (dispatch: Dispatch) =>
-    dispatch({
-      type: actionTypes.CREATE_PLAYER_ID,
-      event: "CreatePlayerId",
-      handle: (data: string) => {
-        dispatch({
-          type: actionTypes.CREATE_PLAYER_ID,
-          payload: data
-        });
-      }
+  dispatch({
+    type: actionTypes.CREATE_PLAYER_ID,
+    event: "CreatePlayerId",
+    handle: (data: string) => {
+      dispatch({
+        type: actionTypes.CREATE_PLAYER_ID,
+        payload: data
+      });
+    }
     });
-};
+  };
+  
+  
+  ///////////////////////////////////////////////////////////////////////////
 
-interface checkRoomAction {
-  event: string;
-  emit: boolean;
-  handle: (formData: Player) => void;
-  type: SocketActionTypes.CHECK_ROOM;
-}
-
-export const checkRoom = (formData: Player) => {
+  interface checkRoomAction {
+    // event: string;
+    // emit: boolean;
+    handle:  Player
+    // handle: (formData: Player) => void;
+    type: SocketActionTypes.CHECK_ROOM;
+  }
+  
+  export const checkRoom = (formData: Player) => {
   console.log("[Room] action creator");
   return {
     event: "Room",
@@ -74,9 +74,18 @@ export const checkRoom = (formData: Player) => {
   };
 };
 
+///////////////////////////////////////////////////////////////////////////
+
+interface Res_roomInfos {
+  player: Player;
+  room: Room;
+  error: string;
+}
+
+
 interface roomHomeInfosAction {
-  event: string;
-  handle: (data: Res_roomInfos) => void;
+  // event: string;
+  // handle: (data: Res_roomInfos) => void;
   type: SocketActionTypes.ROOM_AND_PLAYER;
   player: Player;
   room: Room;
@@ -86,12 +95,12 @@ interface roomHomeInfosAction {
 export const roomHomeInfos = () => {
   console.log("[roomHomeInfos] action creator");
   return (dispatch: Dispatch) =>
-    dispatch({
-      type: actionTypes.ROOM_AND_PLAYER,
-      event: "Room",
-      handle: (data: Res_roomInfos) => {
-        dispatch({
-          type: actionTypes.ROOM_AND_PLAYER,
+  dispatch({
+    type: actionTypes.ROOM_AND_PLAYER,
+    event: "Room",
+    handle: (data: Res_roomInfos) => {
+      dispatch({
+        type: actionTypes.ROOM_AND_PLAYER,
           player: data.player,
           room: data.room,
           error: data.error
@@ -100,9 +109,14 @@ export const roomHomeInfos = () => {
     });
 };
 
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
 interface leaveRoomAction {
-  event: string;
-  emit: boolean;
+  // event: string;
+  // emit: boolean;
   handle: {
     player: Player;
     room: Room;
@@ -129,9 +143,18 @@ export const leaveRoom = (me: Player, room: Room) => {
   };
 };
 
+
+///////////////////////////////////////////////////////////////////////////
+
+
+interface Res_refreshRoom {
+  room: Room;
+  error: string;
+}
+
 interface refreshRoomAction {
-  event: string;
-  handle: (data: Res_refreshRoom) => void;
+  // event: string;
+  // handle: (data: Res_refreshRoom) => void;
   type: SocketActionTypes.REFRESH_ROOM;
   room: Room;
   error: string;
@@ -153,9 +176,13 @@ export const refreshRoom = () => {
     });
 };
 
+
+
+///////////////////////////////////////////////////////////////////////////
+
 interface startGameAction {
-  event: string;
-  emit: boolean;
+  // event: string;
+  // emit: boolean;
   handle: Room;
   type: SocketActionTypes.START_GAME;
 }
@@ -168,10 +195,14 @@ export const startGame = (room: Room) => {
   };
 };
 
+
+///////////////////////////////////////////////////////////////////////////
+
+
 interface readyAction {
-  event: string;
-  emit: boolean;
-  handle: { player: Player; room: Room };
+  // event: string;
+  // emit: boolean;
+  // handle: { player: Player; room: Room };
   type: SocketActionTypes.READY;
   player: Player;
   room: Room;
@@ -185,6 +216,9 @@ export const ready = (me: Player, room: Room) => {
   };
 };
 
+
+///////////////////////////////////////////////////////////////////////////
+
 export type RoomActions =
   | createPlayerIdAction
   | checkRoomAction
@@ -192,4 +226,4 @@ export type RoomActions =
   | leaveRoomAction
   | refreshRoomAction
   | startGameAction
-  | readyAction;
+  | readyAction | defaultAction;

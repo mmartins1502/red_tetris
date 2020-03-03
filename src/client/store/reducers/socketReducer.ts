@@ -10,6 +10,7 @@ export interface iState {
   player: Player;
   room: Room;
   error: string;
+  redirect: boolean;
 }
 const initialState: iState = {
   player: {
@@ -29,7 +30,8 @@ const initialState: iState = {
       state: false
     }
   },
-  error: ""
+  error: "",
+  redirect: false
 };
 
 export const socketReducer: Reducer<iState, RoomActions> = (
@@ -52,7 +54,8 @@ export const socketReducer: Reducer<iState, RoomActions> = (
         ...state,
         player: action.player,
         room: action.room,
-        error: action.error
+        error: action.error,
+        redirect: true
       };
     case actionTypes.LEAVE_ROOM:
       return {

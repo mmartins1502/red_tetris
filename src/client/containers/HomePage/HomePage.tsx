@@ -23,53 +23,38 @@ interface IProps {
   room: Room;
   player: Player;
   error: string;
+  redirect: boolean;
   onCreatePlayerId: () => void;
   onFormValidated: (formData: Player) => void;
   onRoomNumber: () => void;
 }
 
 export const HomePage: FC<IProps> = (props) => {
-  console.log("[HomePage] props", props);
-  const [state, setState] = useState<any>({
-    redirect: false
-  });
+  // console.log("[HomePage] props", props);
 
   const { onCreatePlayerId } = props;
 
   useEffect(() => {
-    console.log("[useEffect] call onCreatePlayerId()");
     onCreatePlayerId();
-    // eslint-disable-next-line
   }, [onCreatePlayerId]);
 
   const formValidation = (formData: Player) => {
     formData.id = props.player.id;
     props.onFormValidated(formData);
     props.onRoomNumber();
-    setState({
-      ...state,
-      redirect: true
-    });
+
   };
 
-  if (state.redirect && props.room.id && props.player.name && !props.error) {
+  if (props.redirect && props.room.id && props.player.name && !props.error) {
     return <Redirect to={`/${props.room.id}[${props.player.name}]`} />;
   }
-
-  // let error = props.error ? (
-  //   <Slide direction="left" in={props.error !== ""} mountOnEnter unmountOnExit>
-  //     <Alert style={{ margin: "10px" }} severity="error">
-  //       {props.error}
-  //     </Alert>
-  //   </Slide>
-  // ) : null;
 
   return (
     <div className="Box">
       <Logo />
       <div className="BoxInput">
         <h2 className="BoxTitle">WELCOME</h2>
-        <Formulaire onFormValidated={(formData) => formValidation(formData)} />
+        <Formulaire  onFormValidated={(formData) => formValidation(formData)} />
       </div>
       <Slide
         direction="left"
@@ -90,7 +75,8 @@ const mapStateToProps = (store: IAppState) => {
     playerId: store.socketState.player.id,
     player: store.socketState.player,
     room: store.socketState.room,
-    error: store.socketState.error
+    error: store.socketState.error,
+    redirect: store.socketState.redirect
   };
 };
 
