@@ -6,8 +6,6 @@ import HomePage from "./containers/HomePage/HomePage";
 import RoomHome from "./containers/RoomHome/RoomHome";
 
 const App: FC<any> = () => {
-  // const [tasks, setTasks] = useState<Task[]>([]);
-
   return (
     <Switch>
       <Route path="/" exact component={HomePage} />

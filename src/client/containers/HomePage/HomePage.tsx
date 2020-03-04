@@ -18,6 +18,7 @@ import Slide from "@material-ui/core/Slide";
 // CSS & IMG
 // const classes = require("./HomePage.module.css");
 import "./HomePage.css";
+import MusicButton from "../../components/UI/Music/MusicButton";
 
 interface IProps {
   room: Room;
@@ -49,22 +50,28 @@ export const HomePage: FC<IProps> = (props) => {
   }
 
   return (
-    <div className="Box">
-      <Logo />
-      <div className="BoxInput">
-        <h2 className="BoxTitle">WELCOME</h2>
-        <Formulaire onFormValidated={(formData) => formValidation(formData)} />
+    <div>
+      <MusicButton />
+
+      <div className="Box">
+        <Logo />
+        <div className="BoxInput">
+          <h2 className="BoxTitle">WELCOME</h2>
+          <Formulaire
+            onFormValidated={(formData) => formValidation(formData)}
+          />
+        </div>
+        <Slide
+          direction="left"
+          in={props.error !== "" && props.error !== undefined}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Alert style={{ margin: "10px" }} severity="error">
+            {props.error}
+          </Alert>
+        </Slide>
       </div>
-      <Slide
-        direction="left"
-        in={props.error !== "" && props.error !== undefined}
-        mountOnEnter
-        unmountOnExit
-      >
-        <Alert style={{ margin: "10px" }} severity="error">
-          {props.error}
-        </Alert>
-      </Slide>
     </div>
   );
 };
