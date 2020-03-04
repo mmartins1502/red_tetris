@@ -3,7 +3,6 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 // import {render, fireEvent, cleanup} from '@testing-library/react';
 
-
 import { HomePage } from "./HomePage";
 import Formulaire from "../../components/HomePage/Formulaire";
 import Logo from "../../components/UI/Logo/Logo";
@@ -40,7 +39,7 @@ describe("<HomePage />", () => {
       redirect: false,
       onCreatePlayerId: jest.fn(),
       onFormValidated: () => {},
-      onRoomNumber: () => {},
+      onRoomNumber: () => {}
     };
     wrapper = shallow(<HomePage {...props} />);
   });
@@ -64,15 +63,15 @@ describe("<HomePage />", () => {
         <h2>WELCOME</h2>,
         <Formulaire onFormValidated={() => {}} />,
         <Slide
-        direction="left"
-        in={props.error !== ""}
-        mountOnEnter
-        unmountOnExit
-      >
-        <Alert style={{ margin: "10px" }} severity="error">
-        This is my Error Test
-        </Alert>
-      </Slide>
+          direction="left"
+          in={props.error !== ""}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Alert style={{ margin: "10px" }} severity="error">
+            This is my Error Test
+          </Alert>
+        </Slide>
       ])
     ).toEqual(true);
   });
@@ -89,17 +88,11 @@ describe("<HomePage />", () => {
         name: "testPlayerName"
       },
       redirect: true
-    })
-     
-    expect(wrapper.find(Redirect)).toHaveLength(1)
-    expect(wrapper.contains(<Redirect to={`/testId[testPlayerName]`} />)).toEqual(true)
+    });
 
+    expect(wrapper.find(Redirect)).toHaveLength(1);
+    expect(
+      wrapper.contains(<Redirect to={`/testId[testPlayerName]`} />)
+    ).toEqual(true);
   });
-
-  it("should test createPlayerId function call ", () => {
-    wrapper = shallow(<HomePage {...props} />)
-    expect(props.onCreatePlayerId).toHaveBeenCalledTimes(1);
-  })
-
-
 });

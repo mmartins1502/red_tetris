@@ -1,8 +1,11 @@
 import * as actionTypes from "./actionTypes";
 import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
-import { Dispatch } from "redux";
-
+// eslint-disable-next-line
+import { Dispatch, ActionCreator, AnyAction } from "redux";
+// eslint-disable-next-line
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { iState } from "../reducers/socketReducer";
 
 export enum SocketActionTypes {
   DEFAULT = "DEFAULT",
@@ -27,47 +30,56 @@ const initialRoom: Room = {
   }
 };
 
-
 interface defaultAction {
-  type: SocketActionTypes.DEFAULT
+  type: SocketActionTypes.DEFAULT;
 }
 
 // event: string;
 // handle: (data: string) => void;
-interface createPlayerIdAction {
+export interface createPlayerIdAction {
   type: SocketActionTypes.CREATE_PLAYER_ID;
   payload: string;
 }
 
-export const createPlayerId = () => {
+export const createPlayerId: ActionCreator<ThunkAction<
+  Promise<any>,
+  iState,
+  null,
+  any
+>> = () => {
   console.log("[createPlayerId] action creator");
-  return (dispatch: Dispatch) =>
-  dispatch({
-    type: actionTypes.CREATE_PLAYER_ID,
-    event: "CreatePlayerId",
-    handle: (data: string) => {
+  return async (dispatch) => {
+    return new Promise<any>((resolve) => {
       dispatch({
-        type: actionTypes.CREATE_PLAYER_ID,
-        payload: data
+        type: SocketActionTypes.CREATE_PLAYER_ID,
+        event: "CreatePlayerId",
+        handle: (data: string) => {
+          resolve(
+            dispatch({
+              type: SocketActionTypes.CREATE_PLAYER_ID,
+              payload: data
+            })
+          );
+        }
       });
-    }
     });
   };
-  
-  
-  ///////////////////////////////////////////////////////////////////////////
+};
 
-  interface checkRoomAction {
-    // event: string;
-    // emit: boolean;
-    handle:  Player
-    // handle: (formData: Player) => void;
-    type: SocketActionTypes.CHECK_ROOM;
-  }
-  
-  export const checkRoom = (formData: Player) => {
+///////////////////////////////////////////////////////////////////////////
+
+interface checkRoomAction {
+  // event: string;
+  // emit: boolean;
+  handle: Player;
+  // handle: (formData: Player) => void;
+  type: SocketActionTypes.CHECK_ROOM;
+}
+
+export const checkRoom = (formData: Player) => {
   console.log("[Room] action creator");
   return {
+    type: SocketActionTypes.CHECK_ROOM,
     event: "Room",
     emit: true,
     handle: formData
@@ -82,7 +94,6 @@ interface Res_roomInfos {
   error: string;
 }
 
-
 interface roomHomeInfosAction {
   // event: string;
   // handle: (data: Res_roomInfos) => void;
@@ -92,27 +103,34 @@ interface roomHomeInfosAction {
   error: string;
 }
 
-export const roomHomeInfos = () => {
+export const roomHomeInfos: ActionCreator<ThunkAction<
+  Promise<any>,
+  iState,
+  null,
+  any
+>> = () => {
   console.log("[roomHomeInfos] action creator");
-  return (dispatch: Dispatch) =>
-  dispatch({
-    type: actionTypes.ROOM_AND_PLAYER,
-    event: "Room",
-    handle: (data: Res_roomInfos) => {
+  return async (dispatch) => {
+    return new Promise<any>((resolve) => {
       dispatch({
-        type: actionTypes.ROOM_AND_PLAYER,
-          player: data.player,
-          room: data.room,
-          error: data.error
-        });
-      }
+        type: SocketActionTypes.ROOM_AND_PLAYER,
+        event: "Room",
+        handle: (data: Res_roomInfos) => {
+          resolve(
+            dispatch({
+              type: SocketActionTypes.ROOM_AND_PLAYER,
+              player: data.player,
+              room: data.room,
+              error: data.error
+            })
+          );
+        }
+      });
     });
+  };
 };
 
-
-
 ///////////////////////////////////////////////////////////////////////////
-
 
 interface leaveRoomAction {
   // event: string;
@@ -124,28 +142,29 @@ interface leaveRoomAction {
   type: SocketActionTypes.LEAVE_ROOM;
 }
 
+export const leaveRoomReducer = () => {
+  return {
+    type: SocketActionTypes.LEAVE_ROOM,
+    room: initialRoom
+  };
+};
+
 export const leaveRoom = (me: Player, room: Room) => {
   const data = {
     player: me,
     room: room
   };
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: SocketActionTypes.LEAVE_ROOM,
-      event: "LeaveRoom",
-      emit: true,
-      handle: data
-    });
-    dispatch({
-      type: SocketActionTypes.LEAVE_ROOM,
-      room: initialRoom
-    });
+  // dispatch(leaveRoomReducer();)
+
+  return {
+    type: SocketActionTypes.LEAVE_ROOM,
+    event: "LeaveRoom",
+    emit: true,
+    handle: data
   };
 };
 
-
 ///////////////////////////////////////////////////////////////////////////
-
 
 interface Res_refreshRoom {
   room: Room;
@@ -160,23 +179,31 @@ interface refreshRoomAction {
   error: string;
 }
 
-export const refreshRoom = () => {
+export const refreshRoom: ActionCreator<ThunkAction<
+  Promise<any>,
+  iState,
+  null,
+  any
+>> = () => {
   // console.log("[refreshRoom] action creator");
-  return (dispatch: Dispatch) =>
-    dispatch({
-      type: actionTypes.REFRESH_ROOM,
-      event: "RefreshRoom",
-      handle: (data: Res_refreshRoom) => {
-        dispatch({
-          type: actionTypes.REFRESH_ROOM,
-          room: data.room,
-          error: data.error
-        });
-      }
+  return async (dispatch) => {
+    return new Promise<any>((resolve) => {
+      dispatch({
+        type: actionTypes.REFRESH_ROOM,
+        event: "RefreshRoom",
+        handle: (data: Res_refreshRoom) => {
+          resolve(
+            dispatch({
+              type: actionTypes.REFRESH_ROOM,
+              room: data.room,
+              error: data.error
+            })
+          );
+        }
+      });
     });
+  };
 };
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -195,9 +222,7 @@ export const startGame = (room: Room) => {
   };
 };
 
-
 ///////////////////////////////////////////////////////////////////////////
-
 
 interface readyAction {
   // event: string;
@@ -216,7 +241,6 @@ export const ready = (me: Player, room: Room) => {
   };
 };
 
-
 ///////////////////////////////////////////////////////////////////////////
 
 export type RoomActions =
@@ -226,4 +250,5 @@ export type RoomActions =
   | leaveRoomAction
   | refreshRoomAction
   | startGameAction
-  | readyAction | defaultAction;
+  | readyAction
+  | defaultAction;

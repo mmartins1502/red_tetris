@@ -33,6 +33,7 @@ interface IProps extends RouteComponentProps {
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
+  console.log("props.room", props.room);
   const { onRereshRoom } = props;
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
     </div>
   );
 
-  if (!props.room || !props.room.players) {
+  if (!props.room || !props.room.players || props.room.players.length < 1) {
     console.log("nobody in the room");
     props.history.replace("/");
   }

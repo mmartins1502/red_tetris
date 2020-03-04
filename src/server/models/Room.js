@@ -1,18 +1,21 @@
 const Player = require("./Player");
 
 module.exports = class Room {
-  constructor(id, playerId, playerName) {
+  constructor(id) {
     this.id = id;
     this.players = [];
     this.inGame = false;
     this.star = this.players[0];
-    playerId && playerName ? this.addPlayer(playerId, playerName) : null;
+    // playerId && playerName
+    //   ? this.addPlayer(playerId, playerName, playerState, playerRoom)
+    //   : null;
   }
 
-  addPlayer(playerId, playerName, playerState) {
+  addPlayer(playerId, playerName, playerState, playerRoom) {
     let player = {
       id: playerId,
       name: playerName,
+      room: playerRoom,
       state: playerState
     };
     this.players.push(player);

@@ -3,6 +3,13 @@ const Player = require("../models/Player");
 const Room = require("../models/Room");
 const utils = require("../utils/utilitiesFunctions");
 
+const initialRoom = {
+  id: "",
+  players: [],
+  inGame: false,
+  star: {}
+};
+
 module.exports = function socketConfig(rooms, server, players) {
   const io = socketIo(server);
 
@@ -19,11 +26,11 @@ module.exports = function socketConfig(rooms, server, players) {
         } else if (room.inGame) {
           error = "This room is already in game...";
         } else {
-          room.addPlayer(socket.id, data.name, data.state);
+          room.addPlayer(socket.id, data.name, data.state, data.room);
         }
       } else {
         room = utils.createNewRoom(data.room, rooms);
-        room.addPlayer(socket.id, data.name, data.state);
+        room.addPlayer(socket.id, data.name, data.state, data.room);
       }
       const player = utils.createNewPlayer(
         socket.id,
@@ -57,6 +64,7 @@ module.exports = function socketConfig(rooms, server, players) {
         }
       }
       utils.refresh(socket, room, error, false);
+      socket.emit("RefreshRoom", { room: initialRoom, error: undefined });
     });
   };
 

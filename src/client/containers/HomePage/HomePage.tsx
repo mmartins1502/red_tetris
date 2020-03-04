@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useEffect, FC } from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
@@ -30,7 +30,7 @@ interface IProps {
 }
 
 export const HomePage: FC<IProps> = (props) => {
-  // console.log("[HomePage] props", props);
+  console.log("[HomePage] props", props);
 
   const { onCreatePlayerId } = props;
 
@@ -42,7 +42,6 @@ export const HomePage: FC<IProps> = (props) => {
     formData.id = props.player.id;
     props.onFormValidated(formData);
     props.onRoomNumber();
-
   };
 
   if (props.redirect && props.room.id && props.player.name && !props.error) {
@@ -54,11 +53,11 @@ export const HomePage: FC<IProps> = (props) => {
       <Logo />
       <div className="BoxInput">
         <h2 className="BoxTitle">WELCOME</h2>
-        <Formulaire  onFormValidated={(formData) => formValidation(formData)} />
+        <Formulaire onFormValidated={(formData) => formValidation(formData)} />
       </div>
       <Slide
         direction="left"
-        in={props.error !== ""}
+        in={props.error !== "" && props.error !== undefined}
         mountOnEnter
         unmountOnExit
       >

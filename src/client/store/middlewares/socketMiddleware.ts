@@ -4,9 +4,12 @@ const socketMiddleware = () => {
   const socket = io("http://localhost:4001");
   console.log("[socketMiddleware]");
 
-  return (dispatch: any) => (next: any) => (action: any) => {
-    if (typeof action === "function" || !action.event) {
+  return ({ dispatch, getState }: any) => (next: any) => (action: any) => {
+    if (!action.event) {
       return next(action);
+    }
+    if (typeof action === "function") {
+      return action(dispatch, getState);
     }
 
     const { event, leave, handle, emit, type, ...rest } = action;
@@ -19,6 +22,7 @@ const socketMiddleware = () => {
       console.log("action", action);
       console.log("emit: " + event);
       return socket.emit(event, handle);
+      // return socket.emit(event, sent_data);
     }
 
     let handleEvent = handle;
@@ -26,6 +30,7 @@ const socketMiddleware = () => {
       handleEvent = (result: any) =>
         dispatch({ type: handle, result, ...rest });
     }
+    // return socket.on(event, handleEvent);
     return socket.on(event, handleEvent);
   };
 };

@@ -5,10 +5,11 @@ import {
   combineReducers,
   Store
 } from "redux";
-import thunk from "redux-thunk";
+import thunk, { ThunkMiddleware } from "redux-thunk";
 import socketMiddleware from "../store/middlewares/socketMiddleware";
 
 import { socketReducer, iState } from "./reducers/socketReducer";
+import { RoomActions } from "./actions/roomActions";
 
 // Create an interface for the application state
 export interface IAppState {
@@ -20,7 +21,10 @@ const rootReducer = combineReducers<IAppState>({
   socketState: socketReducer
 });
 
-const middlewares = applyMiddleware(thunk, socketMiddleware());
+const middlewares = applyMiddleware(
+  thunk as ThunkMiddleware<iState, RoomActions>,
+  socketMiddleware()
+);
 
 const composeEnhancers =
   ((window as any)["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] as typeof compose) ||
