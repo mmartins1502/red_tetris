@@ -8,7 +8,7 @@ import * as icon from "../../../assets/img/red_tetris_icon.png";
 
 const Logo = () => (
   <div className="Logo">
-    <img src={icon} alt="icon" />
+    <img className="img" src={icon} alt="icon" />
   </div>
 );
 

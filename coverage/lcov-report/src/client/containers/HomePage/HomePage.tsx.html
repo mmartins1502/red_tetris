@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.86% </span>
+                <span class="strong">68.97% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/28</span>
+                <span class='fraction'>20/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.86% </span>
+                <span class="strong">68.97% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/28</span>
+                <span class='fraction'>20/29</span>
             </div>
         
             
@@ -145,7 +145,14 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,6 +172,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,28 +187,34 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,6 +267,7 @@ import Slide from "@material-ui/core/Slide";
 // CSS &amp; IMG
 // const classes = require("./HomePage.module.css");
 import "./HomePage.css";
+import MusicButton from "../../components/UI/Music/MusicButton";
 &nbsp;
 interface IProps {
   room: Room;
@@ -284,22 +299,28 @@ export const HomePage: FC&lt;IProps&gt; = (props) =&gt; {
   }
 &nbsp;
   return (
-    &lt;div className="Box"&gt;
-      &lt;Logo /&gt;
-      &lt;div className="BoxInput"&gt;
-        &lt;h2 className="BoxTitle"&gt;WELCOME&lt;/h2&gt;
-        &lt;Formulaire onFormValidated={<span class="fstat-no" title="function not covered" >(f</span>ormData) =&gt; <span class="cstat-no" title="statement not covered" >formValidation(formData)} /&gt;</span>
+    &lt;div&gt;
+      &lt;MusicButton /&gt;
+&nbsp;
+      &lt;div className="Box"&gt;
+        &lt;Logo /&gt;
+        &lt;div className="BoxInput"&gt;
+          &lt;h2 className="BoxTitle"&gt;WELCOME&lt;/h2&gt;
+          &lt;Formulaire
+            onFormValidated={<span class="fstat-no" title="function not covered" >(f</span>ormData) =&gt; <span class="cstat-no" title="statement not covered" >formValidation(formData)}</span>
+          /&gt;
+        &lt;/div&gt;
+        &lt;Slide
+          direction="left"
+          in={props.error !== "" &amp;&amp; props.error !== undefined}
+          mountOnEnter
+          unmountOnExit
+        &gt;
+          &lt;Alert style={{ margin: "10px" }} severity="error"&gt;
+            {props.error}
+          &lt;/Alert&gt;
+        &lt;/Slide&gt;
       &lt;/div&gt;
-      &lt;Slide
-        direction="left"
-        in={props.error !== ""}
-        mountOnEnter
-        unmountOnExit
-      &gt;
-        &lt;Alert style={{ margin: "10px" }} severity="error"&gt;
-          {props.error}
-        &lt;/Alert&gt;
-      &lt;/Slide&gt;
     &lt;/div&gt;
   );
 };
@@ -328,7 +349,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Mar 03 2020 15:44:03 GMT+0100 (Central European Standard Time)
+                at Thu Mar 05 2020 16:48:00 GMT+0100 (Central European Standard Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

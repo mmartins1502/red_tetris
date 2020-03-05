@@ -1,12 +1,16 @@
 .Logo {
+  display: flex;
+  justify-content: center;
   margin-top: 10%;
   background-color: white;
   padding: 8px;
   height: 100%;
   box-sizing: border-box;
   border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
 }
 
-.Logo img {
+.img {
   height: 100%;
 }

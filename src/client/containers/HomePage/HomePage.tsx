@@ -31,7 +31,7 @@ interface IProps {
 }
 
 export const HomePage: FC<IProps> = (props) => {
-  console.log("[HomePage] props", props);
+  // console.log("[HomePage] props", props);
 
   const { onCreatePlayerId } = props;
 

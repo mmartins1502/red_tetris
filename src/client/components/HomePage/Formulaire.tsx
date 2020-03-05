@@ -63,7 +63,7 @@ const Forrmulaire2: React.FC<Props> = (props) => {
         />
       </div>
       <Button
-        name = "submit"
+        type="submit"
         data-testid="submit"
         onClick={(e: FormEvent) => formHandler(e)}
         classes={{ label: "Button" }}

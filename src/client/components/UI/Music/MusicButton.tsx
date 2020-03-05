@@ -16,14 +16,13 @@ const MusicButton: React.FC<Props> = () => {
 
   const handleChange = () => {
     if (!volume.on) {
-      console.log("volume false", volume);
       setvolume({
         ...volume,
         on: true
       });
+      volume.audio.loop = true;
       volume.audio.play();
     } else {
-      console.log("volume true", volume);
       setvolume({
         ...volume,
         on: false
