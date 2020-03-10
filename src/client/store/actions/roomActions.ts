@@ -2,9 +2,9 @@ import * as actionTypes from "./actionTypes";
 import { Player } from "../../models/Player";
 import { Room } from "../../models/Room";
 // eslint-disable-next-line
-import { Dispatch, ActionCreator, AnyAction } from "redux";
+import { ActionCreator } from "redux";
 // eslint-disable-next-line
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { ThunkAction } from "redux-thunk";
 import { iState } from "../reducers/socketReducer";
 
 export enum SocketActionTypes {

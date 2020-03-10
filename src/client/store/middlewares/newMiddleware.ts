@@ -1,4 +1,4 @@
-import { Middleware, MiddlewareAPI, Dispatch, AnyAction } from "redux";
+import { Dispatch } from "redux";
 import io from "socket.io-client";
 
 const createSocketMiddleware = (socket: SocketIOClient.Socket) => {

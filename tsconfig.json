@@ -1,21 +1,37 @@
 {
+  "include": ["src/**/*.ts", "spec/**/*.ts"],
+  "exclude": ["src/public/", "node_modules"],
   "compilerOptions": {
-    "target": "es5",
+    "outDir": "dist/js/",
+    "baseUrl": "./",
+    "paths": {
+      "@daos": ["src/daos"],
+      "@entities": ["src/entities"],
+      "@shared": ["src/shared"],
+      "@server": ["src/Server"]
+    },
     "downlevelIteration": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "removeComments": false,
+    "sourceMap": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "target": "es6",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "allowJs": false,
+    "checkJs": false,
+    "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types"],
-    "jsx": "react"
-  },
-  "include": ["src"]
+    "plugins": [
+      { "name": "typescript-tslint-plugin", "configFile": "./tslint.json" }
+    ]
+  }
 }

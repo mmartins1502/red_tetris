@@ -1,7 +1,8 @@
 const socketIo = require("socket.io");
-const Player = require("../models/Player");
-const Room = require("../models/Room");
 const utils = require("../utils/utilitiesFunctions");
+
+import { Player } from "../models/Player";
+import { Room } from "../models/Room";
 
 const initialRoom = {
   id: "",
@@ -10,14 +11,18 @@ const initialRoom = {
   star: {}
 };
 
-module.exports = function socketConfig(rooms, server, players) {
+module.exports = function socketConfig(rooms: Room[], server: any) {
   const io = socketIo(server);
 
-  const joinCreateRoom = (socket) => {
-    socket.on("Room", async (data) => {
-      console.log("[joinCreateRoom]");
+  const joinCreateRoom = (socket: any) => {
+    interface idata {
+      room: string;
+      name: string;
+      state: boolean;
+    }
+    socket.on("Room", async (data: idata) => {
+      // console.log("[joinCreateRoom]", data);
       let error;
-      // !data.player.id ? socket.id : data.player.id;
       let room = utils.findRoomById(data.room, rooms);
 
       if (room) {
@@ -32,12 +37,7 @@ module.exports = function socketConfig(rooms, server, players) {
         room = utils.createNewRoom(data.room, rooms);
         room.addPlayer(socket.id, data.name, data.state, data.room);
       }
-      const player = utils.createNewPlayer(
-        socket.id,
-        data.name,
-        data.room,
-        players
-      );
+      const player = utils.createNewPlayer(socket.id, data.name, data.room);
 
       const roomInfos = {
         player: player,
@@ -51,9 +51,14 @@ module.exports = function socketConfig(rooms, server, players) {
     });
   };
 
-  const leaveRoom = (socket) => {
-    socket.on("LeaveRoom", (data) => {
-      console.log("[leaveRoom]");
+  const leaveRoom = (socket: any) => {
+    interface idata {
+      player: Player;
+      room: Room;
+    }
+
+    socket.on("LeaveRoom", (data: idata) => {
+      // console.log("[leaveRoom]");
       let error, room;
       if (!data.player || !data.room) {
         error = "Missing data";
@@ -68,24 +73,30 @@ module.exports = function socketConfig(rooms, server, players) {
     });
   };
 
-  const ready = (socket) => {
-    socket.on("Ready", (data) => {
-      console.log("[ready]");
+  const ready = (socket: any) => {
+    interface idata {
+      player: Player;
+      room: Room;
+    }
+    socket.on("Ready", (data: idata) => {
+      // console.log("[ready]", data);
       let updatedPlayer = {
-        ...data.player
+        ...data.player,
+        state: !data.player.state
       };
-      updatedPlayer.state = !data.player.state;
-      let room = utils.findRoomById(data.room.id, rooms);
+      let room: Room = utils.findRoomById(data.room.id, rooms);
       if (room) {
         room.updatePlayer(updatedPlayer);
         utils.refresh(socket, room, null, true);
+      } else {
+        console.log("no room");
       }
     });
   };
 
-  const startGame = (socket) => {
-    socket.on("StartGame", (room) => {
-      console.log("[startGame]");
+  const startGame = (socket: any) => {
+    socket.on("StartGame", (room: Room) => {
+      console.log("[startGame]", room);
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
         let everyOneIsReady = true;
@@ -113,11 +124,13 @@ module.exports = function socketConfig(rooms, server, players) {
             true
           );
         }
+      } else {
+        console.log("no room");
       }
     });
   };
 
-  io.on("connection", (socket) => {
+  io.on("connection", (socket: any) => {
     socket.emit("CreatePlayerId", socket.id);
     console.log("New client connected with id: " + socket.id);
 

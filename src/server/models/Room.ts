@@ -1,17 +1,24 @@
-const Player = require("./Player");
+import { Player } from "./Player";
 
-module.exports = class Room {
-  constructor(id) {
+export class Room {
+  id: string;
+  players: Player[];
+  inGame: boolean;
+  star: Player;
+
+  constructor(id: string) {
     this.id = id;
     this.players = [];
     this.inGame = false;
     this.star = this.players[0];
-    // playerId && playerName
-    //   ? this.addPlayer(playerId, playerName, playerState, playerRoom)
-    //   : null;
   }
 
-  addPlayer(playerId, playerName, playerState, playerRoom) {
+  public addPlayer(
+    playerId: string,
+    playerName: string,
+    playerState: boolean,
+    playerRoom: string
+  ) {
     let player = {
       id: playerId,
       name: playerName,
@@ -22,19 +29,19 @@ module.exports = class Room {
     !this.star ? (this.star = player) : (this.star = this.players[0]);
   }
 
-  getPlayers() {
-    return this.players;
-  }
+  // public getPlayers() {
+  //   return this.players;
+  // }
 
-  startGame() {
+  public startGame() {
     this.inGame = true;
   }
 
-  isFull() {
+  public isFull() {
     return this.players.length > 3 ? true : false;
   }
 
-  removePlayer(playerId, rooms) {
+  public removePlayer(playerId: string, rooms: Room[]) {
     this.players = this.players.filter((player) => player.id !== playerId);
     this.players.length >= 1
       ? (this.star = this.players[0])
@@ -42,17 +49,17 @@ module.exports = class Room {
     return rooms;
   }
 
-  updatePlayer(updatedPlayer) {
+  public updatePlayer(updatedPlayer: Player) {
     this.players = this.players.map((player) => {
       if (player.id === updatedPlayer.id) {
-        return { ...player, state: updatedPlayer.state };
+        return updatedPlayer;
       } else {
         return player;
       }
     });
   }
 
-  endGame() {
+  public endGame() {
     this.inGame = false;
   }
-};
+}
