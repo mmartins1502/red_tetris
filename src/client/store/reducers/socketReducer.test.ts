@@ -1,7 +1,7 @@
 // import * as actionTypes from "../actions/actionTypes";
 import { socketReducer } from "./socketReducer";
-import { RoomActions, SocketActionTypes } from "../actions/roomActions";
-import { inheritInnerComments } from "@babel/types";
+import { SocketActionTypes } from "../actions/roomActions";
+// import { inheritInnerComments } from "@babel/types";
 
 describe("socketReducer", () => {
   const initialState = {

@@ -5,8 +5,6 @@ import socketMiddleware from "../middlewares/socketMiddleware";
 import * as actions from "./roomActions";
 import * as types from "./actionTypes";
 import { iState } from "../reducers/socketReducer";
-import { setServers } from "dns";
-import { Player } from "../../models/Player";
 
 const middlewares = [
   thunk as ThunkMiddleware<iState, actions.RoomActions>,

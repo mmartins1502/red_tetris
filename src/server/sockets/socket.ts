@@ -21,7 +21,6 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
       state: boolean;
     }
     socket.on("Room", async (data: idata) => {
-      // console.log("[joinCreateRoom]", data);
       let error;
       let room = utils.findRoomById(data.room, rooms);
 
@@ -59,16 +58,12 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
 
     socket.on("LeaveRoom", (data: idata) => {
       // console.log("[leaveRoom]");
-      let error, room;
-      if (!data.player || !data.room) {
-        error = "Missing data";
-      } else {
-        room = utils.findRoomById(data.room.id, rooms);
-        if (room) {
-          rooms = room.removePlayer(data.player.id, rooms);
-        }
+      let room;
+      room = utils.findRoomById(data.room.id, rooms);
+      if (room) {
+        rooms = room.removePlayer(data.player.id, rooms);
       }
-      utils.refresh(socket, room, error, false);
+      utils.refresh(socket, room, null, false);
       socket.emit("RefreshRoom", { room: initialRoom, error: undefined });
     });
   };
@@ -88,32 +83,30 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
       if (room) {
         room.updatePlayer(updatedPlayer);
         utils.refresh(socket, room, null, true);
-      } else {
-        console.log("no room");
       }
     });
   };
 
   const startGame = (socket: any) => {
     socket.on("StartGame", (room: Room) => {
-      console.log("[startGame]", room);
+      // console.log("[startGame]", room);
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
-        let everyOneIsReady = true;
+        // let everyOneIsReady = true;
         for (var i = 0; i < newRoom.players.length; i++) {
           if (newRoom.players[i].state && newRoom.players[i].id !== socket.id) {
-            everyOneIsReady = true;
+            newRoom.everyOneIsReady = true;
           }
           if (
             !newRoom.players[i].state &&
             newRoom.players[i].id !== socket.id
           ) {
-            everyOneIsReady = false;
+            newRoom.everyOneIsReady = false;
           }
         }
 
-        console.log("everyOneIsReady", everyOneIsReady);
-        if (everyOneIsReady) {
+        // console.log("everyOneIsReady", newRoom.everyOneIsReady);
+        if (newRoom.everyOneIsReady) {
           newRoom.startGame();
           utils.refresh(socket, newRoom, null, true);
         } else {
@@ -124,15 +117,13 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
             true
           );
         }
-      } else {
-        console.log("no room");
       }
     });
   };
 
   io.on("connection", (socket: any) => {
     socket.emit("CreatePlayerId", socket.id);
-    console.log("New client connected with id: " + socket.id);
+    // console.log("New client connected with id: " + socket.id);
 
     joinCreateRoom(socket);
     leaveRoom(socket);

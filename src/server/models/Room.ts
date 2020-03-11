@@ -5,12 +5,14 @@ export class Room {
   players: Player[];
   inGame: boolean;
   star: Player;
+  everyOneIsReady: boolean;
 
   constructor(id: string) {
     this.id = id;
     this.players = [];
     this.inGame = false;
     this.star = this.players[0];
+    this.everyOneIsReady = false;
   }
 
   public addPlayer(

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 // import {render, fireEvent, cleanup} from '@testing-library/react';
 
 import { HomePage } from "./HomePage";
 import Formulaire from "../../components/HomePage/Formulaire";
-import Logo from "../../components/UI/Logo/Logo";
+// import Logo from "../../components/UI/Logo/Logo";
 import { Redirect } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
 import Slide from "@material-ui/core/Slide";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+// import Button from "@material-ui/core/Button";
+// import TextField from "@material-ui/core/TextField";
 
 configure({ adapter: new Adapter() });
 

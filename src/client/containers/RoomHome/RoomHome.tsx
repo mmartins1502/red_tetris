@@ -18,6 +18,9 @@ import { IAppState } from "../../store";
 
 import { Alert } from "@material-ui/lab";
 import Slide from "@material-ui/core/Slide";
+import SettingsModal from "../../components/UI/Modal/SettingsModal";
+import MusicButton from "../../components/UI/Music/MusicButton";
+import Settings from "../../components/Room/Settings";
 
 // IMPORT CSS
 const classes = require("./RoomHome.module.css");
@@ -83,21 +86,27 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
   }
 
   return (
-    <div className={classes.RoomHome}>
-      <Logo />
-      {playersAndButtons}
-      {props.error ? (
-        <Slide
-          direction="left"
-          in={props.error !== ""}
-          mountOnEnter
-          unmountOnExit
-        >
-          <Alert style={{ margin: "10px" }} severity="error">
-            {props.error}
-          </Alert>
-        </Slide>
-      ) : null}
+    <div>
+      <MusicButton />
+      <SettingsModal>
+        <Settings />
+      </SettingsModal>
+      <div className={classes.RoomHome}>
+        <Logo />
+        {playersAndButtons}
+        {props.error ? (
+          <Slide
+            direction="left"
+            in={props.error !== ""}
+            mountOnEnter
+            unmountOnExit
+          >
+            <Alert style={{ margin: "10px" }} severity="error">
+              {props.error}
+            </Alert>
+          </Slide>
+        ) : null}
+      </div>
     </div>
   );
 };

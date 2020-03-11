@@ -2,6 +2,7 @@
   "include": ["src/**/*.ts", "spec/**/*.ts"],
   "exclude": ["src/public/", "node_modules"],
   "compilerOptions": {
+    "jsx": "react",
     "outDir": "dist/js/",
     "baseUrl": "./",
     "paths": {
