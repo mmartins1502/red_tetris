@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 
 //IMPORT MODELS
-import { Player } from "../../models/Player";
-import { Room } from "../../models/Room";
+import { Player } from "../../../server/models/Player";
+import { Room } from "../../../server/models/Room";
 
 //IMPORT COMPONENTS
 import PlayersList from "../../components/Room/roomPlayersList";
@@ -21,6 +21,7 @@ import Slide from "@material-ui/core/Slide";
 import SettingsModal from "../../components/UI/Modal/SettingsModal";
 import MusicButton from "../../components/UI/Music/MusicButton";
 import Settings from "../../components/Room/Settings";
+import { Dispatch } from "redux";
 
 // IMPORT CSS
 const classes = require("./RoomHome.module.css");
@@ -33,6 +34,7 @@ interface IProps extends RouteComponentProps {
   onleaveRoom: (me: Player, room: Room) => void;
   onStartGame: (room: Room) => void;
   onReady: (me: Player, room: Room) => void;
+  onleaveRoomReducer: () => void
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
@@ -47,6 +49,7 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
 
   const leaveRoom = () => {
     props.onleaveRoom(me, props.room);
+    props.onleaveRoomReducer()
     props.history.replace("/");
   };
 
@@ -113,14 +116,15 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
 
 const mapStateToProps = (store: IAppState) => {
   return {
-    player: store.socketState.player,
-    room: store.socketState.room,
-    error: store.socketState.error
+    player: store.roomState.player,
+    room: store.roomState.room,
+    error: store.roomState.error
   };
 };
 
 const mapDispatchToProps = {
   onleaveRoom: (me: Player, room: Room) => actions.leaveRoom(me, room),
+  onleaveRoomReducer: () => actions.leaveRoomReducer(),
   onRereshRoom: () => actions.refreshRoom(),
   onStartGame: (room: Room) => actions.startGame(room),
   onReady: (me: Player, room: Room) => actions.ready(me, room)

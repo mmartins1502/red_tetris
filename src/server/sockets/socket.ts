@@ -1,8 +1,12 @@
-const socketIo = require("socket.io");
-const utils = require("../utils/utilitiesFunctions");
-
 import { Player } from "../models/Player";
 import { Room } from "../models/Room";
+// import { Board } from '../models/Board';
+
+
+const socketIo = require("socket.io");
+const utils = require("../utils/utilitiesFunctions");
+const game = require("../game/game");
+
 
 const initialRoom = {
   id: "",
@@ -100,15 +104,15 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
           if (
             !newRoom.players[i].state &&
             newRoom.players[i].id !== socket.id
-          ) {
-            newRoom.everyOneIsReady = false;
+            ) {
+              newRoom.everyOneIsReady = false;
+            }
           }
-        }
-
-        // console.log("everyOneIsReady", newRoom.everyOneIsReady);
-        if (newRoom.everyOneIsReady) {
-          newRoom.startGame();
-          utils.refresh(socket, newRoom, null, true);
+          
+          if (newRoom.everyOneIsReady || (newRoom.players.length === 1 && newRoom.players[0].id === socket.id)) {
+            newRoom.startGame();
+            
+            utils.refresh(socket, newRoom, null, true);
         } else {
           utils.refresh(
             socket,
@@ -129,6 +133,8 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
     leaveRoom(socket);
     ready(socket);
     startGame(socket);
+    game.startGame(socket)
+    game.play(socket)
     // socket.on("disconnect", () => console.log("Client disconnected"));
   });
   return io;

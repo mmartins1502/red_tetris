@@ -1,9 +1,9 @@
 // import * as actionTypes from "../actions/actionTypes";
-import { socketReducer } from "./socketReducer";
+import { roomReducer } from "./roomReducer";
 import { SocketActionTypes } from "../actions/roomActions";
 // import { inheritInnerComments } from "@babel/types";
 
-describe("socketReducer", () => {
+describe("roomReducer", () => {
   const initialState = {
     player: {
       id: "",
@@ -49,7 +49,7 @@ describe("socketReducer", () => {
   };
   it("should test the CREATE_PLAYER_ID reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.CREATE_PLAYER_ID,
         payload: "playerIdTest"
       })
@@ -64,7 +64,7 @@ describe("socketReducer", () => {
 
   it("should test the CHECK_ROOM reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.CHECK_ROOM,
         handle: {
           id: "playerIdTest",
@@ -78,7 +78,7 @@ describe("socketReducer", () => {
 
   it("should test the ROOM_AND_PLAYER reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.ROOM_AND_PLAYER,
         player: playerTest,
         room: roomTest,
@@ -94,7 +94,7 @@ describe("socketReducer", () => {
 
   it("should test the ROOM_AND_PLAYER reducer with ERROR", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.ROOM_AND_PLAYER,
         player: playerTest,
         room: roomTest,
@@ -110,7 +110,7 @@ describe("socketReducer", () => {
 
   it("should test the LEAVE_ROOM reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.LEAVE_ROOM,
         handle: {
           player: playerTest,
@@ -122,7 +122,7 @@ describe("socketReducer", () => {
 
   it("should test the REFRESH_ROOM reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.REFRESH_ROOM,
         room: roomTest,
         error: "some error"
@@ -136,7 +136,7 @@ describe("socketReducer", () => {
 
   it("should test the START_GAME reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.START_GAME,
         handle: roomTest
       })
@@ -145,7 +145,7 @@ describe("socketReducer", () => {
 
   it("should test the READY reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.READY,
         player: playerTest,
         room: roomTest
@@ -155,7 +155,7 @@ describe("socketReducer", () => {
 
   it("should test the DEFAULT reducer", () => {
     expect(
-      socketReducer(initialState, {
+      roomReducer(initialState, {
         type: SocketActionTypes.DEFAULT
       })
     ).toEqual(initialState);

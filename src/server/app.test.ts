@@ -1,11 +1,12 @@
 import { Room } from "../server/models/Room";
 import { Player } from "../client/models/Player";
+import * as ioClient from "socket.io-client";
+
 const socketConfig = require("./sockets/socket");
 
 const app = require("express")();
 const server = require("http").Server(app);
 
-import * as ioClient from "socket.io-client";
 
 let ioServer = require("socket.io")(server, {
   cookie: false,

@@ -1,4 +1,6 @@
 import { Player } from "./Player";
+import { Board } from './Board';
+import { Piece } from './Piece';
 
 export class Room {
   id: string;
@@ -6,6 +8,7 @@ export class Room {
   inGame: boolean;
   star: Player;
   everyOneIsReady: boolean;
+  piecesList: Piece[]
 
   constructor(id: string) {
     this.id = id;
@@ -13,27 +16,39 @@ export class Room {
     this.inGame = false;
     this.star = this.players[0];
     this.everyOneIsReady = false;
+    this.piecesList = this.generator()
+
+  }
+
+  private generator() {
+    const pieces: Piece[] = []
+    for(let i = 0; i < 500; i++) {
+      const piece = new Piece()
+      pieces.push(piece)
+    }
+    return pieces
   }
 
   public addPlayer(
     playerId: string,
     playerName: string,
     playerState: boolean,
-    playerRoom: string
+    playerRoom: string,
+    playerBoard: Board,
+    playerIdxPiece: number
   ) {
     let player = {
       id: playerId,
       name: playerName,
       room: playerRoom,
-      state: playerState
+      state: playerState,
+      board: playerBoard,
+      listIdx: playerIdxPiece
     };
+
     this.players.push(player);
     !this.star ? (this.star = player) : (this.star = this.players[0]);
   }
-
-  // public getPlayers() {
-  //   return this.players;
-  // }
 
   public startGame() {
     this.inGame = true;

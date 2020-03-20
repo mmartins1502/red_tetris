@@ -2,8 +2,8 @@ import React, { useEffect, FC } from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
-import { Player } from "../../models/Player";
-import { Room } from "../../models/Room";
+import { Player } from "../../../server/models/Player";
+import { Room } from "../../../server/models//Room";
 
 //COMPONENTS
 import Formulaire from "../../components/HomePage/Formulaire";
@@ -78,11 +78,11 @@ export const HomePage: FC<IProps> = (props) => {
 
 const mapStateToProps = (store: IAppState) => {
   return {
-    playerId: store.socketState.player.id,
-    player: store.socketState.player,
-    room: store.socketState.room,
-    error: store.socketState.error,
-    redirect: store.socketState.redirect
+    playerId: store.roomState.player.id,
+    player: store.roomState.player,
+    room: store.roomState.room,
+    error: store.roomState.error,
+    redirect: store.roomState.redirect
   };
 };
 

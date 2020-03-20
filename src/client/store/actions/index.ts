@@ -3,7 +3,11 @@ export {
   checkRoom,
   roomHomeInfos,
   leaveRoom,
+  leaveRoomReducer,
   refreshRoom,
   startGame,
-  ready
+  ready,
+  refreshPlayerAsk,
+  refreshPlayer,
+  initBoard
 } from "./roomActions";

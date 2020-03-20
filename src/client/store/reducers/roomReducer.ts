@@ -34,7 +34,7 @@ const initialState: iState = {
   redirect: false
 };
 
-export const socketReducer: Reducer<iState, RoomActions> = (
+export const roomReducer: Reducer<iState, RoomActions> = (
   state = initialState,
   action
 ) => {
@@ -58,16 +58,9 @@ export const socketReducer: Reducer<iState, RoomActions> = (
         redirect: true
       };
     case actionTypes.LEAVE_ROOM:
-      return {
-        ...state,
-        player: {
-          ...state.player,
-          name: initialState.player.name,
-          room: initialState.player.room
-        },
-        room: { ...initialState.room },
-        error: initialState.error
-      };
+      return state;
+    case actionTypes.LEAVE_ROOM_REDUCER:
+      return initialState
     case actionTypes.REFRESH_ROOM:
       return {
         ...state,
@@ -78,6 +71,15 @@ export const socketReducer: Reducer<iState, RoomActions> = (
       return state;
     case actionTypes.READY:
       return state;
+    case actionTypes.REFRESH_PLAYER_ASK:
+      return state;
+    case actionTypes.REFRESH_PLAYER:
+      console.log("actions", action)
+        return {
+          ...state,
+          player: action.player,
+          room: action.room
+        };
     default:
       return state;
   }

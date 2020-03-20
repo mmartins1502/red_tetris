@@ -4,7 +4,8 @@ import expect from "expect";
 import socketMiddleware from "../middlewares/socketMiddleware";
 import * as actions from "./roomActions";
 import * as types from "./actionTypes";
-import { iState } from "../reducers/socketReducer";
+import { iState } from "../reducers/roomReducer";
+import {Room}  from '../../../server/models/Room';
 
 const middlewares = [
   thunk as ThunkMiddleware<iState, actions.RoomActions>,
@@ -13,11 +14,12 @@ const middlewares = [
 const mockStore = configureMockStore(middlewares);
 
 const playerTest = {
-  id: "playerIdTest",
+  id: "id",
   name: "NameTest",
   room: "roomTest",
   state: false
 };
+
 
 const mockState = {
   player: playerTest
@@ -25,88 +27,67 @@ const mockState = {
 
 const roomTest = {
   id: "roomTest",
-  players: [
-    {
-      id: "playerIdTest",
-      name: "NameTest",
-      room: "roomTest",
-      state: false
-    }
-  ],
+  players: [ playerTest ],
   inGame: false,
-  star: {
-    id: "playerIdTest",
-    name: "NameTest",
-    room: "roomTest",
-    state: false
-  }
+  star: playerTest,
+  everyOneIsReady: false
+
 };
 
-const initialRoom = {
-  id: "roomTest",
-  players: [
-    {
-      id: "playerIdTest",
-      name: "NameTest",
-      room: "roomTest",
-      state: false
-    }
-  ],
-  inGame: false,
-  star: {
-    id: "playerIdTest",
-    name: "NameTest",
-    room: "roomTest",
-    state: false
-  }
-};
 
 // ////////////////////MOCK SERVER///////////////////
 
-// const http = require("http");
-// const port = 4001;
-// const socketIo = require("socket.io");
-// const server = http.createServer();
-// const io = socketIo(server);
-// server.listen(port, () => console.log(`Listening on port ${port}`));
-// ///////////DATA TO SEND/////////
-// const data = "Fake Id";
-// const roomInfos = {
-//   player: playerTest,
-//   room: roomTest,
-//   error: "error test"
-// };
+let rooms: Room[] = [];
+
+// const roomTest4 = new Room("13");
+// roomTest4.addPlayer("id test1", "name test1", true, "13");
+// roomTest4.addPlayer("id test2", "name test2", true, "13");
+// rooms.push(roomTest4);
+
+
+
+const socketConfig = require("../../../server/sockets/socket");
+
+const app = require("express")();
+const server = require("http").Server(app);
+
+
+let ioServer = require("socket.io")(server, {
+  cookie: false,
+  pingTimeout: 30000,
+  pingInterval: 2000
+});
 
 // ///////////SOCKET IO/////////
+ioServer = socketConfig(rooms, ioServer);
+      ioServer.listen(4001);
 
-// io.on("connection", (socket: any) => {
-//   socket.emit("CreatePlayerId", data);
-//   socket.on("Room", () => {
-//     socket.emit("Room", roomInfos);
-//   });
-// });
+
+
+const expected = expect.stringMatching(/([a-zA-Z0-9]){20}/gm)
 
 // //////////////////////////////////////////////////
 
 describe("Actions", () => {
+
+
+  afterAll(() => {
+    ioServer.close()
+  })
+
+
   it("should create an action to CREATE_PLAYER_ID", async () => {
     const store = mockStore({});
     store.getState = () => mockState;
-    let expectedResponse = [
-      {
-        type: types.CREATE_PLAYER_ID,
-        payload: ""
-      }
-    ];
+    // const expected = expect.stringMatching(/([a-zA-Z0-9]){20}/gm)
+
+
     return store.dispatch<any>(actions.createPlayerId()).then(() => {
-      store.getState = () => {
-        let test1 = store.getActions();
-        expectedResponse[0].payload = test1[0].payload;
-        playerTest.id = test1[0].payload;
-        roomTest.players[0].id = test1[0].payload;
-        roomTest.star.id = test1[0].payload;
-      };
-      expect(store.getActions()).toEqual(expectedResponse);
+      expect(store.getActions()).toBeTruthy();
+      const returned: any = store.getActions()[0]
+      expect(returned.type).toEqual(types.CREATE_PLAYER_ID);
+      playerTest.id = returned.payload
+      expect(returned.payload).toEqual(expect.objectContaining(expected).sample);
     });
   });
 
@@ -146,30 +127,37 @@ describe("Actions", () => {
       handle: { player: playerTest, room: roomTest }
     };
 
-    expect(actions.leaveRoomReducer()).toEqual({
-      type: types.LEAVE_ROOM,
-      room: initialRoom
-    });
     expect(actions.leaveRoom(playerTest, roomTest)).toEqual(expectedResponse);
   });
 
-  it("should create an action to REFRESH_ROOM", async () => {
-    const store = mockStore({});
+//   it("should create an action to REFRESH_ROOM", async () => {
+//     const store = mockStore({});
+//     store.getState = () => mockState;
 
-    const expectedResponse = [
-      {
-        type: types.REFRESH_ROOM,
-        room: {
-          ...roomTest,
-          players: [{ ...roomTest.players[0] }, playerTest]
-        },
-        error: undefined
-      }
-    ];
+    
+    
+//     const expectedResponse = [
+//       {
+//         type: types.REFRESH_ROOM,
+//         room: roomTest4,
+//         error: undefined
+//       }
+//     ];
+    
+// const playerTest2 = {
+//   id: "player test id",
+//   name: "player test name",
+//   room: "13",
+//   state:false
+// }
 
-    store.dispatch(actions.checkRoom(playerTest));
-    return store.dispatch<any>(actions.refreshRoom()).then(() => {
-      expect(store.getActions()).toEqual(expectedResponse);
-    });
-  });
+//     store.dispatch<any>(actions.checkRoom(playerTest2))
+//     return store.dispatch<any>(actions.refreshRoom()).then(() => {
+//       store.dispatch(actions.leaveRoom(playerTest2, roomTest4))
+
+//       const returned = store.getActions()
+//       console.log('returned', returned)
+//       expect(store.getActions()).toEqual(expectedResponse);
+//     });
+//   });
 });

@@ -20,7 +20,7 @@
   width: 100%;
   height: 100%;
   color: rgba(10, 10, 10, 0.514);
-  border: rgba(255, 255, 255, 0.253) solid 1px;
+  border: rgba(8, 8, 8, 0.453) solid 1px;
 }
 
 @media (max-width: 499px) {

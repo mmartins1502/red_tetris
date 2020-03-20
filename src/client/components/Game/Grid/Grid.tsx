@@ -1,16 +1,23 @@
 import React from "react";
-
-import Line from "./Line";
+import {Board} from "../../../../server/models/Board";
 
 const classes = require("./Grid.module.css");
 
-const Grid = () => {
-  const lines = Array.from({ length: 20 }, (v, k) => k);
+interface iProps {
+  board: Board
+}
+
+const Grid = (props: iProps) => {
+  const style = {
+    backgroundColor: props.board.currentPiece ? props.board.currentPiece.color : "red"
+  }
 
   return (
     <div className={classes.Grid}>
-      {lines.map((i) => {
-        return <Line key={i} />;
+      {props.board.tmpGrid.map((rows, y) => {
+        return <div key={y} className={classes.Line} >{rows.map((value, x) => {
+          return <div key={x} className={classes.Case} style={value ? style : null}></div>
+        })}</div>;
       })}
     </div>
   );

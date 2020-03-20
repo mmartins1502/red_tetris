@@ -5,3 +5,7 @@ export const LEAVE_ROOM = "LEAVE_ROOM";
 export const REFRESH_ROOM = "REFRESH_ROOM";
 export const START_GAME = "START_GAME";
 export const READY = "READY";
+export const REFRESH_PLAYER_ASK = "REFRESH_PLAYER_ASK"
+export const REFRESH_PLAYER = "REFRESH_PLAYER"
+export const INIT_BOARD = "INIT_BOARD"
+export const LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER"

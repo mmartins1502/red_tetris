@@ -1,11 +1,9 @@
 import * as actionTypes from "./actionTypes";
-import { Player } from "../../models/Player";
-import { Room } from "../../models/Room";
-// eslint-disable-next-line
+import { Player } from "../../../server/models/Player";
+import { Room } from "../../../server/models/Room";
 import { ActionCreator } from "redux";
-// eslint-disable-next-line
 import { ThunkAction } from "redux-thunk";
-import { iState } from "../reducers/socketReducer";
+import { iState } from "../reducers/roomReducer";
 
 export enum SocketActionTypes {
   DEFAULT = "DEFAULT",
@@ -15,27 +13,20 @@ export enum SocketActionTypes {
   LEAVE_ROOM = "LEAVE_ROOM",
   REFRESH_ROOM = "REFRESH_ROOM",
   START_GAME = "START_GAME",
-  READY = "READY"
+  READY = "READY",
+  REFRESH_PLAYER = "REFRESH_PLAYER",
+  REFRESH_PLAYER_ASK = "REFRESH_PLAYER_ASK",
+  INIT_BOARD = "INIT_BOARD",
+  LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER",
 }
 
-const initialRoom: Room = {
-  id: "",
-  players: [],
-  inGame: false,
-  star: {
-    id: "",
-    name: "",
-    room: "",
-    state: false
-  }
-};
+// const initialRoom = undefined;
 
 interface defaultAction {
   type: SocketActionTypes.DEFAULT;
 }
 
-// event: string;
-// handle: (data: string) => void;
+
 export interface createPlayerIdAction {
   type: SocketActionTypes.CREATE_PLAYER_ID;
   payload: string;
@@ -47,7 +38,6 @@ export const createPlayerId: ActionCreator<ThunkAction<
   null,
   any
 >> = () => {
-  console.log("[createPlayerId] action creator");
   return async (dispatch) => {
     return new Promise<any>((resolve) => {
       dispatch({
@@ -69,10 +59,7 @@ export const createPlayerId: ActionCreator<ThunkAction<
 ///////////////////////////////////////////////////////////////////////////
 
 interface checkRoomAction {
-  // event: string;
-  // emit: boolean;
   handle: Player;
-  // handle: (formData: Player) => void;
   type: SocketActionTypes.CHECK_ROOM;
 }
 
@@ -95,8 +82,6 @@ interface Res_roomInfos {
 }
 
 interface roomHomeInfosAction {
-  // event: string;
-  // handle: (data: Res_roomInfos) => void;
   type: SocketActionTypes.ROOM_AND_PLAYER;
   player: Player;
   room: Room;
@@ -109,7 +94,7 @@ export const roomHomeInfos: ActionCreator<ThunkAction<
   null,
   any
 >> = () => {
-  console.log("[roomHomeInfos] action creator");
+  // console.log("[roomHomeInfos] action creator");
   return async (dispatch) => {
     return new Promise<any>((resolve) => {
       dispatch({
@@ -133,8 +118,6 @@ export const roomHomeInfos: ActionCreator<ThunkAction<
 ///////////////////////////////////////////////////////////////////////////
 
 interface leaveRoomAction {
-  // event: string;
-  // emit: boolean;
   handle: {
     player: Player;
     room: Room;
@@ -142,10 +125,16 @@ interface leaveRoomAction {
   type: SocketActionTypes.LEAVE_ROOM;
 }
 
+interface leaveRoomReducerAction {
+  type: SocketActionTypes.LEAVE_ROOM_REDUCER;
+  player: undefined;
+  room: undefined;
+}
+
 export const leaveRoomReducer = () => {
+  console.log("[leaveRoomReducer]")
   return {
-    type: SocketActionTypes.LEAVE_ROOM,
-    room: initialRoom
+    type: SocketActionTypes.LEAVE_ROOM_REDUCER,
   };
 };
 
@@ -154,8 +143,7 @@ export const leaveRoom = (me: Player, room: Room) => {
     player: me,
     room: room
   };
-  // dispatch(leaveRoomReducer();)
-
+  console.log("[leaveRoom]")
   return {
     type: SocketActionTypes.LEAVE_ROOM,
     event: "LeaveRoom",
@@ -243,12 +231,85 @@ export const ready = (me: Player, room: Room) => {
 
 ///////////////////////////////////////////////////////////////////////////
 
+interface refreshPlayerAskAction {
+  type: SocketActionTypes.REFRESH_PLAYER_ASK;
+  room: Room;
+}
+
+export const refreshPlayerAsk = (player: Player, room: Room, move: string) => {
+  return {
+    event: "Board",
+    emit: true,
+    handle: {player: player, room: room, move: move}
+  };
+};
+
+
+///////////////////////////////////////////////////////////////////////////
+
+interface initBoardAction {
+  type: SocketActionTypes.INIT_BOARD;
+  player: Player;
+}
+
+export const initBoard = (player: Player, room: Room) => {
+  console.log('[initBoard]')
+  return {
+    event: "initialBoard",
+    emit: true,
+    handle: {player: player, room: room}
+  };
+};
+
+
+///////////////////////////////////////////////////////////////////////////
+
+interface refreshPlayerAction {
+  type: SocketActionTypes.REFRESH_PLAYER;
+  player: Player;
+  room: Room;
+  error: string;
+}
+
+export const refreshPlayer: ActionCreator<ThunkAction<
+  Promise<any>,
+  iState,
+  null,
+  any
+>> = () => {
+  return async (dispatch) => {
+    return new Promise<any>((resolve) => {
+      dispatch({
+        type: actionTypes.REFRESH_PLAYER,
+        event: "Board",
+        handle: (data: any) => {
+          resolve(
+            dispatch({
+              type: actionTypes.REFRESH_PLAYER,
+              player: data.player,
+              room: data.room,
+              error: data.error
+            })
+          );
+        }
+      });
+    });
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+
 export type RoomActions =
   | createPlayerIdAction
   | checkRoomAction
   | roomHomeInfosAction
   | leaveRoomAction
+  | leaveRoomReducerAction
   | refreshRoomAction
   | startGameAction
   | readyAction
+  | refreshPlayerAskAction
+  | initBoardAction
+  | refreshPlayerAction
   | defaultAction;

@@ -8,17 +8,17 @@ import {
 import thunk, { ThunkMiddleware } from "redux-thunk";
 import socketMiddleware from "../store/middlewares/socketMiddleware";
 
-import { socketReducer, iState } from "./reducers/socketReducer";
+import { roomReducer, iState } from "./reducers/roomReducer";
 import { RoomActions } from "./actions/roomActions";
 
 // Create an interface for the application state
 export interface IAppState {
-  socketState: iState;
+  roomState: iState;
 }
 
 // Create the root reducer
 const rootReducer = combineReducers<IAppState>({
-  socketState: socketReducer
+  roomState: roomReducer
 });
 
 const middlewares = applyMiddleware(
