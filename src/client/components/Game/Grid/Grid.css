@@ -6,20 +6,27 @@
   border: 20px solid #d40e0e;
   box-sizing: border-box;
   box-shadow: transparent;
-  background-color: rgb(77, 77, 77);
+
+  /* background-color: rgb(77, 77, 77); */
 }
 
 .Line {
   display: flex;
+  margin-top: 1px;
+  margin-bottom: 1px;
   width: 100%;
   height: 5%;
 }
 
 .Case {
+  margin-right: 1px;
+  margin-left: 1px;
   width: 100%;
   height: 100%;
   color: rgba(10, 10, 10, 0.514);
-  border: rgba(8, 8, 8, 0.453) solid 1px;
+  /* border: rgba(8, 8, 8, 0.453) solid 1px; */
+  background-color: rgb(77, 77, 77);
+
 }
 
 @media (max-width: 499px) {

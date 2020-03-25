@@ -38,10 +38,10 @@ export class Board {
     this.gameOver =false
   }
 
-  public reset() {
-    this.grid = Array.from({length: 20}, () => Array(10).fill(0))
-    this.tmpGrid = this.grid
-  }
+  // public reset() {
+  //   this.grid = Array.from({length: 20}, () => Array(10).fill(0))
+  //   this.tmpGrid = this.grid
+  // }
 
 
   private insideWalls(x: number) {
@@ -121,6 +121,7 @@ export class Board {
         }
       });
     });
+    this.clearLines()
   }
 
 }

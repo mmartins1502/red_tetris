@@ -54,7 +54,7 @@ const Game: FC<IProps> = (props) => {
 const gamePage = useRef(null)
 
 const {onRefreshPlayer} = props
-// const {onRefreshPlayerAsk, player, room} = props
+const {onRefreshPlayerAsk, player, room} = props
   
   useEffect(() => {
     gamePage.current.focus()
@@ -63,16 +63,16 @@ const {onRefreshPlayer} = props
     // eslint-disable-next-line
   }, [onRefreshPlayer])
 
-  // useEffect(() => {
-  //   // AUTOMATIC MOVE
-  //   let interval = null;
-  //   if (room.inGame && !player.board.gameOver) {
-  //     interval = setInterval(() => {
-  //       onRefreshPlayerAsk(player, room, "ArrowDown")
-  //     }, room.speed);
-  //    }
-  //   return () => clearInterval(interval);
-  // }, [room, player, onRefreshPlayerAsk]);
+  useEffect(() => {
+    // AUTOMATIC MOVE
+    let interval = null;
+    if (room.inGame && !player.board.gameOver) {
+      interval = setInterval(() => {
+        onRefreshPlayerAsk(player, room, "ArrowDown")
+      }, room.speed);
+     }
+    return () => clearInterval(interval);
+  }, [room, player, onRefreshPlayerAsk]);
 
 
 

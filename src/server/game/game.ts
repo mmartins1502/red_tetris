@@ -61,12 +61,14 @@ const play = (socket: any) => {
         let board = new Board(room.piecesList[player.listIdx])
 
         if (move && player.board && player.board.currentPiece) {
+            console.log('player.board.grid', player.board.grid)
             let pos = {
                 y: player.board.currentPiece.pos.y,
                 x: player.board.currentPiece.pos.x 
             }
             let piece = new Piece(player.board.currentPiece.letter, pos);
             board.currentPiece = piece
+            board.grid = player.board.grid
             let p = moves[move](board.currentPiece);
             console.log('before valid p', p)
             // Hard drop
@@ -82,9 +84,8 @@ const play = (socket: any) => {
             } else if (!board.isValid(p) && move === KEY.DOWN) {
                 // Piece is down => save pos, clear lines ? & new current piece | GAME OVER
                 board.freeze()
-                board.clearLines()
                 player.listIdx++
-                if (!room.piecesList[player.listIdx +3]) {
+                if (!room.piecesList[player.listIdx + 3]) {
                     room.piecesList = generator(room.piecesList)  
                 }
                 let p = new Piece(room.piecesList[player.listIdx])
