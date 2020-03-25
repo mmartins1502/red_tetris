@@ -9,5 +9,5 @@ export {
   ready,
   refreshPlayerAsk,
   refreshPlayer,
-  initBoard
+  initBoard,
 } from "./roomActions";

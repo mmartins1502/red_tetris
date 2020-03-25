@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
-import { Player } from "../../../server/models/Player";
-import { Room } from "../../../server/models/Room";
+import { Player } from "../../../Shared/models/Player";
+import { Room } from "../../../Shared/models/Room";
 
 import * as actions from "../../store/actions/index";
 import { IAppState } from "../../store";
@@ -11,7 +11,31 @@ import { withRouter } from "react-router";
 import Grid from "../../components/Game/Grid/Grid";
 
 import "./Game.css";
-import { Dispatch } from "redux";
+import NextPieces from "../../components/Game/NextPieces/NextPieces";
+// const pieces = [
+//   {
+//       color: "cyan",
+//   },
+//   {
+//       color: "blue",
+//   },
+//   {
+//       color: "orange",
+//   },
+//   {    
+//       color: "yellow",
+//   },
+//   {
+//       color: "green",
+//   },
+//   {
+//       color: "red",
+//   },
+//   {
+//       color: "purple",
+//   }
+// ]
+
 
 interface IProps {
   history: History;
@@ -29,16 +53,28 @@ const Game: FC<IProps> = (props) => {
 
 const gamePage = useRef(null)
 
-  const {onRefreshPlayer} = props
-
+const {onRefreshPlayer} = props
+// const {onRefreshPlayerAsk, player, room} = props
   
   useEffect(() => {
     gamePage.current.focus()
     onRefreshPlayer()
     props.onInitialBoard(props.player, props.room)
-
     // eslint-disable-next-line
   }, [onRefreshPlayer])
+
+  // useEffect(() => {
+  //   // AUTOMATIC MOVE
+  //   let interval = null;
+  //   if (room.inGame && !player.board.gameOver) {
+  //     interval = setInterval(() => {
+  //       onRefreshPlayerAsk(player, room, "ArrowDown")
+  //     }, room.speed);
+  //    }
+  //   return () => clearInterval(interval);
+  // }, [room, player, onRefreshPlayerAsk]);
+
+
 
 
   const leaveRoom = () => {
@@ -49,7 +85,7 @@ const gamePage = useRef(null)
 
   const handleKeyPress = (e) => {
     e.preventDefault()
-    console.log("\'" + e.key + "\'")
+    console.log("'" + e.key + "'")
     if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === " ") {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
     } 
@@ -60,6 +96,8 @@ const gamePage = useRef(null)
       <button onClick={() => leaveRoom()}>QUIT</button>
       <div className="Game">
         <Grid board={props.player.board}/>
+        <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
+        {props.player.board.gameOver ? <h1 style={{color: 'black'}}>GAME OVER</h1> : null}
         <div className="Side">
           <div className="Adversaire">Adversaire</div>
           <div className="Commands">
@@ -70,7 +108,6 @@ const gamePage = useRef(null)
             <span>↓ : move down</span>
             <span>space : drop piece</span>
           </div>
-          <div className="Next">next piece</div>
         </div>
       </div>
     </div>

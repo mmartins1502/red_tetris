@@ -8,7 +8,7 @@
     "paths": {
       "@daos": ["src/daos"],
       "@entities": ["src/entities"],
-      "@shared": ["src/shared"],
+      "@shared": ["src/Shared"],
       "@server": ["src/Server"]
     },
     "downlevelIteration": true,

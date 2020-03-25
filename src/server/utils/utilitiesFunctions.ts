@@ -1,22 +1,17 @@
-import { Player } from "../models/Player";
-import { Room } from "../models/Room";
+// import { Player } from "../../common/models/Player";
+import { Room } from "../../Shared/models/Room";
 
 const createNewRoom = (id: string, rooms: Room[]) => {
   let room = new Room(id);
   rooms.push(room);
-  return room;
-};
-
-const createNewPlayer = (id: string, name: string, roomId: string) => {
-  let player = new Player(id, name, roomId);
-  return player;
+  return room as Room
 };
 
 const findRoomById = (id: string, rooms: Room[]) => {
   const room = rooms.find((room) => {
     return room.id === id;
   });
-  return room;
+  return room as Room
 };
 
 const refresh = (socket: any, room: Room, error: string, all: boolean) => {
@@ -35,7 +30,6 @@ const refresh = (socket: any, room: Room, error: string, all: boolean) => {
 
 module.exports = {
   createNewRoom,
-  createNewPlayer,
   findRoomById,
   refresh
 };

@@ -21,7 +21,6 @@ import Slide from "@material-ui/core/Slide";
 import SettingsModal from "../../components/UI/Modal/SettingsModal";
 import MusicButton from "../../components/UI/Music/MusicButton";
 import Settings from "../../components/Room/Settings";
-import { Dispatch } from "redux";
 
 // IMPORT CSS
 const classes = require("./RoomHome.module.css");
@@ -38,7 +37,7 @@ interface IProps extends RouteComponentProps {
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
-  console.log("props.room", props.room);
+  // console.log("props.room", props.room);
   const { onRereshRoom } = props;
 
   useEffect(() => {

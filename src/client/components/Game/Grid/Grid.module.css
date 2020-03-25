@@ -2,12 +2,11 @@
   display: flex;
   flex-direction: column;
   width: 40vh;
-  /* max-width: 500px; */
   height: 80vh;
-  border: 2px solid tomato;
+  border: 20px solid #d40e0e;
   box-sizing: border-box;
   box-shadow: transparent;
-  background-color: rgba(10, 10, 10, 0.781);
+  background-color: rgb(77, 77, 77);
 }
 
 .Line {

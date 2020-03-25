@@ -74,7 +74,6 @@ export const roomReducer: Reducer<iState, RoomActions> = (
     case actionTypes.REFRESH_PLAYER_ASK:
       return state;
     case actionTypes.REFRESH_PLAYER:
-      console.log("actions", action)
         return {
           ...state,
           player: action.player,

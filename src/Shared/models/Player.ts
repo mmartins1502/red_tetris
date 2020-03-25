@@ -5,7 +5,7 @@ export class Player {
   name: string;
   room: string;
   state: boolean;
-  board: Board;
+  board?: Board;
   listIdx: number;
 
   constructor(id: string, name: string, room: string) {
@@ -13,8 +13,11 @@ export class Player {
     this.name = name;
     this.room = room;
     this.state = false;
-    this.board = new Board()
     this.listIdx = 0
-    
+  }
+
+  public initBoard(letter: string) {
+    this.board = new Board(letter)
+    this.board.draw()
   }
 }

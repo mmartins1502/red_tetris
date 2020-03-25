@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
-import { Player } from "../../../server/models/Player";
-import { Room } from "../../../server/models/Room";
+import { Player } from "../../../Shared/models/Player";
+import { Room } from "../../../Shared/models/Room";
 import { ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { iState } from "../reducers/roomReducer";

@@ -1,6 +1,8 @@
 import { Player } from "./Player";
-import { Board } from './Board';
-import { Piece } from './Piece';
+// import { Board } from './Board';
+// import { Piece } from './Piece';
+import {randomizer} from '../../server/utils/randomizer'
+// import { pieces } from './Pieces';
 
 export class Room {
   id: string;
@@ -8,7 +10,8 @@ export class Room {
   inGame: boolean;
   star: Player;
   everyOneIsReady: boolean;
-  piecesList: Piece[]
+  piecesList: any
+  speed: number
 
   constructor(id: string) {
     this.id = id;
@@ -16,35 +19,28 @@ export class Room {
     this.inGame = false;
     this.star = this.players[0];
     this.everyOneIsReady = false;
+    this.piecesList = []
     this.piecesList = this.generator()
+    this.speed = 250
 
   }
 
   private generator() {
-    const pieces: Piece[] = []
-    for(let i = 0; i < 500; i++) {
-      const piece = new Piece()
-      pieces.push(piece)
+    let random = randomizer()
+    for(let i = 0; i < 15; i++) {
+      this.piecesList.push(random.next().value)
     }
-    return pieces
+    // console.log('this.piecesList', this.piecesList)
+    return this.piecesList
   }
 
   public addPlayer(
     playerId: string,
     playerName: string,
-    playerState: boolean,
     playerRoom: string,
-    playerBoard: Board,
-    playerIdxPiece: number
   ) {
-    let player = {
-      id: playerId,
-      name: playerName,
-      room: playerRoom,
-      state: playerState,
-      board: playerBoard,
-      listIdx: playerIdxPiece
-    };
+
+    let player = new Player(playerId, playerName, playerRoom)
 
     this.players.push(player);
     !this.star ? (this.star = player) : (this.star = this.players[0]);

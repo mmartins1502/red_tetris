@@ -6,9 +6,10 @@
 .Game {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   color: white;
 }
+
 
 .Side {
   display: flex;
@@ -24,10 +25,10 @@
   max-width: 300px;
   height: 60vw;
   max-height: 600px;
-  border: 1px solid tomato;
+  border: 1px solid #d40e0e;
   box-sizing: border-box;
   box-shadow: transparent;
-  background-color: rgba(10, 10, 10, 0.781);
+  background-color: rgb(77, 77, 77);
 }
 
 .Commands {
@@ -39,17 +40,7 @@
   max-width: 300px;
   height: 20vw;
   max-height: 180px;
-  border: 1px solid tomato;
-  box-sizing: border-box;
-  box-shadow: transparent;
-  background-color: rgba(10, 10, 10, 0.781);
-}
-
-.Next {
-  border: 1px solid white;
-  width: 10vw;
-  height: 10vw;
-  border: 1px solid tomato;
+  border: 1px solid #d40e0e;
   box-sizing: border-box;
   box-shadow: transparent;
   background-color: rgba(10, 10, 10, 0.781);
@@ -63,7 +54,7 @@
   width: 80%;
   margin: 10%;
   padding: 20px;
-  border: 1px solid tomato;
+  border: 1px solid #d40e0e;
   box-sizing: border-box;
   box-shadow: transparent;
   background-color: rgba(10, 10, 10, 0.781);
