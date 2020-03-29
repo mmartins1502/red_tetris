@@ -1,21 +1,23 @@
 import * as actionTypes from "../actions/actionTypes";
 import { RoomActions } from "../actions/roomActions";
 import { Reducer } from "redux";
-import { Player } from 'Shared/models/Player';
-import { Room } from 'Shared/models/Room';
-
+import { Player, iPlayer } from 'Shared/models/Player';
+import { Room, iRoom } from '../../../Shared/models/Room';
+// import { Board } from 'Shared/models/Board';
 
 
 export interface iState {
-  player: Player;
-  room: Room; 
+  player: iPlayer;
+  room: iRoom; 
   error: string;
   redirect: boolean;
 }
-const player: Player = new Player("", "", "")
+const player: iPlayer = new Player("", "", "")
+const room: iRoom = new Room("")
+
 const initialState: iState = {
   player: player,
-  room: new Room(""),
+  room: room,
   error: "",
   redirect: false
 };

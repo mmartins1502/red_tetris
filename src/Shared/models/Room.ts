@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player, iPlayer } from "./Player";
 import { randomizer } from '../../Server/utils/randomizer';
 
 
@@ -13,6 +13,26 @@ interface iSettings {
     faster: boolean;
   }
 }
+
+export interface iRoom {
+  id: string;
+  players: iPlayer[];
+  inGame: boolean;
+  star: iPlayer;
+  everyOneIsReady: boolean;
+  piecesList: string[];
+  speed: number;
+  settings : iSettings;
+  generator: () => void;
+  addPlayer: (playerId: string, playerName: string, playerRoom: string) => void
+  startGame: () => void;
+  isFull: () => boolean;
+  removePlayer: (playerId: string, rooms: iRoom[]) => iRoom[];
+  updatePlayer: (updatedPlayer: Player) => void;
+  endGame: () => void;
+}
+
+
 
 export class Room {
   id: string;
@@ -30,9 +50,9 @@ export class Room {
     this.inGame = false;
     this.star = this.players[0];
     this.everyOneIsReady = false;
-    this.piecesList = []
-    this.piecesList = this.generator()
-    this.speed = 250
+    this.piecesList = [];
+    this.piecesList = this.generator();
+    this.speed = 250;
     this.settings = {
       mode: 'Solo',
       difficulty: {
@@ -43,27 +63,20 @@ export class Room {
         noRotation: false,
         faster: false
       }
-    }
+    };
 
   }
 
-  private generator() {
+  public generator = () => {
     let random = randomizer()
     for(let i = 0; i < 15; i++) {
       this.piecesList.push(random.next().value)
     }
-    // console.log('this.piecesList', this.piecesList)
     return this.piecesList
   }
 
-  public addPlayer(
-    playerId: string,
-    playerName: string,
-    playerRoom: string,
-  ) {
-
+  public addPlayer(playerId: string, playerName: string, playerRoom: string) {
     let player = new Player(playerId, playerName, playerRoom)
-
     this.players.push(player);
     !this.star ? (this.star = player) : (this.star = this.players[0]);
   }

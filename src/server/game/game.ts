@@ -2,8 +2,6 @@ import { Player } from "../../Shared/models/Player"
 import { Room } from '../../Shared/models/Room'
 import { Board } from '../../Shared/models/Board'
 import { Piece } from '../../Shared/models/Piece'
-import { randomizer } from '../utils/randomizer'
-// const utilGame = require('../utils/gameFunctions')
 
 
 
@@ -56,13 +54,6 @@ const moves = {
 [KEY.UP]: (p: Piece) => p.currentPieceRotation(p)
 };
 
-const generator = (piecesList: any) => {
-    let random = randomizer()
-    for(let i = 0; i < 5; i++) {
-      piecesList.push(random.next().value)
-    }
-    return piecesList
-  }
 
 const play = (socket: any) => {
     socket.on("Board", (data: iData) => {
@@ -104,7 +95,7 @@ const play = (socket: any) => {
                     board.freeze()
                     player.listIdx++
                     if (!room.piecesList[player.listIdx + 3]) {
-                        room.piecesList = generator(room.piecesList)  
+                        room.piecesList = room.generator()  
                     }
                     let p = new Piece(room.piecesList[player.listIdx])
                     board.isValid(p) ? board.currentPiece = p : board.gameOver = true

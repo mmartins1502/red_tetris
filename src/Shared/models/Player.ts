@@ -4,6 +4,16 @@ import { Board } from './Board';
 
 // }
 
+export interface iPlayer {
+  id: string;
+  name: string;
+  room: string;
+  state: boolean;
+  board?: Board;
+  listIdx: number;
+  initBoard: (letter: string) => void  
+}
+
 export class Player {
   id: string;
   name: string;
