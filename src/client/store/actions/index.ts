@@ -10,4 +10,5 @@ export {
   refreshPlayerAsk,
   refreshPlayer,
   initBoard,
+  settingsChanged,
 } from "./roomActions";

@@ -1,38 +1,26 @@
 import * as actionTypes from "../actions/actionTypes";
-
-import { Player } from "../../models/Player";
-import { Room } from "../../models/Room";
-
 import { RoomActions } from "../actions/roomActions";
 import { Reducer } from "redux";
+import { Player } from 'Shared/models/Player';
+import { Room } from 'Shared/models/Room';
+
+
 
 export interface iState {
   player: Player;
-  room: Room;
+  room: Room; 
   error: string;
   redirect: boolean;
 }
+const player: Player = new Player("", "", "")
 const initialState: iState = {
-  player: {
-    id: "",
-    name: "",
-    room: "",
-    state: false
-  },
-  room: {
-    id: "",
-    players: [],
-    inGame: false,
-    star: {
-      id: "",
-      name: "",
-      room: "",
-      state: false
-    }
-  },
+  player: player,
+  room: new Room(""),
   error: "",
   redirect: false
 };
+
+console.log('initialState', initialState)
 
 export const roomReducer: Reducer<iState, RoomActions> = (
   state = initialState,
@@ -57,6 +45,14 @@ export const roomReducer: Reducer<iState, RoomActions> = (
         error: action.error,
         redirect: true
       };
+    case actionTypes.SETTINGS:
+        return {
+          ...state,
+          room: {
+            ...state.room,
+            settings: action.settings
+          }
+        };
     case actionTypes.LEAVE_ROOM:
       return state;
     case actionTypes.LEAVE_ROOM_REDUCER:

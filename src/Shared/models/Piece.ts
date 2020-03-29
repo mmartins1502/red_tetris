@@ -26,18 +26,17 @@ export class Piece {
     }
 
     public currentPieceRotation(p: Piece){
-        // Clone with JSON for immutability.
         let clone: Piece = JSON.parse(JSON.stringify(p));
-        // Transpose matrix, p is the Piece.
-        for (let y = 0; y < p.shape.length; ++y) {
+          // Transpose matrix
+          for (let y = 0; y < clone.shape.length; ++y) {
             for (let x = 0; x < y; ++x) {
-            [p.shape[x][y], p.shape[y][x]] = 
-            [p.shape[y][x], p.shape[x][y]];
+              [clone.shape[x][y], clone.shape[y][x]] = 
+              [clone.shape[y][x], clone.shape[x][y]];
             }
-        }
-        // Reverse the order of the columns.
-        p.shape.forEach(row => row.reverse());
-  
+          }
+          // Reverse the order of the columns.
+          clone.shape.forEach((row: any) => row.reverse());
+        
         return clone;
     }
 

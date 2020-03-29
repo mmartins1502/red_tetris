@@ -1,5 +1,9 @@
 import { Board } from './Board';
 
+// interface iAccount {
+
+// }
+
 export class Player {
   id: string;
   name: string;
@@ -7,6 +11,7 @@ export class Player {
   state: boolean;
   board?: Board;
   listIdx: number;
+  // account: iAccount
 
   constructor(id: string, name: string, room: string) {
     this.id = id;

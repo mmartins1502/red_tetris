@@ -2,8 +2,8 @@ import React, { useEffect, FC } from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
-import { Player } from "../../../server/models/Player";
-import { Room } from "../../../server/models//Room";
+import { Player } from "../../../Shared/models/Player";
+import { Room } from "../../../Shared/models/Room";
 
 //COMPONENTS
 import Formulaire from "../../components/HomePage/Formulaire";
@@ -11,16 +11,16 @@ import * as actions from "../../store/actions/roomActions";
 import { IAppState } from "../../store";
 import { Redirect } from "react-router-dom";
 import Logo from "../../components/UI/Logo/Logo";
-
+import MusicButton from "../../components/UI/Music/MusicButton";
 import { Alert } from "@material-ui/lab";
 import Slide from "@material-ui/core/Slide";
 
 // CSS & IMG
-// const classes = require("./HomePage.module.css");
 import "./HomePage.css";
-import MusicButton from "../../components/UI/Music/MusicButton";
+
 
 interface IProps {
+  playerId: string;
   room: Room;
   player: Player;
   error: string;
@@ -30,8 +30,8 @@ interface IProps {
   onRoomNumber: () => void;
 }
 
-export const HomePage: FC<IProps> = (props) => {
-  // console.log("[HomePage] props", props);
+export const HomePage: React.FC<IProps> = (props) => {
+  console.log("[HomePage] props", props);
 
   const { onCreatePlayerId } = props;
 
@@ -39,11 +39,13 @@ export const HomePage: FC<IProps> = (props) => {
     onCreatePlayerId();
   }, [onCreatePlayerId]);
 
-  const formValidation = (formData: Player) => {
+  const formValidation = (formData: any) => {
     formData.id = props.player.id;
     props.onFormValidated(formData);
     props.onRoomNumber();
   };
+
+
 
   if (props.redirect && props.room.id && props.player.name && !props.error) {
     return <Redirect to={`/${props.room.id}[${props.player.name}]`} />;
@@ -52,7 +54,6 @@ export const HomePage: FC<IProps> = (props) => {
   return (
     <div>
       <MusicButton />
-
       <div className="Box">
         <Logo />
         <div className="BoxInput">

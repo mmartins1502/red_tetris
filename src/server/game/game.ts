@@ -38,6 +38,16 @@ const KEY = {
   }
   Object.freeze(KEY);
 
+const POINTS = {
+    SINGLE: 100,
+    DOUBLE: 300,
+    TRIPLE: 500,
+    TETRIS: 800,
+    SOFT_DROP: 1,
+    HARD_DROP: 2
+  }
+  Object.freeze(POINTS);
+
 const moves = {
 [KEY.LEFT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x - 1}} as Piece),
 [KEY.RIGHT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x + 1}} as Piece),
@@ -51,7 +61,6 @@ const generator = (piecesList: any) => {
     for(let i = 0; i < 5; i++) {
       piecesList.push(random.next().value)
     }
-    console.log('piecesList', piecesList)
     return piecesList
   }
 
@@ -61,36 +70,45 @@ const play = (socket: any) => {
         let board = new Board(room.piecesList[player.listIdx])
 
         if (move && player.board && player.board.currentPiece) {
-            console.log('player.board.grid', player.board.grid)
+            // console.log('player.board.grid', player.board.grid)
             let pos = {
                 y: player.board.currentPiece.pos.y,
                 x: player.board.currentPiece.pos.x 
             }
             let piece = new Piece(player.board.currentPiece.letter, pos);
             board.currentPiece = piece
+            board.currentPiece.shape = player.board.currentPiece.shape
+
             board.grid = player.board.grid
-            let p = moves[move](board.currentPiece);
-            console.log('before valid p', p)
-            // Hard drop
-            if (move === KEY.SPACE) {
-                while (board.isValid(p)) {
-                    board.move(p);   
-                    p = moves[KEY.DOWN](board.currentPiece);
-                  }
-            // Other moves
-            } else if (board.isValid(p)) {    
-                // If the move is valid, move the piece.
-                board.move(p);
-            } else if (!board.isValid(p) && move === KEY.DOWN) {
-                // Piece is down => save pos, clear lines ? & new current piece | GAME OVER
-                board.freeze()
-                player.listIdx++
-                if (!room.piecesList[player.listIdx + 3]) {
-                    room.piecesList = generator(room.piecesList)  
+            if (move === KEY.UP) {
+                if (!room.settings.options.noRotation) {
+                    let p = moves[KEY.UP](board.currentPiece)
+                    if (board.isValid(p)) {
+                        board.currentPiece  = board.currentPiece.currentPieceRotation(board.currentPiece)
+                    }
                 }
-                let p = new Piece(room.piecesList[player.listIdx])
-                board.isValid(p) ? board.currentPiece = p : board.gameOver = true
-                
+            } else {
+                let p = moves[move](board.currentPiece);
+                // Hard drop
+                if (move === KEY.SPACE) {
+                    while (board.isValid(p)) {
+                        board.move(p);   
+                        p = moves[KEY.DOWN](board.currentPiece);
+                      }
+                // Other moves
+                } else if (board.isValid(p)) {    
+                    // If the move is valid, move the piece.
+                    board.move(p);
+                } else if (!board.isValid(p) && move === KEY.DOWN) {
+                    // Piece is down => save pos, clear lines ? & new current piece | GAME OVER
+                    board.freeze()
+                    player.listIdx++
+                    if (!room.piecesList[player.listIdx + 3]) {
+                        room.piecesList = generator(room.piecesList)  
+                    }
+                    let p = new Piece(room.piecesList[player.listIdx])
+                    board.isValid(p) ? board.currentPiece = p : board.gameOver = true
+                }
             }
         }                
         board.draw()

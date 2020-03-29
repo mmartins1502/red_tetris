@@ -1,8 +1,18 @@
 import { Player } from "./Player";
-// import { Board } from './Board';
-// import { Piece } from './Piece';
-import {randomizer} from '../../server/utils/randomizer'
-// import { pieces } from './Pieces';
+import { randomizer } from '../../Server/utils/randomizer';
+
+
+interface iSettings {
+  mode: string;
+  difficulty: {
+    easy: boolean;
+    hard: boolean;
+  },
+  options: {
+    noRotation: boolean;
+    faster: boolean;
+  }
+}
 
 export class Room {
   id: string;
@@ -10,8 +20,9 @@ export class Room {
   inGame: boolean;
   star: Player;
   everyOneIsReady: boolean;
-  piecesList: any
-  speed: number
+  piecesList: any;
+  speed: number;
+  settings : iSettings
 
   constructor(id: string) {
     this.id = id;
@@ -22,6 +33,17 @@ export class Room {
     this.piecesList = []
     this.piecesList = this.generator()
     this.speed = 250
+    this.settings = {
+      mode: 'Solo',
+      difficulty: {
+        easy: true,
+        hard: false
+      },
+      options: {
+        noRotation: false,
+        faster: false
+      }
+    }
 
   }
 

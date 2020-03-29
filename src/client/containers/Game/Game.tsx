@@ -12,6 +12,7 @@ import Grid from "../../components/Game/Grid/Grid";
 
 import "./Game.css";
 import NextPieces from "../../components/Game/NextPieces/NextPieces";
+import GameOver from "../../components/Game/GameOver/GameOver";
 // const pieces = [
 //   {
 //       color: "cyan",
@@ -86,10 +87,13 @@ const {onRefreshPlayerAsk, player, room} = props
   const handleKeyPress = (e) => {
     e.preventDefault()
     console.log("'" + e.key + "'")
-    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === " ") {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === " ") {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
-    } 
+    } else if (e.key === "ArrowUp" && !props.room.settings.options.noRotation) {
+      props.onRefreshPlayerAsk(props.player, props.room, e.key)
+    }
   }
+  let spectrum = (props.room.settings.mode === "Solo" || props.room.settings.difficulty.hard) ? null : <div className="Adversaire">Adversaire</div>
 
   return (
     <div className="GamePage" style={{ position: "absolute" }} tabIndex={0} ref={gamePage}  onKeyDown={(e) => handleKeyPress(e)}>
@@ -97,9 +101,9 @@ const {onRefreshPlayerAsk, player, room} = props
       <div className="Game">
         <Grid board={props.player.board}/>
         <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
-        {props.player.board.gameOver ? <h1 style={{color: 'black'}}>GAME OVER</h1> : null}
+        {props.player.board.gameOver ? <GameOver /> : null}
         <div className="Side">
-          <div className="Adversaire">Adversaire</div>
+          {spectrum}
           <div className="Commands">
             <h4>Commands</h4>
             <span>← : move left</span>

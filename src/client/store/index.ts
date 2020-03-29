@@ -11,6 +11,7 @@ import socketMiddleware from "../store/middlewares/socketMiddleware";
 import { roomReducer, iState } from "./reducers/roomReducer";
 import { RoomActions } from "./actions/roomActions";
 
+
 // Create an interface for the application state
 export interface IAppState {
   roomState: iState;

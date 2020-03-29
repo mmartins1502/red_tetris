@@ -45,29 +45,29 @@ export class Board {
 
 
   private insideWalls(x: number) {
-    console.log('x', x)
-    console.log('insideWalls', x >= 0 && x < 10)
+    // console.log('x', x)
+    // console.log('insideWalls', x >= 0 && x < 10)
     return x >= 0 && x < 10;
   }
 
   private isEmpty(value: number) {
-    console.log('isEmpty', value)
+    // console.log('isEmpty', value)
     return value === 0;
   }
 
   private aboveFloor(y: number) {
-    console.log('aboveFloor', y >= 0 && y < 20)
+    // console.log('aboveFloor', y >= 0 && y < 20)
     return y >= 0 && y < 20;
   }
 
   private notOccupied(x: number, y: number) {
-    console.log('notOccupied', this.grid[y] && this.grid[y][x] === 0)
+    // console.log('notOccupied', this.grid[y] && this.grid[y][x] === 0)
     return this.grid[y] && this.grid[y][x] === 0;
   }
 
 
   public isValid(piece: Piece) {
-    console.log('piece.shape', piece.shape)
+    // console.log('piece.shape', piece.shape)
       return piece.shape.every((row, dy) => {
         return row.every((value, dx) => {
           let x = piece.pos.x + dx
@@ -89,7 +89,7 @@ export class Board {
 
   public draw() {
     const piece = this.currentPiece
-    console.log('piece', piece)
+    // console.log('piece', piece)
     this.tmpGrid = this.grid.map((row, y) => {
       return row.map((value, x) => {
         if (x >= piece.pos.x && y >= piece.pos.y && (x - piece.pos.x) <= piece.width && (y - piece.pos.y) <= piece.height) {

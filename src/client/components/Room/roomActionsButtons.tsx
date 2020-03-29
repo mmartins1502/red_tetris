@@ -1,11 +1,12 @@
 import React, { SFC } from "react";
 import "./roomActions.module.css";
-import { Player } from "../../models/Player";
-import { Room } from "../../models/Room";
+
 
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { makeStyles } from "@material-ui/core/styles";
+import { Player } from "../../../Shared/models/Player";
+import { Room } from "../../../Shared/models/Room";
 
 export interface IProps {
   me: Player;

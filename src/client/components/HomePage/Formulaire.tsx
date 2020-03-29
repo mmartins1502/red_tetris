@@ -1,21 +1,18 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-
-import { Player } from "../../models/Player";
-
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import "./Formulaire.css";
+import { Player } from "../../../Shared/models/Player";
 
 export interface Props {
   onFormValidated: (formData: Player) => void;
 }
 
 const Forrmulaire2: React.FC<Props> = (props) => {
-  const [state, setState] = useState<Player>({
+  const [state, setState] = useState<any>({
     id: "",
     name: "",
     room: "",
-    state: false
   });
 
   const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => {

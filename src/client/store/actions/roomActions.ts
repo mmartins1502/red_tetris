@@ -18,6 +18,7 @@ export enum SocketActionTypes {
   REFRESH_PLAYER_ASK = "REFRESH_PLAYER_ASK",
   INIT_BOARD = "INIT_BOARD",
   LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER",
+  SETTINGS = "SETTINGS",
 }
 
 // const initialRoom = undefined;
@@ -149,6 +150,21 @@ export const leaveRoom = (me: Player, room: Room) => {
     event: "LeaveRoom",
     emit: true,
     handle: data
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+interface settingsChangedAction {
+  type: SocketActionTypes.SETTINGS;
+  settings: undefined;
+}
+
+export const settingsChanged = (settings: any) => {
+  console.log("[settingsChanged]")
+  return {
+    type: SocketActionTypes.SETTINGS,
+    settings: settings
   };
 };
 
@@ -312,4 +328,5 @@ export type RoomActions =
   | refreshPlayerAskAction
   | initBoardAction
   | refreshPlayerAction
+  | settingsChangedAction
   | defaultAction;

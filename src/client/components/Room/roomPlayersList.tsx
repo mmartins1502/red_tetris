@@ -1,6 +1,5 @@
 import React, { SFC } from "react";
-import { Room } from "../../models/Room";
-import { Player } from "../../models/Player";
+
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -11,6 +10,8 @@ import StarIcon from "@material-ui/icons/Star";
 import DoneIcon from "@material-ui/icons/Done";
 
 import "./roomPlayersList.module.css";
+import { Player } from "../../../Shared/models/Player";
+import { Room } from "../../../Shared/models/Room";
 
 interface IProps {
   player: Player;

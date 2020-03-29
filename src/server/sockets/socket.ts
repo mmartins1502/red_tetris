@@ -45,7 +45,7 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
       player.initBoard(room.piecesList[0])
       if (player.board){
 
-        console.log('player.board.currentPiece', player.board.currentPiece)
+        // console.log('player.board.currentPiece', player.board.currentPiece)
       }
       const roomInfos = {
         player: player,
@@ -102,6 +102,7 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
     socket.on("StartGame", (room: Room) => {
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
+        newRoom.settings = room.settings
         for (var i = 0; i < newRoom.players.length; i++) {
           if (newRoom.players[i].state && newRoom.players[i].id !== socket.id) {
             newRoom.everyOneIsReady = true;
