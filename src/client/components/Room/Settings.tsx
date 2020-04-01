@@ -63,9 +63,12 @@ const usestyles = makeStyles((theme: Theme) =>
 const Settings = (props: Props) => {
   const classes = usestyles();
   const [modalStyle] = React.useState(getModalStyle);
-  const [Multi, setMulti] = React.useState(false);
+  // const [Multi, setMulti] = React.useState(false);
   const [settings, setSettings] = React.useState({
-      mode: props.playersNb > 1 ?'MultiPlayer' : 'Solo',
+      mode: {
+        multiplayer: false,
+        solo: true
+      },
       difficulty: {
         easy: true,
         hard: false
@@ -85,15 +88,14 @@ const Settings = (props: Props) => {
 
 
   const handleChangeMode = (event: React.ChangeEvent<HTMLInputElement>) => {
-      event.preventDefault();
-      console.log('props.playersNb', props.playersNb)
-      if (props.playersNb > 1) {
-        setMulti(!Multi)
-        setSettings({ 
-          ...settings, 
-          mode:  Multi ?'MultiPlayer' : 'Solo',
-        });
-      }
+      const {multiplayer, solo} = settings.mode
+      setSettings({ 
+        ...settings, 
+        mode:{
+          multiplayer: solo,
+          solo: multiplayer
+        } 
+      });
   };
 
 
@@ -130,7 +132,7 @@ const Settings = (props: Props) => {
             <Grid item>Solo</Grid>
             <Grid item>
               <CustomSwitch
-                checked={Multi}
+                checked={settings.mode.multiplayer}
                 onChange={handleChangeMode}
                 value="Multi"
               />

@@ -32,7 +32,7 @@ interface IProps extends RouteComponentProps {
   error: string;
   ////////////////////////////////
   onCreatePlayerId: () => void;
-  onFormValidated: (formData: Player) => void;
+  onFormValidated: (newPlayer: Player) => void;
   onRoomNumber: () => void;
   ////////////////////////////////
   onRereshRoom: () => void;
@@ -44,31 +44,43 @@ interface IProps extends RouteComponentProps {
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
-  console.log("props.room", props.room);
-  const { onRereshRoom, room, onCreatePlayerId, onFormValidated, onRoomNumber } = props;
+  // console.log("[RoomHome] props", props);
+  const { onRereshRoom, onFormValidated, onRoomNumber, onCreatePlayerId } = props;
+  const params = useParams<{playerName: string, room: string}>()
+  console.log('params', params)
 
-  const {roomNAme, playerName} = useParams()
+
   
   useEffect(() => {
-    if (!room) {
+    console.log('[useEffect] => Component Will mount')
+    onRereshRoom()
+    if(!props.player.id) {
       onCreatePlayerId()
-      let newPlayer = new Player(props.player.id, playerName, roomNAme)
-      onFormValidated(newPlayer)
-      onRoomNumber()
     }
+    if (props.room.id === "" || props.room.star === undefined || props.room.players.length === 0) {
+          const newPlayer = new Player(props.player.id, params.playerName, params.room)
+          onFormValidated(newPlayer)
+          onRoomNumber()
+        }
     // eslint-disable-next-line
-  }, [room, onCreatePlayerId, onFormValidated, onRoomNumber])
+  }, [])
+  
+  // useEffect(() => {
+  //   if (room.id === "" || room.star === undefined || room.players.length === 0) {
+  //     let newPlayer = new Player(props.player.id, params.playerName, params.room)
+  //     onFormValidated(newPlayer)
+  //     onRoomNumber()
+  //   }
+  // }, [onFormValidated, onRoomNumber, params.playerName, params.room, props.player.id, room.id, room.players.length, room.star])
 
-  useEffect(() => {
-    onRereshRoom();
-  }, [onRereshRoom]);
+  // useEffect(() => {
+  //   onRereshRoom();
+  // }, [onRereshRoom]);
 
   const me = props.player;
-
-
   const onSettingsChanged = (settings) => {
-  props.onSettingsChanged(settings)
-}
+    props.onSettingsChanged(settings)
+  }
 
   const leaveRoom = () => {
     props.onleaveRoom(me, props.room);
@@ -102,16 +114,23 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
     </div>
   );
 
-  if (!props.room || !props.room.players || props.room.players.length < 1) {
-    console.log("nobody in the room");
-    props.history.replace("/");
-  }
+  // if (!props.room || !props.room.players || props.room.players.length < 1) {
+  //   if(!player.id) {
+  //     props.onCreatePlayerId()
+  //   }
+  //   let newPlayer = new Player(props.player.id, params.playerName, params.room)
+  //   props.onFormValidated(newPlayer)
+  //   props.onRoomNumber()
+  //   console.log("nobody in the room");
+  //   // props.history.replace("/");
+  // }
 
   if (props.room && props.room.inGame === true) {
     return <Game />;
   }
   let settingsOwner = null
-  if (props.player.id === props.room.star.id) {
+  console.log('props =>', props)
+  if (props.player && props.room && props.player.id === props.room.star.id) {
     const playersNb: number = props.room.players.length
     settingsOwner = (
       <SettingsModal>

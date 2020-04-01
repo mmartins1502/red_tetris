@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
-import { Player } from "../../../Shared/models/Player";
-import { Room } from "../../../Shared/models/Room";
+import { Player, iPlayer } from "../../../Shared/models/Player";
+import { Room, iRoom } from "../../../Shared/models/Room";
 
 import * as actions from "../../store/actions/index";
 import { IAppState } from "../../store";
@@ -13,39 +13,19 @@ import Grid from "../../components/Game/Grid/Grid";
 import "./Game.css";
 import NextPieces from "../../components/Game/NextPieces/NextPieces";
 import GameOver from "../../components/Game/GameOver/GameOver";
-// const pieces = [
-//   {
-//       color: "cyan",
-//   },
-//   {
-//       color: "blue",
-//   },
-//   {
-//       color: "orange",
-//   },
-//   {    
-//       color: "yellow",
-//   },
-//   {
-//       color: "green",
-//   },
-//   {
-//       color: "red",
-//   },
-//   {
-//       color: "purple",
-//   }
-// ]
+import Spectrum from '../../components/Game/Spectrum/Spectrum'
+import Logo from "../../components/UI/Logo/Logo";
+
 
 
 interface IProps {
   history: History;
-  room: Room;
-  player: Player;
+  room: iRoom;
+  player: iPlayer;
   onRereshRoom: () => void;
-  onleaveRoom: (me: Player, room: Room) => void;
-  onRefreshPlayerAsk: (me: Player, room: Room, move: string) => void;
-  onInitialBoard: (me: Player, room: Room) => void;
+  onleaveRoom: (me: iPlayer, room: iRoom) => void;
+  onRefreshPlayerAsk: (me: iPlayer, room: iRoom, move: string) => void;
+  onInitialBoard: (me: iPlayer, room: iRoom) => void;
   onRefreshPlayer: () => void;
   onleaveRoomReducer: () => void
 }
@@ -54,26 +34,32 @@ const Game: FC<IProps> = (props) => {
 
 const gamePage = useRef(null)
 
-const {onRefreshPlayer} = props
-const {onRefreshPlayerAsk, player, room} = props
+const {onRefreshPlayer, onRereshRoom} = props
+
+// const {onRefreshPlayerAsk, player, room} = props
+
+console.log("[Game] props", props);
+
   
   useEffect(() => {
     gamePage.current.focus()
+    onRereshRoom()
     onRefreshPlayer()
     props.onInitialBoard(props.player, props.room)
     // eslint-disable-next-line
-  }, [onRefreshPlayer])
+  }, [onRefreshPlayer, onRereshRoom])
 
-  useEffect(() => {
-    // AUTOMATIC MOVE
-    let interval = null;
-    if (room.inGame && !player.board.gameOver) {
-      interval = setInterval(() => {
-        onRefreshPlayerAsk(player, room, "ArrowDown")
-      }, room.speed);
-     }
-    return () => clearInterval(interval);
-  }, [room, player, onRefreshPlayerAsk]);
+  // useEffect(() => {
+  //   // AUTOMATIC MOVE
+  //   let interval = null;
+  //   if (room.inGame && !player.board.gameOver) {
+  //     interval = setInterval(() => {
+  //       onRefreshPlayerAsk(player, room, "ArrowDown")
+  //     }, room.speed);
+  //    }
+  //   return () => clearInterval(interval);
+  //   // eslint-disable-next-line
+  // }, [room, player, onRefreshPlayerAsk]);
 
 
 
@@ -89,20 +75,34 @@ const {onRefreshPlayerAsk, player, room} = props
     console.log("'" + e.key + "'")
     if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === " ") {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
-    } else if (e.key === "ArrowUp" && !props.room.settings.options.noRotation) {
+    } else if (e.key === "ArrowUp" && !props.room.settingsRoom.options.noRotation) {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
     }
   }
-  let spectrum = (props.room.settings.mode === "Solo" || props.room.settings.difficulty.hard) ? null : <div className="Adversaire">Adversaire</div>
+
+  let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ? null : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
+
+  let score = (
+    <div className="Score">
+      <div style={{color: "black"}}>Score: {props.player.account.points}</div>
+      <div style={{color: "black"}}>Lines: {props.player.account.lines}</div>
+    </div>
+  )
 
   return (
     <div className="GamePage" style={{ position: "absolute" }} tabIndex={0} ref={gamePage}  onKeyDown={(e) => handleKeyPress(e)}>
       <button onClick={() => leaveRoom()}>QUIT</button>
       <div className="Game">
-        <Grid board={props.player.board}/>
-        <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
+        <div className="Right">
+          <Grid board={props.player.board}/>
+          <div className="NextAndScore">
+            <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
+            {score}
+          </div>
+        </div>
         {props.player.board.gameOver ? <GameOver /> : null}
         <div className="Side">
+          <Logo />
           {spectrum}
           <div className="Commands">
             <h4>Commands</h4>

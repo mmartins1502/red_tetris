@@ -1,3 +1,10 @@
+export interface iPieces {
+    name: string;
+    color: string;
+    shape: number[][]
+}
+
+
 export const pieces = [
     {
         name: "I",

@@ -101,7 +101,7 @@
   },
   "scripts": {
     "start_cli": "node scripts/start.js",
-    "start_srv": "nodemon src/server/app.ts",
+    "start_srv": "nodemon src/Server/app.ts",
     "build": "node scripts/build.js",
     "test_0": "node scripts/test.js",
     "test": "jest --collectCoverage",

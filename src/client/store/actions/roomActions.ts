@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
-import { Player } from "../../../Shared/models/Player";
-import { Room } from "../../../Shared/models/Room";
+import { iPlayer } from "../../../Shared/models/Player";
+import { iRoom, iSettings } from "../../../Shared/models/Room";
 import { ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { iState } from "../reducers/roomReducer";
@@ -20,8 +20,6 @@ export enum SocketActionTypes {
   LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER",
   SETTINGS = "SETTINGS",
 }
-
-// const initialRoom = undefined;
 
 interface defaultAction {
   type: SocketActionTypes.DEFAULT;
@@ -60,11 +58,10 @@ export const createPlayerId: ActionCreator<ThunkAction<
 ///////////////////////////////////////////////////////////////////////////
 
 interface checkRoomAction {
-  handle: Player;
   type: SocketActionTypes.CHECK_ROOM;
 }
 
-export const checkRoom = (formData: Player) => {
+export const checkRoom = (formData: iPlayer) => {
   console.log("[Room] action creator");
   return {
     type: SocketActionTypes.CHECK_ROOM,
@@ -77,15 +74,15 @@ export const checkRoom = (formData: Player) => {
 ///////////////////////////////////////////////////////////////////////////
 
 interface Res_roomInfos {
-  player: Player;
-  room: Room;
+  player: iPlayer;
+  room: iRoom;
   error: string;
 }
 
 interface roomHomeInfosAction {
   type: SocketActionTypes.ROOM_AND_PLAYER;
-  player: Player;
-  room: Room;
+  player: iPlayer;
+  room: iRoom;
   error: string;
 }
 
@@ -120,16 +117,16 @@ export const roomHomeInfos: ActionCreator<ThunkAction<
 
 interface leaveRoomAction {
   handle: {
-    player: Player;
-    room: Room;
+    player: iPlayer;
+    room: iRoom;
   };
   type: SocketActionTypes.LEAVE_ROOM;
 }
 
 interface leaveRoomReducerAction {
   type: SocketActionTypes.LEAVE_ROOM_REDUCER;
-  player: undefined;
-  room: undefined;
+  player: iPlayer;
+  room: iRoom;
 }
 
 export const leaveRoomReducer = () => {
@@ -139,7 +136,7 @@ export const leaveRoomReducer = () => {
   };
 };
 
-export const leaveRoom = (me: Player, room: Room) => {
+export const leaveRoom = (me: iPlayer, room: iRoom) => {
   const data = {
     player: me,
     room: room
@@ -157,29 +154,27 @@ export const leaveRoom = (me: Player, room: Room) => {
 
 interface settingsChangedAction {
   type: SocketActionTypes.SETTINGS;
-  settings: undefined;
+  settingsRoom: iSettings;
 }
 
-export const settingsChanged = (settings: any) => {
+export const settingsChanged = (settingsRoom: any) => {
   console.log("[settingsChanged]")
   return {
     type: SocketActionTypes.SETTINGS,
-    settings: settings
+    settingsRoom: settingsRoom
   };
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
 interface Res_refreshRoom {
-  room: Room;
+  room: iRoom;
   error: string;
 }
 
 interface refreshRoomAction {
-  // event: string;
-  // handle: (data: Res_refreshRoom) => void;
   type: SocketActionTypes.REFRESH_ROOM;
-  room: Room;
+  room: iRoom;
   error: string;
 }
 
@@ -212,13 +207,10 @@ export const refreshRoom: ActionCreator<ThunkAction<
 ///////////////////////////////////////////////////////////////////////////
 
 interface startGameAction {
-  // event: string;
-  // emit: boolean;
-  handle: Room;
   type: SocketActionTypes.START_GAME;
 }
 
-export const startGame = (room: Room) => {
+export const startGame = (room: iRoom) => {
   return {
     event: "StartGame",
     emit: true,
@@ -229,15 +221,10 @@ export const startGame = (room: Room) => {
 ///////////////////////////////////////////////////////////////////////////
 
 interface readyAction {
-  // event: string;
-  // emit: boolean;
-  // handle: { player: Player; room: Room };
   type: SocketActionTypes.READY;
-  player: Player;
-  room: Room;
 }
 
-export const ready = (me: Player, room: Room) => {
+export const ready = (me: iPlayer, room: iRoom) => {
   return {
     event: "Ready",
     emit: true,
@@ -249,10 +236,9 @@ export const ready = (me: Player, room: Room) => {
 
 interface refreshPlayerAskAction {
   type: SocketActionTypes.REFRESH_PLAYER_ASK;
-  room: Room;
 }
 
-export const refreshPlayerAsk = (player: Player, room: Room, move: string) => {
+export const refreshPlayerAsk = (player: iPlayer, room: iRoom, move: string) => {
   return {
     event: "Board",
     emit: true,
@@ -265,10 +251,10 @@ export const refreshPlayerAsk = (player: Player, room: Room, move: string) => {
 
 interface initBoardAction {
   type: SocketActionTypes.INIT_BOARD;
-  player: Player;
+  // player: Player;
 }
 
-export const initBoard = (player: Player, room: Room) => {
+export const initBoard = (player: iPlayer, room: iRoom) => {
   console.log('[initBoard]')
   return {
     event: "initialBoard",
@@ -282,8 +268,8 @@ export const initBoard = (player: Player, room: Room) => {
 
 interface refreshPlayerAction {
   type: SocketActionTypes.REFRESH_PLAYER;
-  player: Player;
-  room: Room;
+  player: iPlayer;
+  room: iRoom;
   error: string;
 }
 

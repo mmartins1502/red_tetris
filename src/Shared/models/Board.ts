@@ -1,33 +1,33 @@
-import { Piece } from './Piece';
-// import { pieces } from './Pieces';
+import { Piece, iPiece } from './Piece';
+import  {POINTS}  from '../../Server/game/game';
 
-// const initialGrid = [
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-// ]
+
+interface iScore {
+  points: number;
+  lines: number;
+}
+
+export interface iBoard {
+  grid: number[][];
+  tmpGrid: number[][];
+  currentPiece: iPiece;
+  gameOver: boolean;
+  insideWalls: (x: number) => boolean
+  isEmpty: (value: number) => boolean
+  aboveFloor: (y: number) => boolean
+  notOccupied: (x: number, y: number) => boolean
+  isValid: (piece: iPiece) => boolean
+  move: (p: iPiece) => void
+  draw: () => void
+  getLineClearPoints: (lines: number) => number
+  clearLines: () => iScore
+  freeze: () => iScore
+}
 
 export class Board {
-  grid: Array<Array<number>>;
-  tmpGrid: Array<Array<number>>;
-  currentPiece: Piece;
+  grid: number[][];
+  tmpGrid: number[][];
+  currentPiece: iPiece;
   gameOver: boolean
 
 
@@ -44,29 +44,29 @@ export class Board {
   // }
 
 
-  private insideWalls(x: number) {
+  public insideWalls(x: number) {
     // console.log('x', x)
     // console.log('insideWalls', x >= 0 && x < 10)
     return x >= 0 && x < 10;
   }
 
-  private isEmpty(value: number) {
+  public isEmpty(value: number) {
     // console.log('isEmpty', value)
     return value === 0;
   }
 
-  private aboveFloor(y: number) {
+  public aboveFloor(y: number) {
     // console.log('aboveFloor', y >= 0 && y < 20)
     return y >= 0 && y < 20;
   }
 
-  private notOccupied(x: number, y: number) {
+  public notOccupied(x: number, y: number) {
     // console.log('notOccupied', this.grid[y] && this.grid[y][x] === 0)
     return this.grid[y] && this.grid[y][x] === 0;
   }
 
 
-  public isValid(piece: Piece) {
+  public isValid(piece: iPiece) {
     // console.log('piece.shape', piece.shape)
       return piece.shape.every((row, dy) => {
         return row.every((value, dx) => {
@@ -80,7 +80,7 @@ export class Board {
       })
   }
 
-  public move(p: Piece){
+  public move(p: iPiece){
     if (this.currentPiece) {
         this.currentPiece.pos.x = p.pos.x
         this.currentPiece.pos.y = p.pos.y
@@ -99,17 +99,34 @@ export class Board {
       })
     })
   }
+
+
+  public getLineClearPoints(lines: number) {
+    return lines === 1 ? POINTS.SINGLE :
+         lines === 2 ? POINTS.DOUBLE :  
+         lines === 3 ? POINTS.TRIPLE :     
+         lines === 4 ? POINTS.TETRIS : 
+         0;
+  }
   
   public clearLines() {
+    let lines: number = 0
     this.grid.forEach((row, y) => {
       // If every value is greater than 0.
       if (row.every(value => value > 0)) {
+        lines++
         // Remove the row.
         this.grid.splice(y, 1);
         // Add zero filled row at the top. 
         this.grid.unshift(Array(10).fill(0));
       } 
     });
+
+    const score = {
+      points: this.getLineClearPoints(lines),
+      lines: lines
+    } 
+    return score;  
   }
 
 
@@ -121,7 +138,7 @@ export class Board {
         }
       });
     });
-    this.clearLines()
+    return this.clearLines()
   }
 
 }

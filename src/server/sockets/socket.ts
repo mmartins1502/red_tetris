@@ -1,5 +1,5 @@
-import { Player } from "../../Shared/models/Player";
-import { Room } from "../../Shared/models/Room";
+import { Player, iPlayer } from "../../Shared/models/Player";
+import { Room, iRoom } from "../../Shared/models/Room";
 // import { Board } from '../models/Board';
 
 
@@ -15,7 +15,7 @@ const initialRoom = {
   star: {}
 };
 
-module.exports = function socketConfig(rooms: Room[], server: any) {
+module.exports = function socketConfig(rooms: iRoom[], server: any) {
   const io = socketIo(server);
 
   const joinCreateRoom = (socket: any) => {
@@ -35,6 +35,10 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
           error = "This room is already in game...";
         } else {
           room.addPlayer(socket.id, data.name, data.room);
+          room.settingsRoom.mode = {
+            multiplayer: true,
+            solo: false
+          }
         }
       } else {
         room = utils.createNewRoom(data.room, rooms);
@@ -43,10 +47,6 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
       const player = new Player(socket.id, data.name, data.room);
       console.log('room.piecesList[0]', room.piecesList[0])
       player.initBoard(room.piecesList[0])
-      if (player.board){
-
-        // console.log('player.board.currentPiece', player.board.currentPiece)
-      }
       const roomInfos = {
         player: player,
         room: room,
@@ -79,19 +79,17 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
 
   const ready = (socket: any) => {
     interface idata {
-      player: Player;
-      room: Room;
+      player: iPlayer;
+      room: iRoom;
     }
     socket.on("Ready", (data: idata) => {
       // console.log("[ready]", data);
-      // let updatedPlayer = {
-      //   ...data.player,
-      //   state: !data.player.state
-      // };
 
-      let updatedPlayer = new Player(data.player.id, data.player.name, data.player.room)
       let room: Room = utils.findRoomById(data.room.id, rooms);
+      let updatedPlayer: iPlayer = new Player(data.player.id, data.player.name, data.player.room)
+      updatedPlayer.state = !data.player.state
       if (room) {
+        updatedPlayer.initBoard(room.piecesList[updatedPlayer.listIdx])
         room.updatePlayer(updatedPlayer);
         utils.refresh(socket, room, null, true);
       }
@@ -102,7 +100,7 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
     socket.on("StartGame", (room: Room) => {
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
-        newRoom.settings = room.settings
+        newRoom.settings = room.settingsRoom
         for (var i = 0; i < newRoom.players.length; i++) {
           if (newRoom.players[i].state && newRoom.players[i].id !== socket.id) {
             newRoom.everyOneIsReady = true;
@@ -140,7 +138,7 @@ module.exports = function socketConfig(rooms: Room[], server: any) {
     ready(socket);
     startGame(socket);
     game.startGame(socket)
-    game.play(socket)
+    game.play(socket, rooms)
     // socket.on("disconnect", () => console.log("Client disconnected"));
   });
   return io;

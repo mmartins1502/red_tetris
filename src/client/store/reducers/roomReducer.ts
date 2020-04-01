@@ -13,7 +13,7 @@ export interface iState {
   redirect: boolean;
 }
 const player: iPlayer = new Player("", "", "")
-const room: iRoom = new Room("")
+const room: iRoom = new Room("")!
 
 const initialState: iState = {
   player: player,
@@ -22,7 +22,7 @@ const initialState: iState = {
   redirect: false
 };
 
-console.log('initialState', initialState)
+console.log('initialState', initialState.room)
 
 export const roomReducer: Reducer<iState, RoomActions> = (
   state = initialState,
@@ -52,7 +52,7 @@ export const roomReducer: Reducer<iState, RoomActions> = (
           ...state,
           room: {
             ...state.room,
-            settings: action.settings
+            settingsRoom: action.settingsRoom
           }
         };
     case actionTypes.LEAVE_ROOM:

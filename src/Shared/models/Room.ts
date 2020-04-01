@@ -2,8 +2,11 @@ import { Player, iPlayer } from "./Player";
 import { randomizer } from '../../Server/utils/randomizer';
 
 
-interface iSettings {
-  mode: string;
+export interface iSettings {
+  mode: {
+    multiplayer: boolean,
+    solo: boolean
+  },
   difficulty: {
     easy: boolean;
     hard: boolean;
@@ -20,9 +23,9 @@ export interface iRoom {
   inGame: boolean;
   star: iPlayer;
   everyOneIsReady: boolean;
-  piecesList: string[];
+  piecesList: any;
   speed: number;
-  settings : iSettings;
+  settingsRoom : iSettings;
   generator: () => void;
   addPlayer: (playerId: string, playerName: string, playerRoom: string) => void
   startGame: () => void;
@@ -34,15 +37,15 @@ export interface iRoom {
 
 
 
-export class Room {
+export class Room implements iRoom {
   id: string;
-  players: Player[];
+  players: iPlayer[];
   inGame: boolean;
-  star: Player;
+  star: iPlayer;
   everyOneIsReady: boolean;
   piecesList: any;
   speed: number;
-  settings : iSettings
+  settingsRoom : iSettings
 
   constructor(id: string) {
     this.id = id;
@@ -52,9 +55,12 @@ export class Room {
     this.everyOneIsReady = false;
     this.piecesList = [];
     this.piecesList = this.generator();
-    this.speed = 250;
-    this.settings = {
-      mode: 'Solo',
+    this.speed = 1000;
+    this.settingsRoom = {
+      mode: {
+        multiplayer: false,
+        solo: true
+      },
       difficulty: {
         easy: true,
         hard: false
@@ -72,11 +78,13 @@ export class Room {
     for(let i = 0; i < 15; i++) {
       this.piecesList.push(random.next().value)
     }
+
     return this.piecesList
   }
 
   public addPlayer(playerId: string, playerName: string, playerRoom: string) {
-    let player = new Player(playerId, playerName, playerRoom)
+    let player: iPlayer = new Player(playerId, playerName, playerRoom)
+    player.initBoard(this.piecesList[player.listIdx])
     this.players.push(player);
     !this.star ? (this.star = player) : (this.star = this.players[0]);
   }
@@ -89,7 +97,7 @@ export class Room {
     return this.players.length > 3 ? true : false;
   }
 
-  public removePlayer(playerId: string, rooms: Room[]) {
+  public removePlayer(playerId: string, rooms: iRoom[]) {
     this.players = this.players.filter((player) => player.id !== playerId);
     this.players.length >= 1
       ? (this.star = this.players[0])
@@ -97,7 +105,7 @@ export class Room {
     return rooms;
   }
 
-  public updatePlayer(updatedPlayer: Player) {
+  public updatePlayer(updatedPlayer: iPlayer) {
     this.players = this.players.map((player) => {
       if (player.id === updatedPlayer.id) {
         return updatedPlayer;

@@ -1,10 +1,11 @@
 .Logo {
   display: flex;
   justify-content: center;
-  margin-top: 10%;
+  align-items: center;
+  margin-top: 5%;
+  margin-bottom: 5%;
   background-color: white;
   padding: 8px;
-  height: 100%;
   box-sizing: border-box;
   border-radius: 5px;
   width: 100%;
@@ -13,4 +14,6 @@
 
 .img {
   height: 100%;
+  width: 100%;
+
 }

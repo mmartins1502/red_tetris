@@ -39,6 +39,9 @@ export const HomePage: React.FC<IProps> = (props) => {
     onCreatePlayerId();
   }, [onCreatePlayerId]);
 
+  
+  
+
   const formValidation = (formData: any) => {
     formData.id = props.player.id;
     props.onFormValidated(formData);

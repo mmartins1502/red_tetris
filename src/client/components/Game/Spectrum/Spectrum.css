@@ -1,0 +1,47 @@
+.PlayerSpectre {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.NameSpectre {
+    display: flex;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.ScoreSpectre {
+    display: flex;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 5px;
+}
+
+
+.GridSpectre {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    height: 200px;
+    border: 2px solid #d40e0e;
+    box-sizing: border-box;
+    box-shadow: transparent;
+}
+  
+.LineSpectre {
+    display: flex;
+    /* margin-top: 1px;
+    margin-bottom: 1px; */
+    width: 100%;
+    height: 5%;
+}
+  
+.CaseSpectre {
+    /* margin-right: 1px;
+    margin-left: 1px; */
+    width: 100%;
+    height: 100%;
+    /* color: rgba(10, 10, 10, 0.514); */
+    background-color: rgb(255, 255, 255);
+    border: 0.02px solid white;
+}

@@ -5,9 +5,19 @@ interface iPos {
     y: number;
 }
 
+export interface iPiece {
+  shape: number[][];
+  color: string;
+  width: number;
+  height: number;
+  pos: iPos;
+  letter: string;
+  currentPieceRotation: (p: iPiece) => iPiece
+}
+
 
 export class Piece {
-    shape: Array<Array<number>>;
+    shape: number[][];
     color: string;
     width: number;
     height: number;

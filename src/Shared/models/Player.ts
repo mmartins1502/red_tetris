@@ -1,27 +1,29 @@
-import { Board } from './Board';
+import { Board, iBoard } from './Board';
 
-// interface iAccount {
-
-// }
+interface iAccount {
+  lines: number;
+  points: number;
+}
 
 export interface iPlayer {
   id: string;
   name: string;
   room: string;
   state: boolean;
-  board?: Board;
+  board?: iBoard;
   listIdx: number;
+  account: iAccount;
   initBoard: (letter: string) => void  
 }
 
-export class Player {
+export class Player implements iPlayer {
   id: string;
   name: string;
   room: string;
   state: boolean;
-  board?: Board;
+  board?: iBoard;
   listIdx: number;
-  // account: iAccount
+  account: iAccount;
 
   constructor(id: string, name: string, room: string) {
     this.id = id;
@@ -29,6 +31,10 @@ export class Player {
     this.room = room;
     this.state = false;
     this.listIdx = 0
+    this.account = {
+      lines: 0,
+      points: 0
+    }
   }
 
   public initBoard(letter: string) {
