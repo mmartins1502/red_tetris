@@ -2,7 +2,7 @@ import { Piece, iPiece } from './Piece';
 import  {POINTS}  from '../../Server/game/game';
 
 
-interface iScore {
+export interface iScore {
   points: number;
   lines: number;
 }

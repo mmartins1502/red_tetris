@@ -43,7 +43,7 @@ const Grid = (props: iProps) => {
     <div className={"Grid"}>
       {props.board.tmpGrid.map((rows, y) => {
         return <div key={y} className={"Line"} >{rows.map((value, x) => {
-          return <div key={x} className={"Case"} style={value ? {backgroundColor: pieces[value -1].color, border: `solid 3px darken(${pieces[value -1].color}, 20)` , boxShadow: `inset 0 0 1px 1px lighten(${pieces[value -1].color},20)`} : null}></div>
+          return <div key={x} className={value === -1 ? "Case Indextructible" : value > 0 ? "Case Tetri" : "Case"} style={value > 0 ? {backgroundColor: pieces[value -1].color} : null}></div>
         })}</div>;
       })}
     </div>

@@ -19,6 +19,7 @@ export enum SocketActionTypes {
   INIT_BOARD = "INIT_BOARD",
   LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER",
   SETTINGS = "SETTINGS",
+  SPEED_UP = "SPEED_UP",
 }
 
 interface defaultAction {
@@ -264,6 +265,18 @@ export const initBoard = (player: iPlayer, room: iRoom) => {
 };
 
 
+interface speedUpAction {
+  type: SocketActionTypes.SPEED_UP
+  newSpeed: number
+}
+
+export const speedUp = (speed: number) => {
+  return {
+    type: SocketActionTypes.SPEED_UP,
+    newSpeed: speed
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 interface refreshPlayerAction {
@@ -315,4 +328,5 @@ export type RoomActions =
   | initBoardAction
   | refreshPlayerAction
   | settingsChangedAction
+  | speedUpAction
   | defaultAction;

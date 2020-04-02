@@ -77,6 +77,14 @@ export const roomReducer: Reducer<iState, RoomActions> = (
           player: action.player,
           room: action.room
         };
+    case actionTypes.SPEED_UP:
+      return {
+        ...state,
+        room: {
+          ...state.room,
+          speed: action.newSpeed
+        }
+      };
     default:
       return state;
   }

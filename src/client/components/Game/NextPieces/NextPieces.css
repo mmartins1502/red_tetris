@@ -16,6 +16,14 @@
     box-shadow: transparent;
 }
 
+.tetri {
+    background-image: url("https://logomakr.com/media/clipart/tnp_vendetusvectores/1233851.svg");
+    background-position: center;
+    background-size: 140%;
+  box-shadow: inset 2px 2px 3px 3px rgba(37, 37, 37, 0.74);
+
+}
+
 
 .piece {
     display: flex;

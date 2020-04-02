@@ -15,6 +15,7 @@ import NextPieces from "../../components/Game/NextPieces/NextPieces";
 import GameOver from "../../components/Game/GameOver/GameOver";
 import Spectrum from '../../components/Game/Spectrum/Spectrum'
 import Logo from "../../components/UI/Logo/Logo";
+import CountDown from "../../components/Game/CountDown/CountDown";
 
 
 
@@ -28,6 +29,7 @@ interface IProps {
   onInitialBoard: (me: iPlayer, room: iRoom) => void;
   onRefreshPlayer: () => void;
   onleaveRoomReducer: () => void
+  onSpeedUp: (speed: number) => void
 }
 
 const Game: FC<IProps> = (props) => {
@@ -36,7 +38,7 @@ const gamePage = useRef(null)
 
 const {onRefreshPlayer, onRereshRoom} = props
 
-// const {onRefreshPlayerAsk, player, room} = props
+const {onRefreshPlayerAsk, player, room} = props
 
 console.log("[Game] props", props);
 
@@ -49,17 +51,18 @@ console.log("[Game] props", props);
     // eslint-disable-next-line
   }, [onRefreshPlayer, onRereshRoom])
 
-  // useEffect(() => {
-  //   // AUTOMATIC MOVE
-  //   let interval = null;
-  //   if (room.inGame && !player.board.gameOver) {
-  //     interval = setInterval(() => {
-  //       onRefreshPlayerAsk(player, room, "ArrowDown")
-  //     }, room.speed);
-  //    }
-  //   return () => clearInterval(interval);
-  //   // eslint-disable-next-line
-  // }, [room, player, onRefreshPlayerAsk]);
+  useEffect(() => {
+    // AUTOMATIC MOVE
+    let interval = null;
+    if (room.inGame && !player.board.gameOver) {
+      interval = setInterval(() => {
+        onRefreshPlayerAsk(player, room, "ArrowDown")
+      }, room.speed);
+     }
+    return () => clearInterval(interval);
+    // eslint-disable-next-line
+  }, [room, player, onRefreshPlayerAsk]);
+
 
 
 
@@ -69,6 +72,12 @@ console.log("[Game] props", props);
     props.onleaveRoomReducer()
     props.history.replace("/");
   };
+
+  const speedUp = () => {
+    let newSpeed: number = props.room.speed
+    newSpeed = (newSpeed / 10) * 9
+    props.onSpeedUp(newSpeed)
+  }
 
   const handleKeyPress = (e) => {
     e.preventDefault()
@@ -81,7 +90,7 @@ console.log("[Game] props", props);
   }
 
   let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ? null : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
-
+  let countDown = (props.room.settingsRoom.options.faster) ? <CountDown speedUp={speedUp} /> : null
   let score = (
     <div className="Score">
       <div style={{color: "black"}}>Score: {props.player.account.points}</div>
@@ -98,6 +107,7 @@ console.log("[Game] props", props);
           <div className="NextAndScore">
             <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
             {score}
+            {countDown}
           </div>
         </div>
         {props.player.board.gameOver ? <GameOver /> : null}
@@ -132,7 +142,8 @@ const mapDispatchToProps = {
     onRereshRoom: () => actions.refreshRoom(),
     onRefreshPlayerAsk: (me: Player, room: Room, move: string) => actions.refreshPlayerAsk(me, room, move),
     onRefreshPlayer: () => actions.refreshPlayer(),
-    onInitialBoard: (me: Player, room: Room) => actions.initBoard(me, room)
+    onInitialBoard: (me: Player, room: Room) => actions.initBoard(me, room),
+    onSpeedUp: (speed: number) => actions.speedUp(speed)
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

@@ -11,4 +11,5 @@ export {
   refreshPlayer,
   initBoard,
   settingsChanged,
+  speedUp,
 } from "./roomActions";

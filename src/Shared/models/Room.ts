@@ -26,6 +26,7 @@ export interface iRoom {
   piecesList: any;
   speed: number;
   settingsRoom : iSettings;
+  malus: number;
   generator: () => void;
   addPlayer: (playerId: string, playerName: string, playerRoom: string) => void
   startGame: () => void;
@@ -45,7 +46,8 @@ export class Room implements iRoom {
   everyOneIsReady: boolean;
   piecesList: any;
   speed: number;
-  settingsRoom : iSettings
+  settingsRoom : iSettings;
+  malus: number;
 
   constructor(id: string) {
     this.id = id;
@@ -70,6 +72,7 @@ export class Room implements iRoom {
         faster: false
       }
     };
+    this.malus = 0
 
   }
 

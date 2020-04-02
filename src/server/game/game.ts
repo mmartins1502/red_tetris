@@ -1,6 +1,6 @@
 import { Player, iPlayer } from "../../Shared/models/Player"
 import { iRoom } from '../../Shared/models/Room'
-import { Board, iBoard } from '../../Shared/models/Board'
+import { Board, iBoard, iScore } from '../../Shared/models/Board'
 import { Piece, iPiece } from '../../Shared/models/Piece'
 import { randomizer } from '../utils/randomizer'
 
@@ -79,10 +79,38 @@ const refreshPlayerGameInRoom = (player: iPlayer, room: iRoom, socket: any, room
       let newRoom: iRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
         newRoom.updatePlayer(updatedPlayer);
-        console.log('updatedPlayer.board.grid', updatedPlayer.board?.grid)
+        // console.log('updatedPlayer.board.grid', updatedPlayer.board?.grid)
         utils.refresh(socket, newRoom, null, true);
       }
 }
+
+
+
+const indestructiblesLines = (score: iScore, room: iRoom, socket: any, rooms: iRoom[]) => {
+    const {players} = room
+    if (score.lines > 1) {
+        players.map((player: iPlayer) => {
+            if (player.id !== socket.id && player.board) {
+                let grid = player.board?.grid
+                for (let i = 1; i < score.lines; i++ ) {
+                    grid?.push(Array(10).fill(-1));
+                }
+                grid?.splice(0, score.lines -1);
+                player.board.grid = grid
+                return player
+            } else return player
+        })
+    }
+    let newRoom: iRoom = utils.findRoomById(room.id, rooms)
+    newRoom.players = players
+    newRoom.malus = score.lines -1
+
+    utils.refresh(socket, newRoom, null, false)
+}
+
+
+
+
 
 export const play = (socket: any, rooms: iRoom[]) => {
     socket.on("Board", (data: iData) => {
@@ -91,6 +119,17 @@ export const play = (socket: any, rooms: iRoom[]) => {
 
         if (move && player.board && player.board.currentPiece) {
             // console.log('player.board.grid', player.board.grid)
+            room.players.map((play: iPlayer) => {
+                if (player.id === play.id && player.board && play.board && player.board.grid !== play.board.grid) {
+                    player.board.grid = play.board.grid
+                    console.log('player.board.currentPiece.pos.y ', player.board.currentPiece.pos.y )
+                    console.log('room.malus',(room.malus))
+                    console.log('20 - room.malus', 20 - (room.malus))
+                    if (player.board.currentPiece.pos.y >= 20 - room.malus) player.board.currentPiece.pos.y -= room.malus
+                }
+                return play
+            })
+
             let pos = {
                 y: player.board.currentPiece.pos.y,
                 x: player.board.currentPiece.pos.x 
@@ -134,6 +173,9 @@ export const play = (socket: any, rooms: iRoom[]) => {
                     if (!room.piecesList[player.listIdx + 3]) {
                         room.piecesList = generator(room.piecesList)  
                     }
+
+                    if (score.lines > 1 && room.players.length > 1) indestructiblesLines(score, room, socket, rooms)
+
                     let p = new Piece(room.piecesList[player.listIdx])
                     board.isValid(p) ? board.currentPiece = p : board.gameOver = true
                 }
@@ -144,8 +186,3 @@ export const play = (socket: any, rooms: iRoom[]) => {
         socket.emit("Board", {player: player, room: room, error: undefined})
     })
 }
-
-// module.exports = {
-//     startGame,
-//     play  
-// }

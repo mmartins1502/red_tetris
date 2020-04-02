@@ -16,7 +16,7 @@ const NextPieces = (props: Props) => {
             let p = new Piece(piece)
             return <div className="piece"> {p.shape.map((row, y) => {
                 return <div key={y} className="row" >{row.map((value, x) => {
-                return <div key={x} className="case" style={value ? {backgroundColor: pieces[value -1].color, border: `solid 3px darken(${pieces[value -1].color}, 20)` , boxShadow: `inset 0 0 1px 1px lighten(${pieces[value -1].color},20)`} : null}></div> 
+                return <div key={x} className={value ? "case tetri" : "case"} style={value ? {backgroundColor: pieces[value -1].color, border: `solid 3px darken(${pieces[value -1].color}, 20)` , boxShadow: `inset 0 0 1px 1px lighten(${pieces[value -1].color},20)`} : null}></div> 
                 })}</div>;
             })}</div>
         })

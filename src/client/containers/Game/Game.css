@@ -29,6 +29,7 @@
 }
 
 .Side {
+  padding-top: -15%;
   display: flex;
   flex-direction: column;
   width: 30%;
