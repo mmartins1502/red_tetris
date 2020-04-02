@@ -19,7 +19,7 @@ export const startGame = (socket: any) => {
         // let board = new Board(data.room.piecesList[0])
         // board.draw()
         // data.player.board = board
-        // socket.emit("Board", {player: data.player, room: data.room, error: undefined})
+        socket.emit("Board", {player: data.player, room: data.room, error: undefined})
     })
 }
 

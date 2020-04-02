@@ -75,7 +75,7 @@ console.log("[Game] props", props);
 
   const speedUp = () => {
     let newSpeed: number = props.room.speed
-    newSpeed = (newSpeed / 10) * 9
+    newSpeed = (newSpeed / 8) * 7
     props.onSpeedUp(newSpeed)
   }
 

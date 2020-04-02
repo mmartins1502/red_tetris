@@ -100,7 +100,7 @@ module.exports = function socketConfig(rooms: iRoom[], server: any) {
     socket.on("StartGame", (room: Room) => {
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
-        newRoom.settings = room.settingsRoom
+        newRoom.settingsRoom = room.settingsRoom
         for (var i = 0; i < newRoom.players.length; i++) {
           if (newRoom.players[i].state && newRoom.players[i].id !== socket.id) {
             newRoom.everyOneIsReady = true;
