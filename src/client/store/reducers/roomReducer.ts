@@ -3,7 +3,6 @@ import { RoomActions } from "../actions/roomActions";
 import { Reducer } from "redux";
 import { Player, iPlayer } from 'Shared/models/Player';
 import { Room, iRoom } from '../../../Shared/models/Room';
-// import { Board } from 'Shared/models/Board';
 
 
 export interface iState {
@@ -74,8 +73,7 @@ export const roomReducer: Reducer<iState, RoomActions> = (
     case actionTypes.REFRESH_PLAYER:
         return {
           ...state,
-          player: action.player,
-          room: action.room
+          player: action.player
         };
     case actionTypes.SPEED_UP:
       return {
@@ -84,6 +82,12 @@ export const roomReducer: Reducer<iState, RoomActions> = (
           ...state.room,
           speed: action.newSpeed
         }
+      };
+    case actionTypes.RESET_ROOM:
+      return {
+        ...state,
+        room: action.room,
+        player: action.player
       };
     default:
       return state;

@@ -12,4 +12,5 @@ export {
   initBoard,
   settingsChanged,
   speedUp,
+  onResetRoomParams,
 } from "./roomActions";

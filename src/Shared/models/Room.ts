@@ -14,8 +14,25 @@ export interface iSettings {
   options: {
     noRotation: boolean;
     faster: boolean;
-  }
+  },
+  spectrum: boolean
 }
+
+const initialSettings: iSettings = {
+  mode: {
+    multiplayer: false,
+    solo: true
+  },
+  difficulty: {
+    easy: true,
+    hard: false
+  },
+  options: {
+    noRotation: false,
+    faster: false
+  },
+  spectrum: true
+};
 
 export interface iRoom {
   id: string;
@@ -32,8 +49,9 @@ export interface iRoom {
   startGame: () => void;
   isFull: () => boolean;
   removePlayer: (playerId: string, rooms: iRoom[]) => iRoom[];
-  updatePlayer: (updatedPlayer: Player) => void;
+  updatePlayer: (updatedPlayer: iPlayer) => void;
   endGame: () => void;
+  resetRoom: () => void
 }
 
 
@@ -58,22 +76,8 @@ export class Room implements iRoom {
     this.piecesList = [];
     this.piecesList = this.generator();
     this.speed = 1000;
-    this.settingsRoom = {
-      mode: {
-        multiplayer: false,
-        solo: true
-      },
-      difficulty: {
-        easy: true,
-        hard: false
-      },
-      options: {
-        noRotation: false,
-        faster: false
-      }
-    };
-    this.malus = 0
-
+    this.settingsRoom = initialSettings;
+    this.malus = 0;
   }
 
   public generator = () => {
@@ -120,5 +124,22 @@ export class Room implements iRoom {
 
   public endGame() {
     this.inGame = false;
+  }
+
+  public resetRoom() {
+    this.inGame = false;
+    this.everyOneIsReady = false;
+    this.piecesList = [];
+    this.piecesList = this.generator();
+    this.speed = 1000;
+    this.settingsRoom = initialSettings;
+    this.malus = 0;
+
+    this.players = this.players.map((player) => {
+      player.resetPlayer()
+      player.initBoard(this.piecesList[player.listIdx])
+      return player
+    })
+
   }
 }

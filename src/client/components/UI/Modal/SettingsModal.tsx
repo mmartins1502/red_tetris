@@ -1,9 +1,9 @@
-import React, { ReactElement } from "react";
+import React, { ReactNode } from "react";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { IconButton, Modal } from "@material-ui/core";
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 const SettingsModal = (props: Props) => {
@@ -18,7 +18,7 @@ const SettingsModal = (props: Props) => {
   };
 
   return (
-    <div>
+    <div >
       <IconButton
         color="secondary"
         aria-label="upload picture"

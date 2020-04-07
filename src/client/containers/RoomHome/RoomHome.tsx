@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { RouteComponentProps, useParams } from "react-router-dom";
 
 //IMPORT MODELS
-import { Player } from "../../../Shared/models/Player"
-import { Room } from "../../../Shared/models/Room";
+import { Player, iPlayer } from "../../../Shared/models/Player"
+import { iSettings, iRoom } from "../../../Shared/models/Room";
 
 
 //IMPORT COMPONENTS
@@ -27,55 +27,46 @@ import Settings from "../../components/Room/Settings";
 const classes = require("./RoomHome.module.css");
 
 interface IProps extends RouteComponentProps {
-  room: Room;
-  player: Player;
+  room: iRoom;
+  player: iPlayer;
   error: string;
   ////////////////////////////////
   onCreatePlayerId: () => void;
-  onFormValidated: (newPlayer: Player) => void;
+  onFormValidated: (newPlayer: iPlayer) => void;
   onRoomNumber: () => void;
   ////////////////////////////////
   onRereshRoom: () => void;
-  onleaveRoom: (me: Player, room: Room) => void;
-  onStartGame: (room: Room) => void;
-  onReady: (me: Player, room: Room) => void;
+  onleaveRoom: (me: iPlayer, room: iRoom) => void;
+  onStartGame: (room: iRoom) => void;
+  onReady: (me: iPlayer, room: iRoom) => void;
   onleaveRoomReducer: () => void
-  onSettingsChanged: (settings: any) => void
+  onSettingsChanged: (settings: iSettings) => void
+  // onResetRoomParams: (player: iPlayer, room: iRoom) => void
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
   // console.log("[RoomHome] props", props);
   const { onRereshRoom, onFormValidated, onRoomNumber, onCreatePlayerId } = props;
+  const {player, room} = props
   const params = useParams<{playerName: string, room: string}>()
   console.log('params', params)
 
 
   
   useEffect(() => {
-    console.log('[useEffect] => Component Will mount')
-    onRereshRoom()
-    if(!props.player.id) {
+    if(!player.id) {
       onCreatePlayerId()
+    } else if (room.id === "") {
+      const newPlayer: iPlayer = new Player(player.id, params.playerName, params.room)
+      onFormValidated(newPlayer)
+      onRoomNumber()
     }
-    if (props.room.id === "" || props.room.star === undefined || props.room.players.length === 0) {
-          const newPlayer = new Player(props.player.id, params.playerName, params.room)
-          onFormValidated(newPlayer)
-          onRoomNumber()
-        }
-    // eslint-disable-next-line
-  }, [])
-  
-  // useEffect(() => {
-  //   if (room.id === "" || room.star === undefined || room.players.length === 0) {
-  //     let newPlayer = new Player(props.player.id, params.playerName, params.room)
-  //     onFormValidated(newPlayer)
-  //     onRoomNumber()
-  //   }
-  // }, [onFormValidated, onRoomNumber, params.playerName, params.room, props.player.id, room.id, room.players.length, room.star])
+  }, [player.id, room.id, onCreatePlayerId, onFormValidated, onRoomNumber, params])
 
-  // useEffect(() => {
-  //   onRereshRoom();
-  // }, [onRereshRoom]);
+  useEffect(() => {
+    onRereshRoom();
+  }, [onRereshRoom]);
+
 
   const me = props.player;
   const onSettingsChanged = (settings) => {
@@ -109,32 +100,20 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
           ready={() => ready()}
         />
       </div>
-
-      {/* <p>{props.error ? props.error : null}</p> */}
     </div>
   );
 
-  // if (!props.room || !props.room.players || props.room.players.length < 1) {
-  //   if(!player.id) {
-  //     props.onCreatePlayerId()
-  //   }
-  //   let newPlayer = new Player(props.player.id, params.playerName, params.room)
-  //   props.onFormValidated(newPlayer)
-  //   props.onRoomNumber()
-  //   console.log("nobody in the room");
-  //   // props.history.replace("/");
-  // }
 
   if (props.room && props.room.inGame === true) {
     return <Game />;
   }
   let settingsOwner = null
   console.log('props =>', props)
-  if (props.player && props.room && props.player.id === props.room.star.id) {
+  if (props.player.id !== "" && props.room.star !== undefined && props.player.id === props.room.star.id) {
     const playersNb: number = props.room.players.length
     settingsOwner = (
       <SettingsModal>
-        <Settings playersNb={playersNb} onSettingsChanged={(settings) => onSettingsChanged(settings)} />
+        <Settings playersNb={playersNb} onSettingsChanged={(settings) => onSettingsChanged(settings)}  />
       </SettingsModal>
     )
   }
@@ -174,15 +153,17 @@ const mapStateToProps = (store: IAppState) => {
 
 const mapDispatchToProps = {
   onCreatePlayerId: () => actions.createPlayerId(),
-  onFormValidated: (newPlayer: Player) => actions.checkRoom(newPlayer),
+  onFormValidated: (newPlayer: iPlayer) => actions.checkRoom(newPlayer),
   onRoomNumber: () => actions.roomHomeInfos(),
   /////////////////////////////////////////////////
-  onleaveRoom: (me: Player, room: Room) => actions.leaveRoom(me, room),
+  onleaveRoom: (me: iPlayer, room: iRoom) => actions.leaveRoom(me, room),
   onleaveRoomReducer: () => actions.leaveRoomReducer(),
   onRereshRoom: () => actions.refreshRoom(),
-  onStartGame: (room: Room) => actions.startGame(room),
-  onReady: (me: Player, room: Room) => actions.ready(me, room),
-  onSettingsChanged: (settings: any) => actions.settingsChanged(settings)
+  onStartGame: (room: iRoom) => actions.startGame(room),
+  onReady: (me: iPlayer, room: iRoom) => actions.ready(me, room),
+  onSettingsChanged: (settings: iSettings) => actions.settingsChanged(settings),
+  // onResetRoomParams: (player: iPlayer, room: iRoom) => actions.onResetRoomParams(player, room)
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomHome);

@@ -63,12 +63,16 @@ const usestyles = makeStyles((theme: Theme) =>
 const Settings = (props: Props) => {
   const classes = usestyles();
   const [modalStyle] = React.useState(getModalStyle);
-  // const [Multi, setMulti] = React.useState(false);
+  const mode = props.playersNb > 1 ? {
+    multiplayer: true,
+    solo: false
+  } : {
+    multiplayer: false,
+    solo: true
+  }
+
   const [settings, setSettings] = React.useState({
-      mode: {
-        multiplayer: false,
-        solo: true
-      },
+      mode: mode,
       difficulty: {
         easy: true,
         hard: false
@@ -76,7 +80,8 @@ const Settings = (props: Props) => {
       options: {
         noRotation: false,
         faster: false
-      }
+      },
+      spectrum: true
   });
 
   const {onSettingsChanged} = props
@@ -87,16 +92,24 @@ const Settings = (props: Props) => {
  }, [settings])
 
 
-  const handleChangeMode = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const {multiplayer, solo} = settings.mode
-      setSettings({ 
-        ...settings, 
-        mode:{
-          multiplayer: solo,
-          solo: multiplayer
-        } 
-      });
-  };
+  // const handleChangeMode = () => {
+  //     const {multiplayer, solo} = settings.mode
+  //     setSettings({ 
+  //       ...settings, 
+  //       mode:{
+  //         multiplayer: solo,
+  //         solo: multiplayer
+  //       } 
+  //     });
+  // };
+
+  const handleChangeSpectrum = () => {
+      const { spectrum } = settings
+      setSettings({
+        ...settings,
+        spectrum: !spectrum
+      })
+  }
 
 
 
@@ -112,9 +125,9 @@ const Settings = (props: Props) => {
   };
 
 
-  const handleChangeOption = async(event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
-      await setSettings({ 
+      setSettings({ 
         ...settings, 
         options:{
           ...settings.options,
@@ -123,22 +136,28 @@ const Settings = (props: Props) => {
       });
   };
 
+  let modeTitle = settings.mode.multiplayer ? <h3>Multiplayer</h3> : <h3>Solo</h3>
+
+  let spectrum = settings.mode.multiplayer ? (
+    <Grid container alignItems="center" spacing={1} >
+    <Grid item>Spectrum Complete</Grid>
+    <Grid item>
+      <FormControlLabel
+        control={<CustomSwitch checked={!settings.spectrum} onChange={handleChangeSpectrum}/>}
+        label=""
+      />
+    </Grid>
+    <Grid item>Horizon</Grid>
+  </Grid>
+  ) : null
+
   return (
     <div>
       <div style={modalStyle} className={classes.paper}>
         <h2 id="simple-modal-title">SETTINGS</h2>
+        {modeTitle}
         <Grid component="label" container alignItems="center" spacing={1}>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item>Solo</Grid>
-            <Grid item>
-              <CustomSwitch
-                checked={settings.mode.multiplayer}
-                onChange={handleChangeMode}
-                value="Multi"
-              />
-            </Grid>
-            <Grid item>Multi</Grid>
-          </Grid>
+          {spectrum}
           <Grid container alignItems="center"  spacing={2}>
             <Grid item>
               <h4>Difficulty</h4>

@@ -3,8 +3,7 @@ import { iRoom } from '../../Shared/models/Room'
 import { Board, iBoard, iScore } from '../../Shared/models/Board'
 import { Piece, iPiece } from '../../Shared/models/Piece'
 import { randomizer } from '../utils/randomizer'
-
-const utils = require("../utils/utilitiesFunctions");
+import * as utils from "../utils/utilitiesFunctions"
 
 
 
@@ -16,9 +15,9 @@ interface iData {
 
 export const startGame = (socket: any) => {
     socket.on("initialBoard", (data: iData) => {
-        // let board = new Board(data.room.piecesList[0])
-        // board.draw()
-        // data.player.board = board
+        if (data.room.settingsRoom.difficulty.hard) {
+            data.player.account.life = 1
+        }
         socket.emit("Board", {player: data.player, room: data.room, error: undefined})
     })
 }
@@ -50,16 +49,16 @@ export const POINTS = {
   Object.freeze(POINTS);
 
 const moves = {
-[KEY.LEFT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x - 1}} as Piece),
-[KEY.RIGHT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x + 1}} as Piece),
-[KEY.DOWN]: (p: Piece) => ({ ...p, pos:{...p.pos, y: p.pos.y + 1}} as Piece),
-[KEY.SPACE]: (p: Piece) => ({ ...p, pos:{...p.pos, y: p.pos.y + 1}} as Piece),
-[KEY.UP]: (p: Piece) => p.currentPieceRotation(p)
+    [KEY.LEFT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x - 1}} as Piece),
+    [KEY.RIGHT]: (p: Piece) => ({ ...p, pos:{...p.pos, x: p.pos.x + 1}} as Piece),
+    [KEY.DOWN]: (p: Piece) => ({ ...p, pos:{...p.pos, y: p.pos.y + 1}} as Piece),
+    [KEY.SPACE]: (p: Piece) => ({ ...p, pos:{...p.pos, y: p.pos.y + 1}} as Piece),
+    [KEY.UP]: (p: Piece) => p.currentPieceRotation(p)
 };
 
 const generator = (piecesList: any) => {
     let random = randomizer()
-    for(let i = 0; i < 5; i++) {
+    for(let i = 0; i < 15; i++) {
       piecesList.push(random.next().value)
     }
     return piecesList
@@ -74,13 +73,18 @@ const refreshPlayerGameInRoom = (player: iPlayer, room: iRoom, socket: any, room
           ...player,
           board: {
               ...newBoard
+          },
+          account: {
+              ...player.account
           }
       }
       let newRoom: iRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
+        newRoom.players = room.players
         newRoom.updatePlayer(updatedPlayer);
-        // console.log('updatedPlayer.board.grid', updatedPlayer.board?.grid)
-        utils.refresh(socket, newRoom, null, true);
+        newRoom.piecesList = room.piecesList
+        newRoom.settingsRoom = room.settingsRoom
+        utils.refresh(socket, newRoom, "", true);
       }
 }
 
@@ -102,12 +106,22 @@ const indestructiblesLines = (score: iScore, room: iRoom, socket: any, rooms: iR
         })
     }
     let newRoom: iRoom = utils.findRoomById(room.id, rooms)
-    newRoom.players = players
+    newRoom.players = room.players
     newRoom.malus = score.lines -1
-
-    utils.refresh(socket, newRoom, null, false)
+    newRoom.settingsRoom = room.settingsRoom
+    utils.refresh(socket, newRoom, "", false)
 }
 
+
+const GameOverOrNot = (board: iBoard, player: iPlayer, room: iRoom) => {
+    if (player.account.life === 1) {
+        board.gameOver = true
+    } else {
+        board.clearLinesForLife()
+        player.account.life--
+        board.currentPiece = new Piece(room.piecesList[player.listIdx++])
+    }
+}
 
 
 
@@ -116,15 +130,10 @@ export const play = (socket: any, rooms: iRoom[]) => {
     socket.on("Board", (data: iData) => {
         const {player, room, move} = data
         let board: iBoard = new Board(room.piecesList[player.listIdx])
-
         if (move && player.board && player.board.currentPiece) {
-            // console.log('player.board.grid', player.board.grid)
             room.players.map((play: iPlayer) => {
                 if (player.id === play.id && player.board && play.board && player.board.grid !== play.board.grid) {
                     player.board.grid = play.board.grid
-                    console.log('player.board.currentPiece.pos.y ', player.board.currentPiece.pos.y )
-                    console.log('room.malus',(room.malus))
-                    console.log('20 - room.malus', 20 - (room.malus))
                     if (player.board.currentPiece.pos.y >= 20 - room.malus) player.board.currentPiece.pos.y -= room.malus
                 }
                 return play
@@ -142,7 +151,7 @@ export const play = (socket: any, rooms: iRoom[]) => {
                 if (!room.settingsRoom.options.noRotation) {
                     let p = moves[KEY.UP](board.currentPiece)
                     if (board.isValid(p)) {
-                        board.currentPiece  = board.currentPiece.currentPieceRotation(board.currentPiece)
+                        board.currentPiece  = p //board.currentPiece.currentPieceRotation(board.currentPiece)
                     }
                 }
             } else {
@@ -167,22 +176,24 @@ export const play = (socket: any, rooms: iRoom[]) => {
                     player.account.points += score.points
                     player.account.lines += score.lines
                     player.listIdx++
-                    if (room.settingsRoom.mode.multiplayer && room.settingsRoom.difficulty.easy){
-                        refreshPlayerGameInRoom(player, room, socket, rooms)
-                    }
                     if (!room.piecesList[player.listIdx + 3]) {
                         room.piecesList = generator(room.piecesList)  
                     }
-
+                    
                     if (score.lines > 1 && room.players.length > 1) indestructiblesLines(score, room, socket, rooms)
-
+                    
                     let p = new Piece(room.piecesList[player.listIdx])
-                    board.isValid(p) ? board.currentPiece = p : board.gameOver = true
+                    if (board.isValid(p)) {
+                        board.currentPiece = p 
+                    } else {
+                        GameOverOrNot(board, player, room)
+                    }
+                    refreshPlayerGameInRoom(player, room, socket, rooms)
                 }
             }
         }                
         board.draw()
         player.board = board
-        socket.emit("Board", {player: player, room: room, error: undefined})
+        socket.emit("Board", {player: player, error: undefined})
     })
 }

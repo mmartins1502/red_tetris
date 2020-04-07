@@ -1,11 +1,12 @@
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkMiddleware } from "redux-thunk";
 import expect from "expect";
-import socketMiddleware from "../middlewares/socketMiddleware";
-import * as actions from "./roomActions";
-import * as types from "./actionTypes";
-import { iState } from "../reducers/roomReducer";
-import {Room}  from '../../../server/models/Room';
+import socketMiddleware from '../client/store/middlewares/socketMiddleware';
+import { iState } from '../client/store/reducers/roomReducer';
+import * as actions from "../client/store/actions/roomActions";
+import { Room, iRoom } from '../Shared/models/Room';
+import * as types from "../client/store/actions/actionTypes";
+import { Player, iPlayer } from '../Shared/models/Player';
 
 const middlewares = [
   thunk as ThunkMiddleware<iState, actions.RoomActions>,
@@ -13,31 +14,20 @@ const middlewares = [
 ];
 const mockStore = configureMockStore(middlewares);
 
-const playerTest = {
-  id: "id",
-  name: "NameTest",
-  room: "roomTest",
-  state: false
-};
+const playerTest: iPlayer = new Player("id", "NameTest", "roomTest")
 
 
 const mockState = {
   player: playerTest
 };
 
-const roomTest = {
-  id: "roomTest",
-  players: [ playerTest ],
-  inGame: false,
-  star: playerTest,
-  everyOneIsReady: false
+const roomTest: iRoom = new Room("roomTest")
 
-};
 
 
 // ////////////////////MOCK SERVER///////////////////
 
-let rooms: Room[] = [];
+let rooms: iRoom[] = [];
 
 // const roomTest4 = new Room("13");
 // roomTest4.addPlayer("id test1", "name test1", true, "13");
@@ -46,7 +36,7 @@ let rooms: Room[] = [];
 
 
 
-const socketConfig = require("../../../server/sockets/socket");
+const socketConfig = require("../Server/sockets/socket");
 
 const app = require("express")();
 const server = require("http").Server(app);

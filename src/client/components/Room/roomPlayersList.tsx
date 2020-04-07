@@ -81,9 +81,11 @@ const roomPlayersList: SFC<IProps> = (props) => {
     });
   }
   return (
-    <List component="nav" className={classes.root} aria-label="contacts">
-      {playersList}
-    </List>
+    <div className="PlayerList">
+      <List component="nav" className={classes.root} aria-label="contacts">
+        {playersList}
+      </List>
+    </div>
   );
 };
 

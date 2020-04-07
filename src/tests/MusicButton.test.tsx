@@ -1,7 +1,7 @@
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 
-import MusicButton from "./MusicButton";
+import MusicButton from "../client/components/UI/Music/MusicButton";
 import { shallow, configure } from "enzyme";
 import { IconButton } from "@material-ui/core";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";

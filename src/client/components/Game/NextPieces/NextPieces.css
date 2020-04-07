@@ -3,31 +3,29 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    min-width: 100px;
-    max-width: 100px;
-    min-height: 300px;
+    width: 80%;
     margin-bottom: 15px;
     margin-left: -2px;
     border-top: 20px solid #d40e0e;
     border-right: 20px solid #d40e0e;
     border-bottom: 20px solid #d40e0e;
     background-color: rgb(77, 77, 77);
-    box-sizing: border-box;
-    box-shadow: transparent;
+    font-family: 'Press Start 2P', cursive;
+    font-size: small;
 }
 
 .tetri {
     background-image: url("https://logomakr.com/media/clipart/tnp_vendetusvectores/1233851.svg");
     background-position: center;
     background-size: 140%;
-  box-shadow: inset 2px 2px 3px 3px rgba(37, 37, 37, 0.74);
-
+    /* box-shadow: inset 2px 2px 3px 3px rgba(37, 37, 37, 0.74); */
 }
 
 
 .piece {
     display: flex;
     flex-direction: column;
+    margin-bottom: 5%;
 }
 
 .row {
@@ -39,7 +37,24 @@
 .case {
     display: flex;
     margin-right: 2px;
-    /* background-color: rgb(77, 77, 77); */
     width: 15px;
     height: 15px;
 }
+
+@media (max-width: 900px) {
+    .Next {
+        height: 75%;
+        width: 80%;
+        font-size: xx-small;
+        border: 15px solid #d40e0e;
+        border-left: none;
+
+    }
+
+    .case {
+        margin-right: 1px;
+        width: 10px;
+        height: 10px;
+    }
+  }
+  

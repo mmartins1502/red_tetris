@@ -12,7 +12,7 @@ export const findRoomById = (id: string, rooms: iRoom[]) => {
   const room = rooms.find((room) => {
     return room.id === id;
   });
-  return room as Room
+  return room as iRoom
 };
 
 export const refresh = (socket: any, room: iRoom, error: string, all: boolean) => {
@@ -29,8 +29,3 @@ export const refresh = (socket: any, room: iRoom, error: string, all: boolean) =
   }
 };
 
-// module.exports = {
-//   createNewRoom,
-//   findRoomById,
-//   refresh
-// };

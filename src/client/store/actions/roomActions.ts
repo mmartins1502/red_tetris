@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { iPlayer } from "../../../Shared/models/Player";
-import { iRoom, iSettings } from "../../../Shared/models/Room";
+import { iRoom, iSettings, Room } from "../../../Shared/models/Room";
 import { ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { iState } from "../reducers/roomReducer";
@@ -20,6 +20,7 @@ export enum SocketActionTypes {
   LEAVE_ROOM_REDUCER = "LEAVE_ROOM_REDUCER",
   SETTINGS = "SETTINGS",
   SPEED_UP = "SPEED_UP",
+  RESET_ROOM = "RESET_ROOM",
 }
 
 interface defaultAction {
@@ -205,6 +206,29 @@ export const refreshRoom: ActionCreator<ThunkAction<
   };
 };
 
+
+interface ResetRoomParamsAction {
+  type: SocketActionTypes.RESET_ROOM;
+  player: iPlayer
+  room: iRoom
+}
+
+
+export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
+  let newRoom: iRoom = new Room(room.id)
+  room.players.every((play: iPlayer) => {
+     return newRoom.addPlayer(play.id, play.name, play.room)
+  })
+  console.log('newRoom.players', newRoom.players)
+  newRoom.resetRoom()
+  let newPlayer = newRoom.players.find((play: iPlayer) => play.id === player.id)
+  return {
+    type: SocketActionTypes.RESET_ROOM,
+    player: newPlayer,
+    room: newRoom
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 interface startGameAction {
@@ -282,7 +306,6 @@ export const speedUp = (speed: number) => {
 interface refreshPlayerAction {
   type: SocketActionTypes.REFRESH_PLAYER;
   player: iPlayer;
-  room: iRoom;
   error: string;
 }
 
@@ -302,7 +325,6 @@ export const refreshPlayer: ActionCreator<ThunkAction<
             dispatch({
               type: actionTypes.REFRESH_PLAYER,
               player: data.player,
-              room: data.room,
               error: data.error
             })
           );
@@ -329,4 +351,5 @@ export type RoomActions =
   | refreshPlayerAction
   | settingsChangedAction
   | speedUpAction
+  | ResetRoomParamsAction
   | defaultAction;

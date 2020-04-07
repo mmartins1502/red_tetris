@@ -1,6 +1,8 @@
-import { Room } from "../server/models/Room";
-import { Player } from "../client/models/Player";
+// import { Room } from "../server/models/Room";
+// import { Player } from "../client/models/Player";
 import * as ioClient from "socket.io-client";
+import { Player } from 'Shared/models/Player';
+import { Room } from 'Shared/models/Room';
 
 const socketConfig = require("./sockets/socket");
 

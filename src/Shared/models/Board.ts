@@ -22,6 +22,7 @@ export interface iBoard {
   getLineClearPoints: (lines: number) => number
   clearLines: () => iScore
   freeze: () => iScore
+  clearLinesForLife: () => void
 }
 
 export class Board {
@@ -107,6 +108,15 @@ export class Board {
          lines === 3 ? POINTS.TRIPLE :     
          lines === 4 ? POINTS.TETRIS : 
          0;
+  }
+
+  public clearLinesForLife() {
+        // Remove the rows.
+        this.grid.splice(9, 10);
+        // Add zero filled rows at the top. 
+        for(let i = 0; i < 10; i++) {
+          this.grid.unshift(Array(10).fill(0));
+        }
   }
   
   public clearLines() {

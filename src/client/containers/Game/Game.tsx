@@ -16,6 +16,8 @@ import GameOver from "../../components/Game/GameOver/GameOver";
 import Spectrum from '../../components/Game/Spectrum/Spectrum'
 import Logo from "../../components/UI/Logo/Logo";
 import CountDown from "../../components/Game/CountDown/CountDown";
+import { Button } from "@material-ui/core";
+import Life from "../../components/Game/Life/Life";
 
 
 
@@ -30,6 +32,7 @@ interface IProps {
   onRefreshPlayer: () => void;
   onleaveRoomReducer: () => void
   onSpeedUp: (speed: number) => void
+  onResetRoomParams: (player: iPlayer, room: iRoom) => void
 }
 
 const Game: FC<IProps> = (props) => {
@@ -81,15 +84,16 @@ console.log("[Game] props", props);
 
   const handleKeyPress = (e) => {
     e.preventDefault()
-    console.log("'" + e.key + "'")
-    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === " ") {
+    if ((e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === " ") && !props.player.board.gameOver) {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
-    } else if (e.key === "ArrowUp" && !props.room.settingsRoom.options.noRotation) {
+    } else if (e.key === "ArrowUp" && !props.room.settingsRoom.options.noRotation && !props.player.board.gameOver) {
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
     }
   }
+  let life = (!props.room.settingsRoom.difficulty.hard && props.room.settingsRoom.difficulty.easy) ? <Life life={props.player.account.life} /> : null;
+  let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ?  null : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
+  // let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ?  <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div> : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
 
-  let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ? null : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
   let countDown = (props.room.settingsRoom.options.faster) ? <CountDown speedUp={speedUp} /> : null
   let score = (
     <div className="Score">
@@ -98,29 +102,44 @@ console.log("[Game] props", props);
     </div>
   )
 
+  let quitButton = (
+    <Button
+          name="quit"
+          data-testid="quit"
+          onClick={() => leaveRoom()}
+          style={{ color: "#d40e0e" }}
+        >
+          (RAGE)QUIT
+        </Button>
+  )
+
+  const goBackToRoom = () => {
+    console.log('[goBackToRoom] Button clicked')
+    props.onResetRoomParams(props.player, props.room)
+    props.history.replace(`/${props.room.id}[${props.player.name}]`)
+  }
+
+  console.log('props.room.settingsRoom.spectrum', props.room.settingsRoom.spectrum)
+
+
   return (
-    <div className="GamePage" style={{ position: "absolute" }} tabIndex={0} ref={gamePage}  onKeyDown={(e) => handleKeyPress(e)}>
-      <button onClick={() => leaveRoom()}>QUIT</button>
-      <div className="Game">
-        <div className="Right">
-          <Grid board={props.player.board}/>
-          <div className="NextAndScore">
-            <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
-            {score}
-            {countDown}
+    <div>
+      <div className="GamePage" style={{ position: "absolute" }} tabIndex={0} ref={gamePage}  onKeyDown={(e) => handleKeyPress(e)}>
+      <Logo />
+        <div className="Game">
+          <div className="Left">
+            <Grid board={props.player.board}/>
+            <div className="NextAndScore">
+              <NextPieces index={props.player.listIdx} list={props.room.piecesList} />
+              {score}
+              {life}
+              {countDown}
+              {quitButton}
+            </div>
           </div>
-        </div>
-        {props.player.board.gameOver ? <GameOver /> : null}
-        <div className="Side">
-          <Logo />
-          {spectrum}
-          <div className="Commands">
-            <h4>Commands</h4>
-            <span>← : move left</span>
-            <span>→ : move right</span>
-            <span>↑ : rotate piece</span>
-            <span>↓ : move down</span>
-            <span>space : drop piece</span>
+          {props.player.board && props.player.board.gameOver ? <GameOver goBack={() => goBackToRoom()} player={props.player} room={props.room} /> : null}
+          <div className={(props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ?  "" : "Right"}>
+            {spectrum}
           </div>
         </div>
       </div>
@@ -143,7 +162,9 @@ const mapDispatchToProps = {
     onRefreshPlayerAsk: (me: Player, room: Room, move: string) => actions.refreshPlayerAsk(me, room, move),
     onRefreshPlayer: () => actions.refreshPlayer(),
     onInitialBoard: (me: Player, room: Room) => actions.initBoard(me, room),
-    onSpeedUp: (speed: number) => actions.speedUp(speed)
+    onSpeedUp: (speed: number) => actions.speedUp(speed),
+    onResetRoomParams: (player: iPlayer, room: iRoom) => actions.onResetRoomParams(player, room)
+
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

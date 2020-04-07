@@ -2,9 +2,7 @@ import React from "react";
 import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-import Grid from "./Grid";
-import Line from "./Line";
-import Case from "./Case";
+import Grid from "../client/components/Game/Grid/Grid";
 
 configure({ adapter: new Adapter() });
 

@@ -3,6 +3,13 @@ import { Board, iBoard } from './Board';
 interface iAccount {
   lines: number;
   points: number;
+  life: number
+}
+
+const initialAccount = {
+  lines: 0,
+  points: 0,
+  life: 3
 }
 
 export interface iPlayer {
@@ -14,6 +21,7 @@ export interface iPlayer {
   listIdx: number;
   account: iAccount;
   initBoard: (letter: string) => void  
+  resetPlayer: () => void  
 }
 
 export class Player implements iPlayer {
@@ -31,10 +39,14 @@ export class Player implements iPlayer {
     this.room = room;
     this.state = false;
     this.listIdx = 0
-    this.account = {
-      lines: 0,
-      points: 0
-    }
+    this.account = initialAccount
+  }
+
+  public resetPlayer() {
+    this.state = false
+    this.board = undefined
+    this.listIdx = 0
+    this.account = initialAccount
   }
 
   public initBoard(letter: string) {

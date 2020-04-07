@@ -1,4 +1,4 @@
-import React, { useEffect, FC } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
@@ -32,6 +32,7 @@ interface IProps {
 
 export const HomePage: React.FC<IProps> = (props) => {
   console.log("[HomePage] props", props);
+  
 
   const { onCreatePlayerId } = props;
 

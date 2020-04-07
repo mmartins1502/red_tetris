@@ -27,3 +27,10 @@
   flex-direction: row;
   justify-content: space-around;
 }
+
+
+@media (max-width: 499px) {
+  .Box {
+    width: fit-content;
+  }
+}

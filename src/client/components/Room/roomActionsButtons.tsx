@@ -29,7 +29,7 @@ const roomActions: SFC<IProps> = (props) => {
   const classes = usestyles();
 
   let startAndReady =
-    (props.room && props.me && props.room.star.id !== props.me.id) ? (
+    (props.room.star && props.me && props.room.star.id !== props.me.id) ? (
       <Button
         name="ready"
         data-testid="ready"
