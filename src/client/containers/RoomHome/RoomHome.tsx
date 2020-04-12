@@ -6,53 +6,61 @@ import { RouteComponentProps, useParams } from "react-router-dom";
 import { Player, iPlayer } from "../../../Shared/models/Player"
 import { iSettings, iRoom } from "../../../Shared/models/Room";
 
-
 //IMPORT COMPONENTS
 import PlayersList from "../../components/Room/roomPlayersList";
 import RoomActions from "../../components/Room/roomActionsButtons";
 import Logo from "../../components/UI/Logo/Logo";
 import Game from "../Game/Game";
+import SettingsModal from "../../components/UI/Modal/SettingsModal";
+import MusicButton from "../../components/UI/Music/MusicButton";
+import Settings from "../../components/Room/Settings";
 
 //IMPORT STORE
 import * as actions from "../../store/actions/index";
 import { IAppState } from "../../store";
 
+//MATERIAL-UI
 import { Alert } from "@material-ui/lab";
 import Slide from "@material-ui/core/Slide";
-import SettingsModal from "../../components/UI/Modal/SettingsModal";
-import MusicButton from "../../components/UI/Music/MusicButton";
-import Settings from "../../components/Room/Settings";
 
 // IMPORT CSS
-const classes = require("./RoomHome.module.css");
+import "./RoomHome.css"
 
 interface IProps extends RouteComponentProps {
   room: iRoom;
   player: iPlayer;
   error: string;
-  ////////////////////////////////
+  music: any;
   onCreatePlayerId: () => void;
   onFormValidated: (newPlayer: iPlayer) => void;
   onRoomNumber: () => void;
-  ////////////////////////////////
   onRereshRoom: () => void;
+  onRefreshPlayer: () => void;
   onleaveRoom: (me: iPlayer, room: iRoom) => void;
   onStartGame: (room: iRoom) => void;
-  onReady: (me: iPlayer, room: iRoom) => void;
+  // onReady: (me: iPlayer, room: iRoom) => void;
   onleaveRoomReducer: () => void
   onSettingsChanged: (settings: iSettings) => void
-  // onResetRoomParams: (player: iPlayer, room: iRoom) => void
+  handleMusic: (music: any) => void
+  resetPlayer: () => void
+
 }
 
 const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
   // console.log("[RoomHome] props", props);
-  const { onRereshRoom, onFormValidated, onRoomNumber, onCreatePlayerId } = props;
-  const {player, room} = props
+  const { onRereshRoom, onFormValidated, onRoomNumber, onCreatePlayerId, onRefreshPlayer, resetPlayer } = props;
+  const {room, player} = props
   const params = useParams<{playerName: string, room: string}>()
-  console.log('params', params)
+
+  // // const player = props.player.id ? room.players.find((play: iPlayer) => play.id === player.id) : props.player
+  // useEffect(() => {
+  //   if (props.player.id && room.id !== "") {
+  //     props.player = room.players.find((play: iPlayer) => play.id === props.player.id)
+  //   }
+  // })
+  // const {player} = props
 
 
-  
   useEffect(() => {
     if(!player.id) {
       onCreatePlayerId()
@@ -61,14 +69,16 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
       onFormValidated(newPlayer)
       onRoomNumber()
     }
-  }, [player.id, room.id, onCreatePlayerId, onFormValidated, onRoomNumber, params])
+  }, [player, room.id, onCreatePlayerId, onFormValidated, onRoomNumber, params])
 
   useEffect(() => {
+    onRefreshPlayer()
     onRereshRoom();
-  }, [onRereshRoom]);
-
+    resetPlayer()
+  }, [onRereshRoom, onRefreshPlayer, resetPlayer]);
 
   const me = props.player;
+
   const onSettingsChanged = (settings) => {
     props.onSettingsChanged(settings)
   }
@@ -83,32 +93,27 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
     props.onStartGame(props.room);
   };
 
-  const ready = () => {
-    props.onReady(me, props.room);
-  };
+  // const ready = () => {
+  //   props.onReady(me, props.room);
+  // };
 
   let playersAndButtons = (
-    <div className={classes.Box}>
+    <div className="BoxRoomHome">
       <h4>ROOM #{props.room ? props.room.id : null}</h4>
-      <div className={classes.Players_actions}>
+      <div className="Players_actions">
         <PlayersList room={props.room} player={me} />
         <RoomActions
           room={props.room}
           me={me}
           leaveRoom={() => leaveRoom()}
           startGame={() => startGame()}
-          ready={() => ready()}
+          // ready={() => ready()}
         />
       </div>
     </div>
   );
 
-
-  if (props.room && props.room.inGame === true) {
-    return <Game />;
-  }
   let settingsOwner = null
-  console.log('props =>', props)
   if (props.player.id !== "" && props.room.star !== undefined && props.player.id === props.room.star.id) {
     const playersNb: number = props.room.players.length
     settingsOwner = (
@@ -117,12 +122,16 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
       </SettingsModal>
     )
   }
+  
+  if (props.room && props.room.inGame === true && props.room.game.location === "Game") {
+    return <Game />;
+  }
 
   return (
     <div>
-      <MusicButton />
+      <MusicButton music={props.music} musicOn={(music) => props.handleMusic(music)} />
       {settingsOwner}
-      <div className={classes.RoomHome}>
+      <div className="RoomHome">
         <Logo />
         {playersAndButtons}
         {props.error ? (
@@ -144,10 +153,10 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
 
 const mapStateToProps = (store: IAppState) => {
   return {
-    playerId: store.roomState.player.id,
     player: store.roomState.player,
     room: store.roomState.room,
-    error: store.roomState.error
+    error: store.roomState.error,
+    music: store.roomState.music
   };
 };
 
@@ -159,10 +168,12 @@ const mapDispatchToProps = {
   onleaveRoom: (me: iPlayer, room: iRoom) => actions.leaveRoom(me, room),
   onleaveRoomReducer: () => actions.leaveRoomReducer(),
   onRereshRoom: () => actions.refreshRoom(),
+  onRefreshPlayer: () => actions.refreshPlayer(),
   onStartGame: (room: iRoom) => actions.startGame(room),
-  onReady: (me: iPlayer, room: iRoom) => actions.ready(me, room),
+  // onReady: (me: iPlayer, room: iRoom) => actions.ready(me, room),
   onSettingsChanged: (settings: iSettings) => actions.settingsChanged(settings),
-  // onResetRoomParams: (player: iPlayer, room: iRoom) => actions.onResetRoomParams(player, room)
+  handleMusic: (music: any) => actions.music(music),
+  resetPlayer: () => actions.resetPlayer()
 
 };
 

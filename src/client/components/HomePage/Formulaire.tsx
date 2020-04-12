@@ -31,7 +31,7 @@ const Forrmulaire2: React.FC<Props> = (props) => {
 
   const formHandler = (e: FormEvent) => {
     e.preventDefault();
-    const formData: Player = { ...state };
+    const formData: any = { ...state };
     props.onFormValidated(formData);
   };
 

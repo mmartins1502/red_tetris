@@ -2,7 +2,7 @@ import React from "react";
 import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-import RoomActions from "./roomActionsButtons";
+import RoomActions from "../../client/components/Room/roomActionsButtons";
 import { Button, ButtonGroup } from "@material-ui/core";
 
 configure({ adapter: new Adapter() });
@@ -52,12 +52,12 @@ describe("<RoomActionsButton />", () => {
     ).toEqual(true);
   });
 
-  it("Should render one ButtonGroup and two Buttons with ready and quit name", () => {
+  it("Should render one ButtonGroup and two Buttons with start (disabled) and quit name", () => {
     wrapper.setProps({ ...props, me: { ...props.me, id: "3" } });
     expect(
       wrapper.containsMatchingElement(
         <ButtonGroup>
-          <Button name="ready">READY</Button>
+          <Button name="ready" disabled >START</Button>
           <Button name="quit">QUIT</Button>
         </ButtonGroup>
       )

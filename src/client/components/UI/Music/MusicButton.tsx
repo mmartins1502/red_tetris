@@ -3,33 +3,31 @@ import { IconButton } from "@material-ui/core";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
 
-interface Props {}
+interface Props {
+  music: any;
+  musicOn: (music: any) => void;
+}
 
-const MusicButton: React.FC<Props> = () => {
-  const url =
-    "https://ia600504.us.archive.org/33/items/TetrisThemeMusic/Tetris.mp3";
-  //   const audio = new Audio(url);
-  const [volume, setvolume] = useState({
-    on: false,
-    audio: new Audio(url)
-  });
+const MusicButton: React.FC<Props> = (props) => {
+  const [volume, setvolume] = useState({...props.music})
 
   const handleChange = () => {
     if (!volume.on) {
       setvolume({
         ...volume,
         on: true
-      });
+      })
       volume.audio.loop = true;
       volume.audio.play();
     } else {
       setvolume({
         ...volume,
         on: false
-      });
+      })
       volume.audio.pause();
     }
-  };
+    props.musicOn(volume)
+  }
 
   return (
     <div>

@@ -1,5 +1,6 @@
 import { Player, iPlayer } from "./Player";
 import { randomizer } from '../../Server/utils/randomizer';
+import { iGame, Game } from './Game';
 
 
 export interface iSettings {
@@ -34,16 +35,17 @@ const initialSettings: iSettings = {
   spectrum: true
 };
 
+
 export interface iRoom {
   id: string;
   players: iPlayer[];
   inGame: boolean;
   star: iPlayer;
-  everyOneIsReady: boolean;
   piecesList: any;
   speed: number;
   settingsRoom : iSettings;
   malus: number;
+  game: iGame;
   generator: () => void;
   addPlayer: (playerId: string, playerName: string, playerRoom: string) => void
   startGame: () => void;
@@ -61,23 +63,24 @@ export class Room implements iRoom {
   players: iPlayer[];
   inGame: boolean;
   star: iPlayer;
-  everyOneIsReady: boolean;
   piecesList: any;
   speed: number;
   settingsRoom : iSettings;
   malus: number;
+  game: iGame;
+
 
   constructor(id: string) {
     this.id = id;
     this.players = [];
     this.inGame = false;
     this.star = this.players[0];
-    this.everyOneIsReady = false;
     this.piecesList = [];
     this.piecesList = this.generator();
     this.speed = 1000;
     this.settingsRoom = initialSettings;
     this.malus = 0;
+    this.game = new Game()
   }
 
   public generator = () => {
@@ -85,7 +88,6 @@ export class Room implements iRoom {
     for(let i = 0; i < 15; i++) {
       this.piecesList.push(random.next().value)
     }
-
     return this.piecesList
   }
 
@@ -128,18 +130,12 @@ export class Room implements iRoom {
 
   public resetRoom() {
     this.inGame = false;
-    this.everyOneIsReady = false;
     this.piecesList = [];
     this.piecesList = this.generator();
     this.speed = 1000;
     this.settingsRoom = initialSettings;
     this.malus = 0;
-
-    this.players = this.players.map((player) => {
-      player.resetPlayer()
-      player.initBoard(this.piecesList[player.listIdx])
-      return player
-    })
+    this.game.location = "Room"
 
   }
 }

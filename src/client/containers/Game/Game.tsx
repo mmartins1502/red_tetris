@@ -9,6 +9,7 @@ import { IAppState } from "../../store";
 import { History } from "history";
 import { withRouter } from "react-router";
 import Grid from "../../components/Game/Grid/Grid";
+import useInterval from '@use-it/interval'
 
 import "./Game.css";
 import NextPieces from "../../components/Game/NextPieces/NextPieces";
@@ -33,40 +34,39 @@ interface IProps {
   onleaveRoomReducer: () => void
   onSpeedUp: (speed: number) => void
   onResetRoomParams: (player: iPlayer, room: iRoom) => void
+  resetPlayer: () => void
 }
 
 const Game: FC<IProps> = (props) => {
-
 const gamePage = useRef(null)
-
-const {onRefreshPlayer, onRereshRoom} = props
-
+const {onRefreshPlayer, onRereshRoom, resetPlayer} = props
 const {onRefreshPlayerAsk, player, room} = props
-
 console.log("[Game] props", props);
-
   
   useEffect(() => {
     gamePage.current.focus()
     onRereshRoom()
     onRefreshPlayer()
+    resetPlayer()
     props.onInitialBoard(props.player, props.room)
     // eslint-disable-next-line
-  }, [onRefreshPlayer, onRereshRoom])
+  }, [onRefreshPlayer, onRereshRoom, resetPlayer])
 
-  useEffect(() => {
-    // AUTOMATIC MOVE
-    let interval = null;
-    if (room.inGame && !player.board.gameOver) {
-      interval = setInterval(() => {
-        onRefreshPlayerAsk(player, room, "ArrowDown")
-      }, room.speed);
-     }
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, [room, player, onRefreshPlayerAsk]);
+  // useEffect(() => {
+  //   // AUTOMATIC MOVE
+  //   let interval = null;
+  //   if (room.inGame && !player.board.gameOver) {
+  //     interval = setInterval(() => {
+  //       onRefreshPlayerAsk(player, room, "ArrowDown")
+  //     }, room.speed);
+  //    }
+  //   return () => clearInterval(interval);
+  //   // eslint-disable-next-line
+  // }, [player, room, onRefreshPlayerAsk]);
 
-
+  useInterval(() => {
+    onRefreshPlayerAsk(player, room, "ArrowDown")
+  }, room.speed)
 
 
 
@@ -90,10 +90,9 @@ console.log("[Game] props", props);
       props.onRefreshPlayerAsk(props.player, props.room, e.key)
     }
   }
+
   let life = (!props.room.settingsRoom.difficulty.hard && props.room.settingsRoom.difficulty.easy) ? <Life life={props.player.account.life} /> : null;
   let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ?  null : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
-  // let spectrum = (props.room.settingsRoom.mode.solo || props.room.settingsRoom.difficulty.hard) ?  <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div> : <div className="Adversaire"><Spectrum room={props.room} player={props.player} /></div>
-
   let countDown = (props.room.settingsRoom.options.faster) ? <CountDown speedUp={speedUp} /> : null
   let score = (
     <div className="Score">
@@ -114,13 +113,14 @@ console.log("[Game] props", props);
   )
 
   const goBackToRoom = () => {
-    console.log('[goBackToRoom] Button clicked')
+    // console.log('[goBackToRoom] Button clicked')
     props.onResetRoomParams(props.player, props.room)
-    props.history.replace(`/${props.room.id}[${props.player.name}]`)
+    // props.history.replace(`/${props.room.id}[${props.player.name}]`)
   }
 
-  console.log('props.room.settingsRoom.spectrum', props.room.settingsRoom.spectrum)
-
+  if ( props.room.game.location === "Room") {
+    props.history.replace(`/${props.room.id}[${props.player.name}]`)
+  }
 
   return (
     <div>
@@ -163,8 +163,8 @@ const mapDispatchToProps = {
     onRefreshPlayer: () => actions.refreshPlayer(),
     onInitialBoard: (me: Player, room: Room) => actions.initBoard(me, room),
     onSpeedUp: (speed: number) => actions.speedUp(speed),
-    onResetRoomParams: (player: iPlayer, room: iRoom) => actions.onResetRoomParams(player, room)
-
+    onResetRoomParams: (player: iPlayer, room: iRoom) => actions.onResetRoomParams(player, room),
+    resetPlayer: () => actions.resetPlayer()
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

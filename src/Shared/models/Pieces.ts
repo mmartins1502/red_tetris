@@ -1,13 +1,15 @@
 export interface iPieces {
     name: string;
+    value: number;
     color: string;
     shape: number[][]
 }
 
 
-export const pieces = [
+export const pieces: iPieces[] = [
     {
         name: "I",
+        value: 1,
         color: "cyan",
         shape:[
                 [0,0,1,0],
@@ -18,6 +20,7 @@ export const pieces = [
     },
     {
         name: "J",
+        value: 2,
         color: "blue",
         shape:[
                 [0,2,0],
@@ -27,6 +30,7 @@ export const pieces = [
     },
     {
         name: "L",
+        value: 3,
         color: "orange",
         shape:[
                 [0,3,0],
@@ -36,6 +40,7 @@ export const pieces = [
     },
     {    
         name: "O",
+        value: 4,
         color: "yellow",
         shape:[
                 [4,4],
@@ -44,6 +49,7 @@ export const pieces = [
     },
     {
         name: "S",
+        value: 5,
         color: "green",
         shape:[
                 [0,5,5],
@@ -54,6 +60,7 @@ export const pieces = [
     {
 
         name: "Z",
+        value: 6,
         color: "red",
         shape:[
                 [6,6,0],
@@ -63,6 +70,7 @@ export const pieces = [
     },
     {
         name: "T",
+        value: 7,
         color: "purple",
         shape:[
                 [7,7,7],

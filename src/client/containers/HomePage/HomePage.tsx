@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
-import { Player } from "../../../Shared/models/Player";
-import { Room } from "../../../Shared/models/Room";
+import { Player, iPlayer } from "../../../Shared/models/Player";
+import { iRoom } from "../../../Shared/models/Room";
 
 //COMPONENTS
 import Formulaire from "../../components/HomePage/Formulaire";
@@ -18,30 +18,26 @@ import Slide from "@material-ui/core/Slide";
 // CSS & IMG
 import "./HomePage.css";
 
-
 interface IProps {
   playerId: string;
-  room: Room;
-  player: Player;
+  room: iRoom;
+  player: iPlayer;
   error: string;
   redirect: boolean;
+  music: any
   onCreatePlayerId: () => void;
-  onFormValidated: (formData: Player) => void;
+  onFormValidated: (formData: iPlayer) => void;
   onRoomNumber: () => void;
+  handleMusic: (music: any) => void
 }
 
 export const HomePage: React.FC<IProps> = (props) => {
-  console.log("[HomePage] props", props);
-  
-
+  // console.log("[HomePage] props", props);
   const { onCreatePlayerId } = props;
 
-  useEffect(() => {
+  React.useEffect(() => {
     onCreatePlayerId();
   }, [onCreatePlayerId]);
-
-  
-  
 
   const formValidation = (formData: any) => {
     formData.id = props.player.id;
@@ -49,7 +45,7 @@ export const HomePage: React.FC<IProps> = (props) => {
     props.onRoomNumber();
   };
 
-
+  
 
   if (props.redirect && props.room.id && props.player.name && !props.error) {
     return <Redirect to={`/${props.room.id}[${props.player.name}]`} />;
@@ -57,8 +53,8 @@ export const HomePage: React.FC<IProps> = (props) => {
 
   return (
     <div>
-      <MusicButton />
-      <div className="Box">
+      <MusicButton music={props.music} musicOn={(music) => props.handleMusic(music)} />
+      <div className="BoxHomePage">
         <Logo />
         <div className="BoxInput">
           <h2 className="BoxTitle">WELCOME</h2>
@@ -87,14 +83,16 @@ const mapStateToProps = (store: IAppState) => {
     player: store.roomState.player,
     room: store.roomState.room,
     error: store.roomState.error,
-    redirect: store.roomState.redirect
+    redirect: store.roomState.redirect,
+    music: store.roomState.music
   };
 };
 
 const mapDispatchToProps = {
   onCreatePlayerId: () => actions.createPlayerId(),
   onFormValidated: (formData: Player) => actions.checkRoom(formData),
-  onRoomNumber: () => actions.roomHomeInfos()
+  onRoomNumber: () => actions.roomHomeInfos(),
+  handleMusic: (music: any) => actions.music(music)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

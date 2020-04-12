@@ -1,5 +1,5 @@
 import { Player, iPlayer } from "../../Shared/models/Player"
-import { iRoom } from '../../Shared/models/Room'
+import { iRoom, Room } from '../../Shared/models/Room'
 import { Board, iBoard, iScore } from '../../Shared/models/Board'
 import { Piece, iPiece } from '../../Shared/models/Piece'
 import { randomizer } from '../utils/randomizer'
@@ -15,12 +15,14 @@ interface iData {
 
 export const startGame = (socket: any) => {
     socket.on("initialBoard", (data: iData) => {
-        if (data.room.settingsRoom.difficulty.hard) {
-            data.player.account.life = 1
+        const player = data.room.players.find((play) => data.player.id === play.id)
+        if (player && data.room.settingsRoom.difficulty.hard) {
+            player.account.life = 1
         }
-        socket.emit("Board", {player: data.player, room: data.room, error: undefined})
+        socket.emit("Board", {player: player, error: undefined})
     })
 }
+
 
 
 interface iData {
@@ -69,6 +71,7 @@ const refreshPlayerGameInRoom = (player: iPlayer, room: iRoom, socket: any, room
     let updatedPlayer: iPlayer = new Player(player.id, player.name, player.room)
     let newBoard: iBoard = new Board(room.piecesList[player.listIdx])
     newBoard.grid = player.board ? player.board.grid : newBoard.grid
+    newBoard.gameOver = player.board && player.board.gameOver ? player.board.gameOver : newBoard.gameOver
       updatedPlayer = {
           ...player,
           board: {
@@ -188,12 +191,34 @@ export const play = (socket: any, rooms: iRoom[]) => {
                     } else {
                         GameOverOrNot(board, player, room)
                     }
-                    refreshPlayerGameInRoom(player, room, socket, rooms)
                 }
             }
+            board.draw()
+            player.board = board
+            refreshPlayerGameInRoom(player, room, socket, rooms)
         }                
-        board.draw()
-        player.board = board
         socket.emit("Board", {player: player, error: undefined})
+    })
+}
+
+export const resetRoom = (socket: any) => {
+    socket.on("ResetRoom", (data: iData) => {
+        const { room } = data
+        let newRoom: iRoom = new Room(room.id)
+        newRoom.addPlayer(room.star.id, room.star.name, room.star.room)
+        room.players.map((play: iPlayer) => {
+            if (play.id !== room.star.id) {
+                return newRoom.addPlayer(play.id, play.name, play.room)
+            } else return play
+        })
+        newRoom.resetRoom()
+        utils.refresh(socket, newRoom, "", true)
+
+        newRoom.players.map((player: iPlayer) => {
+            const newPlayer = player
+            return socket.to(newPlayer.id).emit("ResetPlayer", {player: newPlayer})
+        })
+        const newPlayer = newRoom.players.find((play) => play.id === socket.id)
+        socket.emit("ResetPlayer", {player: newPlayer})
     })
 }

@@ -1,35 +1,7 @@
 import React from "react";
 import { Board } from "../../../../Shared/models/Board";
 import "./Grid.css"
-
-const pieces = [
-  {
-      color: "cyan",
-  },
-  {
-      color: "blue",
-  },
-  {
-      color: "orange",
-  },
-  {    
-      color: "yellow",
-  },
-  {
-      color: "green",
-    },
-    {
-      color: "red",
-    },
-  {
-      color: "purple",
-  }
-]
-
-
-
-
-// const classes = require("./Grid.module.css");
+import { pieces, iPieces } from "../../../../Shared/models/Pieces";
 
 interface iProps {
   board: Board
@@ -37,6 +9,10 @@ interface iProps {
 
 const Grid = (props: iProps) => {
 
+  const whichClass = (value: number) => {
+    const classCss = pieces.find((piece: iPieces) => value === piece.value)
+    return classCss ? classCss.name : ""
+  }
   
 
   return (
@@ -44,7 +20,8 @@ const Grid = (props: iProps) => {
       <div className={"Grid"}>
         {props.board.tmpGrid.map((rows, y) => {
           return <div key={y} className={"Line"} >{rows.map((value, x) => {
-            return <div key={x} className={value === -1 ? "Case Indextructible" : value > 0 ? "Case Tetri" : "Case"} style={value > 0 ? {backgroundColor: pieces[value -1].color} : null}></div>
+            let classCss = whichClass(value)
+            return <div key={x} className={value === -1 ? "Case Indextructible" : value > 0 ? "Case Tetri " + classCss : "Case"} ></div>
           })}</div>;
         })}
       </div>

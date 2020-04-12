@@ -22,8 +22,6 @@ const NextPieces = (props: Props) => {
         })
     )
 
-
-
     return (
         <div>
             <div className="Next">

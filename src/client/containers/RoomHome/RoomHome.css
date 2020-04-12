@@ -6,7 +6,7 @@
   color: #d40e0e;
 }
 
-.Box {
+.BoxRoomHome {
   margin-top: 10%;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 
 
 @media (max-width: 499px) {
-  .Box {
+  .BoxRoomHome {
     width: fit-content;
   }
 }

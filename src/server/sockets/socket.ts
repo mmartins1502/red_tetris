@@ -1,31 +1,24 @@
 import { Player, iPlayer } from "../../Shared/models/Player";
 import { Room, iRoom } from "../../Shared/models/Room";
-// import { Board } from '../models/Board';
+
+import socketIo from "socket.io";
+import * as utils from "../utils/utilitiesFunctions";
+import * as game from "../game/game";
 
 
-const socketIo = require("socket.io");
-const utils = require("../utils/utilitiesFunctions");
-const game = require("../game/game");
+const initialRoom = new Room("")
 
-
-const initialRoom = {
-  id: "",
-  players: [],
-  inGame: false,
-  star: {}
-};
-
-module.exports = function socketConfig(rooms: iRoom[], server: any) {
+export const socketConfig = (rooms: iRoom[], server: any) => {
   const io = socketIo(server);
 
   const joinCreateRoom = (socket: any) => {
     interface idata {
       room: string;
       name: string;
-      state: boolean;
     }
     socket.on("Room", async (data: idata) => {
-      let error;
+      console.log("[joinCreateRoom] Room event")
+      let error = "";
       let room: Room = utils.findRoomById(data.room, rooms);
 
       if (room) {
@@ -45,7 +38,6 @@ module.exports = function socketConfig(rooms: iRoom[], server: any) {
         room.addPlayer(socket.id, data.name, data.room);
       }
       const player = new Player(socket.id, data.name, data.room);
-      console.log('room.piecesList[0]', room.piecesList[0])
       player.initBoard(room.piecesList[0])
       const roomInfos = {
         player: player,
@@ -61,8 +53,8 @@ module.exports = function socketConfig(rooms: iRoom[], server: any) {
 
   const leaveRoom = (socket: any) => {
     interface idata {
-      player: Player;
-      room: Room;
+      player: iPlayer;
+      room: iRoom;
     }
 
     socket.on("LeaveRoom", (data: idata) => {
@@ -72,76 +64,41 @@ module.exports = function socketConfig(rooms: iRoom[], server: any) {
       if (room) {
         rooms = room.removePlayer(data.player.id, rooms);
       }
-      utils.refresh(socket, room, null, false);
+      utils.refresh(socket, room, "", false);
       socket.emit("RefreshRoom", { room: initialRoom, error: undefined });
     });
   };
 
-  const ready = (socket: any) => {
-    interface idata {
-      player: iPlayer;
-      room: iRoom;
-    }
-    socket.on("Ready", (data: idata) => {
-      // console.log("[ready]", data);
-
-      let room: Room = utils.findRoomById(data.room.id, rooms);
-      let updatedPlayer: iPlayer = new Player(data.player.id, data.player.name, data.player.room)
-      updatedPlayer.state = !data.player.state
-      if (room) {
-        updatedPlayer.initBoard(room.piecesList[updatedPlayer.listIdx])
-        room.updatePlayer(updatedPlayer);
-        utils.refresh(socket, room, null, true);
-      }
-    });
-  };
-
   const startGame = (socket: any) => {
-    socket.on("StartGame", (room: Room) => {
+    socket.on("StartGame", (room: iRoom) => {
       let newRoom = utils.findRoomById(room.id, rooms);
       if (newRoom) {
         newRoom.players = room.players
         newRoom.settingsRoom = room.settingsRoom
-        if (newRoom.players.length > 1) newRoom.settingsRoom.mode = {multiplayer: true, solo: false};
-        for (var i = 0; i < newRoom.players.length; i++) {
-          if (newRoom.players[i].state && newRoom.players[i].id !== socket.id) {
-            newRoom.everyOneIsReady = true;
-          }
-          if (
-            !newRoom.players[i].state &&
-            newRoom.players[i].id !== socket.id
-            ) {
-              newRoom.everyOneIsReady = false;
-            }
-          }
-          
-          if (newRoom.everyOneIsReady || (newRoom.players.length === 1 && newRoom.players[0].id === socket.id)) {
-            newRoom.startGame();
-            
-            utils.refresh(socket, newRoom, null, true);
-        } else {
-          utils.refresh(
-            socket,
-            newRoom,
-            "All players must be ready to start a game...",
-            true
-          );
-        }
+        newRoom.startGame();
+        newRoom.game.location = "Game"
+        utils.refresh(socket, newRoom, "", true);
       }
     });
   };
 
   io.on("connection", (socket: any) => {
     socket.emit("CreatePlayerId", socket.id);
-    // console.log("New client connected with id: " + socket.id);
-
     joinCreateRoom(socket);
     leaveRoom(socket);
-    ready(socket);
     startGame(socket);
     game.startGame(socket)
     game.play(socket, rooms)
+    game.resetRoom(socket)
     // socket.on("disconnect", () => console.log("Client disconnected"));
+    socket.on('disconnect', (reason: string) => {
+      if (reason === 'io server disconnect') {
+        console.log("Client disconnected, we try to reconnect him")
+        // the disconnection was initiated by the server, you need to reconnect manually
+        socket.connect();
+      }
+      // else the socket will automatically try to reconnect
+    });
   });
   return io;
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 
-import Formulaire, { Props } from "./Formulaire";
+import Formulaire, { Props } from "../../client/components/HomePage/Formulaire";
 
 function renderFormulaire(props: Partial<Props> = {}) {
   const defaultProps: Props = {
@@ -31,8 +31,7 @@ describe("<Formulaire />", () => {
     expect(onFormValidated).toHaveBeenCalledWith({
       id: "",
       name: "test Name",
-      room: "test Room",
-      state: false
+      room: "test Room"    
     });
   });
 });

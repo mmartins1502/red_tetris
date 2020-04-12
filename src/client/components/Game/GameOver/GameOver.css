@@ -1,0 +1,8 @@
+.ProgressBar {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    font-size: 8 !important;
+}

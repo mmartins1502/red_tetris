@@ -1,52 +1,35 @@
 // import * as actionTypes from "../actions/actionTypes";
-import { roomReducer } from "./roomReducer";
-import { SocketActionTypes } from "../actions/roomActions";
-// import { inheritInnerComments } from "@babel/types";
+import { roomReducer, iState } from "../../client/store/reducers/roomReducer";
+import { SocketActionTypes } from "../../client/store/actions/roomActions";
+import { iPlayer, Player } from '../../Shared/models/Player';
+import { iRoom, Room } from '../../Shared/models/Room';
 
 describe("roomReducer", () => {
-  const initialState = {
-    player: {
-      id: "",
-      name: "",
-      room: "",
-      state: false
-    },
-    room: {
-      id: "",
-      players: [],
-      inGame: false,
-      star: {
-        id: "",
-        name: "",
-        room: "",
-        state: false
-      }
-    },
+
+  const player: iPlayer = new Player("", "", "")
+  const room: iRoom = new Room("")!
+  const url = "https://ia600504.us.archive.org/33/items/TetrisThemeMusic/Tetris.mp3";
+  
+  const initialState: iState = {
+    player: player,
+    room: room,
     error: "",
-    redirect: false
+    redirect: false,
+    music: {
+      on: false,
+      audio: new Audio(url)
+    }
   };
 
-  const playerTest = {
-    id: "playerIdTest",
-    name: "NameTest",
-    room: "roomTest",
-    state: false
-  };
+  const playerTest = new Player("playerIdTest", "NameTest", "roomTest")
+  // const playerTest2 = new Player("playerIdTest2", "NameTest2", "roomTest")
 
-  const roomTest = {
-    id: "roomTest",
-    players: [
-      playerTest,
-      {
-        id: "playerIdTest2",
-        name: "NameTest2",
-        room: "roomTest",
-        state: false
-      }
-    ],
-    inGame: false,
-    star: playerTest
-  };
+
+  const roomTest: iRoom = new Room("roomTest")
+
+  room.addPlayer("playerIdTest", "NameTest", "roomTest")
+  room.addPlayer("playerIdTest2", "NameTest2", "roomTest")
+
   it("should test the CREATE_PLAYER_ID reducer", () => {
     expect(
       roomReducer(initialState, {
@@ -66,12 +49,7 @@ describe("roomReducer", () => {
     expect(
       roomReducer(initialState, {
         type: SocketActionTypes.CHECK_ROOM,
-        handle: {
-          id: "playerIdTest",
-          name: "nameTest",
-          room: "roomTest",
-          state: false
-        }
+        handle: playerTest
       })
     ).toEqual(initialState);
   });
@@ -85,6 +63,7 @@ describe("roomReducer", () => {
         error: ""
       })
     ).toEqual({
+      ...initialState,
       player: playerTest,
       room: roomTest,
       error: "",
@@ -101,6 +80,7 @@ describe("roomReducer", () => {
         error: "some errors"
       })
     ).toEqual({
+      ...initialState,
       player: playerTest,
       room: roomTest,
       error: "some errors",
@@ -143,15 +123,15 @@ describe("roomReducer", () => {
     ).toEqual(initialState);
   });
 
-  it("should test the READY reducer", () => {
-    expect(
-      roomReducer(initialState, {
-        type: SocketActionTypes.READY,
-        player: playerTest,
-        room: roomTest
-      })
-    ).toEqual(initialState);
-  });
+  // it("should test the READY reducer", () => {
+  //   expect(
+  //     roomReducer(initialState, {
+  //       type: SocketActionTypes.READY,
+  //       player: playerTest,
+  //       room: roomTest
+  //     })
+  //   ).toEqual(initialState);
+  // });
 
   it("should test the DEFAULT reducer", () => {
     expect(

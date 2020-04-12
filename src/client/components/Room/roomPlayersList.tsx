@@ -7,15 +7,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import StarIcon from "@material-ui/icons/Star";
-import DoneIcon from "@material-ui/icons/Done";
+// import DoneIcon from "@material-ui/icons/Done";
 
 import "./roomPlayersList.module.css";
-import { Player } from "../../../Shared/models/Player";
-import { Room } from "../../../Shared/models/Room";
+import { iPlayer } from "../../../Shared/models/Player";
+import { iRoom } from "../../../Shared/models/Room";
 
 interface IProps {
-  player: Player;
-  room: Room;
+  player: iPlayer;
+  room: iRoom;
 }
 
 const roomPlayersList: SFC<IProps> = (props) => {
@@ -60,9 +60,9 @@ const roomPlayersList: SFC<IProps> = (props) => {
           </ListItem>
         );
       } else {
-        const done = player.state ? (
-          <DoneIcon style={{ color: "green" }} />
-        ) : null;
+        // const done = player.state ? (
+        //   <DoneIcon style={{ color: "green" }} />
+        // ) : null;
         return (
           <ListItem key={player.id}>
             <ListItemText
@@ -74,7 +74,7 @@ const roomPlayersList: SFC<IProps> = (props) => {
                   : { color: "rgba(10, 10, 10, 0.781)" }
               }
             />
-            {done}
+            {/* {done} */}
           </ListItem>
         );
       }

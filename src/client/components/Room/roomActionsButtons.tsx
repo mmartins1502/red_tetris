@@ -5,15 +5,15 @@ import "./roomActions.module.css";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { makeStyles } from "@material-ui/core/styles";
-import { Player } from "../../../Shared/models/Player";
-import { Room } from "../../../Shared/models/Room";
+import { iPlayer } from "../../../Shared/models/Player";
+import { iRoom } from "../../../Shared/models/Room";
 
 export interface IProps {
-  me: Player;
-  room: Room;
+  me: iPlayer;
+  room: iRoom;
   startGame: () => void;
   leaveRoom: () => void;
-  ready: () => void;
+  // ready: () => void;
 }
 
 const roomActions: SFC<IProps> = (props) => {
@@ -33,10 +33,10 @@ const roomActions: SFC<IProps> = (props) => {
       <Button
         name="ready"
         data-testid="ready"
-        onClick={props.ready}
-        style={{ color: "#d40e0e" }}
+        onClick={props.startGame}
+        disabled
       >
-        READY
+        START
       </Button>
     ) : (
       <Button

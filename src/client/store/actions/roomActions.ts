@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { iPlayer } from "../../../Shared/models/Player";
-import { iRoom, iSettings, Room } from "../../../Shared/models/Room";
+import { iRoom, iSettings } from "../../../Shared/models/Room";
 import { ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { iState } from "../reducers/roomReducer";
@@ -21,6 +21,8 @@ export enum SocketActionTypes {
   SETTINGS = "SETTINGS",
   SPEED_UP = "SPEED_UP",
   RESET_ROOM = "RESET_ROOM",
+  MUSIC = "MUSIC",
+  RESET_PLAYER = "RESET_PLAYER"
 }
 
 interface defaultAction {
@@ -61,15 +63,32 @@ export const createPlayerId: ActionCreator<ThunkAction<
 
 interface checkRoomAction {
   type: SocketActionTypes.CHECK_ROOM;
+  handle: any
 }
 
-export const checkRoom = (formData: iPlayer) => {
+export const checkRoom = (formData: any) => {
   console.log("[Room] action creator");
   return {
     type: SocketActionTypes.CHECK_ROOM,
     event: "Room",
     emit: true,
     handle: formData
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+interface musicAction {
+  type: SocketActionTypes.MUSIC;
+  music: any
+}
+
+export const music = ( music: any) => {
+  console.log("[Music] action creator");
+
+  return {
+    type: SocketActionTypes.MUSIC,
+    music: music
   };
 };
 
@@ -207,25 +226,42 @@ export const refreshRoom: ActionCreator<ThunkAction<
 };
 
 
+///////////////////////////////////////////////////////////////////////////
+
+
+// interface ResetRoomParamsAction {
+//   type: SocketActionTypes.RESET_ROOM;
+//   player: iPlayer
+//   room: iRoom
+// }
+
+
+// export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
+//   let newRoom: iRoom = new Room(room.id)
+//   room.players.map((play: iPlayer) => {
+//      return newRoom.addPlayer(play.id, play.name, play.room)
+//   })
+//   newRoom.resetRoom()
+//   let newPlayer = newRoom.players.find((play: iPlayer) => play.id === player.id)
+//   return {
+//     type: SocketActionTypes.RESET_ROOM,
+//     player: newPlayer,
+//     room: newRoom
+//   }
+// }
+
+
 interface ResetRoomParamsAction {
   type: SocketActionTypes.RESET_ROOM;
-  player: iPlayer
-  room: iRoom
 }
 
 
 export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
-  let newRoom: iRoom = new Room(room.id)
-  room.players.every((play: iPlayer) => {
-     return newRoom.addPlayer(play.id, play.name, play.room)
-  })
-  console.log('newRoom.players', newRoom.players)
-  newRoom.resetRoom()
-  let newPlayer = newRoom.players.find((play: iPlayer) => play.id === player.id)
+  console.log("[onResetRoomParams]")
   return {
-    type: SocketActionTypes.RESET_ROOM,
-    player: newPlayer,
-    room: newRoom
+    event: "ResetRoom",
+    emit: true,
+    handle: {player, room}
   }
 }
 
@@ -233,6 +269,7 @@ export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
 
 interface startGameAction {
   type: SocketActionTypes.START_GAME;
+  handle: iRoom
 }
 
 export const startGame = (room: iRoom) => {
@@ -245,17 +282,17 @@ export const startGame = (room: iRoom) => {
 
 ///////////////////////////////////////////////////////////////////////////
 
-interface readyAction {
-  type: SocketActionTypes.READY;
-}
+// interface readyAction {
+//   type: SocketActionTypes.READY;
+// }
 
-export const ready = (me: iPlayer, room: iRoom) => {
-  return {
-    event: "Ready",
-    emit: true,
-    handle: { player: me, room: room }
-  };
-};
+// export const ready = (me: iPlayer, room: iRoom) => {
+//   return {
+//     event: "Ready",
+//     emit: true,
+//     handle: { player: me, room: room }
+//   };
+// };
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -300,6 +337,53 @@ export const speedUp = (speed: number) => {
     newSpeed: speed
   }
 }
+///////////////////////////////////////////////////////////////////////////
+
+// interface resetPlayerAction {
+//   type: SocketActionTypes.RESET_PLAYER;
+//   player: iPlayer
+// }
+
+
+// export const resetPlayer = (player: iPlayer) => {
+//   return {
+//     type: SocketActionTypes.RESET_PLAYER,
+//     player: player
+//   }
+// }
+
+
+interface resetPlayerAction {
+  type: SocketActionTypes.RESET_PLAYER;
+  player: iPlayer;
+}
+
+export const resetPlayer: ActionCreator<ThunkAction<
+  Promise<any>,
+  iState,
+  null,
+  any
+>> = () => {
+  console.log("[resetPlayer]")
+  return async (dispatch) => {
+    return new Promise<any>((resolve) => {
+      dispatch({
+        type: actionTypes.RESET_PLAYER,
+        event: "ResetPlayer",
+        handle: (data: any) => {
+          console.log('data', data)
+          resolve(
+            dispatch({
+              type: actionTypes.RESET_PLAYER,
+              player: data.player,
+            })
+          );
+        }
+      });
+    });
+  };
+};
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -345,11 +429,13 @@ export type RoomActions =
   | leaveRoomReducerAction
   | refreshRoomAction
   | startGameAction
-  | readyAction
+  // | readyAction
   | refreshPlayerAskAction
   | initBoardAction
   | refreshPlayerAction
   | settingsChangedAction
   | speedUpAction
   | ResetRoomParamsAction
+  | musicAction
+  | resetPlayerAction
   | defaultAction;
