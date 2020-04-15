@@ -80,12 +80,15 @@ describe("Server", () => {
       });
     });
 
+
     test('should register event "CreatePlayerId" ', (done) => {
       client.on("connect", () => {
         client.on("CreatePlayerId", (data: any) => {
-          if (data) {
-            done();
-          }
+          // if (data) {
+          //   done();
+          // }
+          expect(data).toBeDefined()
+          done()
         });
       });
     });
@@ -158,8 +161,8 @@ describe("Server", () => {
       };
       client.on("connect", () => {
         client.emit("LeaveRoom", data);
-        client.on("RefreshRoom", (data: any) => {
-          if (data && data.room) {
+        client.on("RefreshRoom", (Rdata: any) => {
+          if (Rdata && Rdata.room) {
             done();
           }
         });
@@ -167,16 +170,7 @@ describe("Server", () => {
     });
 
     test('should register event "StartGame" ', (done) => {
-      let dataToSend = {
-        player: {
-          ...playerTest,
-          room: "13"
-        },
-        room: roomTest4
-      };
       client.on("connect", () => {
-        client.emit("Ready", dataToSend);
-        client.on("RefreshRoom", (data: any) => {});
         client.emit("StartGame", roomTest4);
         client.on("RefreshRoom", (data: any) => {
           if (data && data.room && data.room.inGame) {

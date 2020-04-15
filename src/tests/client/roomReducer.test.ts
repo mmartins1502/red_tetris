@@ -118,20 +118,99 @@ describe("roomReducer", () => {
     expect(
       roomReducer(initialState, {
         type: SocketActionTypes.START_GAME,
-        handle: roomTest
       })
     ).toEqual(initialState);
   });
 
-  // it("should test the READY reducer", () => {
-  //   expect(
-  //     roomReducer(initialState, {
-  //       type: SocketActionTypes.READY,
-  //       player: playerTest,
-  //       room: roomTest
-  //     })
-  //   ).toEqual(initialState);
-  // });
+  it("should test the SETTINGS reducer", () => {
+    expect(
+      roomReducer(initialState, {
+        type: SocketActionTypes.SETTINGS,
+        settingsRoom: {
+          ...initialState.room.settingsRoom
+        }
+      })
+    ).toEqual(initialState);
+  });
+
+  it("should test the LEAVE_ROOM_REDUCER reducer", () => {
+    expect(roomReducer(initialState, {
+        type: SocketActionTypes.LEAVE_ROOM_REDUCER
+      })
+    ).toEqual(roomReducer(initialState, {
+      type: SocketActionTypes.LEAVE_ROOM_REDUCER
+    }));
+
+  });
+
+  it("should test the REFRESH_PLAYER_ASK reducer", () => {
+    expect(roomReducer(initialState, {
+        type: SocketActionTypes.REFRESH_PLAYER_ASK
+      })
+    ).toEqual(initialState);
+  });
+
+  it("should test the REFRESH_PLAYER_ASK reducer", () => {
+    expect(roomReducer(initialState, {
+        type: SocketActionTypes.REFRESH_PLAYER,
+        player: playerTest,
+        error: ""
+      })
+    ).toEqual({
+      ...initialState,
+      player: playerTest
+    });
+  });
+
+
+  it("should test the SPEED_UP reducer", () => {
+    expect(
+      roomReducer(initialState, {
+        type: SocketActionTypes.SPEED_UP,
+        newSpeed: 4000
+      })
+    ).toEqual({
+      ...initialState,
+      room: {
+        ...initialState.room,
+        speed: 4000
+      }
+    });
+  });
+
+  it("should test the RESET_ROOM reducer", () => {
+    expect(
+      roomReducer(initialState, {
+        type: SocketActionTypes.RESET_ROOM
+      })
+    ).toEqual(initialState);
+  });
+
+  it("should test the MUSIC reducer", () => {
+    expect(
+      roomReducer(initialState, {
+        type: SocketActionTypes.MUSIC,
+        music: 4000
+      })
+    ).toEqual({
+      ...initialState,
+      music: 4000
+    });
+  });
+
+
+  it("should test the RESET_PLAYER reducer", () => {
+    expect(
+      roomReducer(initialState, {
+        type: SocketActionTypes.RESET_PLAYER,
+        player: playerTest
+      })
+    ).toEqual({
+      ...initialState,
+      player: playerTest
+    });
+  });
+
 
   it("should test the DEFAULT reducer", () => {
     expect(

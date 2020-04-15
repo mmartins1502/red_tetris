@@ -101,4 +101,162 @@ describe("Actions", () => {
     expect(actions.leaveRoom(playerTest, roomTest)).toEqual(expectedResponse);
   });
 
+  it("should test action LEAVE_ROOM_REDUCER", async () => {
+    const expectedResponse = {
+      type: types.LEAVE_ROOM_REDUCER
+    };
+
+    expect(actions.leaveRoomReducer()).toEqual(expectedResponse);
+  });
+
+  it("should test action MUSIC", async () => {
+    const music = {
+      on: false,
+      audio: new Audio("url")
+    }
+    const expectedResponse = {
+      type: types.MUSIC,
+      music: music
+    };
+
+    expect(actions.music(music)).toEqual(expectedResponse);
+  });
+
+  it("should test action SETTINGS", async () => {
+    const settingsRoom = {
+      on: false
+    }
+    const expectedResponse = {
+      type: types.SETTINGS,
+      settingsRoom: settingsRoom
+    };
+
+    expect(actions.settingsChanged(settingsRoom)).toEqual(expectedResponse);
+  });
+
+
+  it("should test action REFRESH_ROOM", async () => {
+    const store = mockStore({});
+    store.getState = () => mockState;
+
+    roomTest.addPlayer(playerTest.id, playerTest.name, playerTest.room)
+    playerTest.initBoard("L")
+    roomTest.updatePlayer(playerTest)
+
+    const expectedResponse = [
+      {
+        type: types.REFRESH_ROOM,
+        room: roomTest,
+        error: ""
+      }
+    ];
+
+    store.dispatch(actions.leaveRoom(playerTest, roomTest));
+    
+    return store.dispatch<any>(actions.refreshRoom()).then(() => {
+      expect(store.getActions()).toBeTruthy();
+      expect(store.getActions().keys).toEqual(expectedResponse.keys);
+    });
+  });
+
+
+  it("should  test action RESET_ROOM", async () => {
+    const expectedResponse = {
+      type: types.RESET_ROOM,
+      event: "ResetRoom",
+      emit: true,
+      handle: { player: playerTest, room: roomTest }
+    };
+
+    expect(actions.onResetRoomParams(playerTest, roomTest)).toEqual(expectedResponse);
+  });
+
+  it("should  test action START_GAME", async () => {
+    const expectedResponse = {
+      type: types.START_GAME,
+      event: "StartGame",
+      emit: true,
+      handle: roomTest
+    };
+
+    expect(actions.startGame(roomTest)).toEqual(expectedResponse);
+  });
+
+  it("should test action REFRESH_PLAYER_ASK", async () => {
+    const expectedResponse = {
+      type: types.REFRESH_PLAYER_ASK,
+      event: "Board",
+      emit: true,
+      handle: {player: playerTest, room: roomTest, move: "move"}
+    };
+
+    expect(actions.refreshPlayerAsk(playerTest, roomTest, "move")).toEqual(expectedResponse);
+  });
+
+  it("should test action INIT_BOARD", async () => {
+    const expectedResponse = {
+      type: types.INIT_BOARD,
+      event: "initialBoard",
+      emit: true,
+      handle: {player: playerTest, room: roomTest}
+    };
+
+    expect(actions.initBoard(playerTest, roomTest)).toEqual(expectedResponse);
+  });
+
+  it("should test action SPEED_UP", async () => {
+    const expectedResponse = {
+      type: types.SPEED_UP,
+      newSpeed: 4000
+    };
+
+    expect(actions.speedUp(4000)).toEqual(expectedResponse);
+  });
+
+
+  it("should test action RESET_PLAYER", async () => {
+    const store = mockStore({});
+    store.getState = () => mockState;
+
+    roomTest.addPlayer(playerTest.id, playerTest.name, playerTest.room)
+    playerTest.initBoard("L")
+    roomTest.updatePlayer(playerTest)
+
+    const expectedResponse = [
+      {
+        type: types.RESET_PLAYER,
+        player: playerTest
+      }
+    ];
+
+    store.dispatch(actions.onResetRoomParams(playerTest, roomTest));
+    return store.dispatch<any>(actions.resetPlayer()).then(() => {
+      expect(store.getActions()).toBeTruthy();
+      expect(store.getActions().keys).toEqual(expectedResponse.keys);
+    });
+  });
+
+  it("should test action REFRESH_PLAYER", async () => {
+    const store = mockStore({});
+    store.getState = () => mockState;
+
+    roomTest.addPlayer(playerTest.id, playerTest.name, playerTest.room)
+    playerTest.initBoard("L")
+    roomTest.updatePlayer(playerTest)
+
+    const expectedResponse = [
+      {
+        type: types.REFRESH_PLAYER,
+        player: playerTest,
+        error: ""
+      }
+    ];
+
+    store.dispatch(actions.initBoard(playerTest, roomTest));
+    return store.dispatch<any>(actions.refreshPlayer()).then(() => {
+      expect(store.getActions()).toBeTruthy();
+      expect(store.getActions().keys).toEqual(expectedResponse.keys);
+    });
+  });
+
 });

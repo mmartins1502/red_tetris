@@ -53,7 +53,7 @@ export interface iRoom {
   removePlayer: (playerId: string, rooms: iRoom[]) => iRoom[];
   updatePlayer: (updatedPlayer: iPlayer) => void;
   endGame: () => void;
-  resetRoom: () => void
+  // resetRoom: () => void
 }
 
 
@@ -128,14 +128,14 @@ export class Room implements iRoom {
     this.inGame = false;
   }
 
-  public resetRoom() {
-    this.inGame = false;
-    this.piecesList = [];
-    this.piecesList = this.generator();
-    this.speed = 1000;
-    this.settingsRoom = initialSettings;
-    this.malus = 0;
-    this.game.location = "Room"
+  // public resetRoom() {
+  //   this.inGame = false;
+  //   this.piecesList = [];
+  //   this.piecesList = this.generator();
+  //   this.speed = 1000;
+  //   this.settingsRoom = initialSettings;
+  //   this.malus = 0;
+  //   this.game.location = "Room"
 
-  }
+  // }
 }

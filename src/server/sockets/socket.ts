@@ -17,7 +17,6 @@ export const socketConfig = (rooms: iRoom[], server: any) => {
       name: string;
     }
     socket.on("Room", async (data: idata) => {
-      console.log("[joinCreateRoom] Room event")
       let error = "";
       let room: Room = utils.findRoomById(data.room, rooms);
 
@@ -90,10 +89,11 @@ export const socketConfig = (rooms: iRoom[], server: any) => {
     game.startGame(socket)
     game.play(socket, rooms)
     game.resetRoom(socket)
+
     // socket.on("disconnect", () => console.log("Client disconnected"));
     socket.on('disconnect', (reason: string) => {
       if (reason === 'io server disconnect') {
-        console.log("Client disconnected, we try to reconnect him")
+        // console.log("Client disconnected, we try to reconnect him")
         // the disconnection was initiated by the server, you need to reconnect manually
         socket.connect();
       }

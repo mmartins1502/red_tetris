@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 //IMPORT MODELS
-import { Player, iPlayer } from "../../../Shared/models/Player";
+import { iPlayer } from "../../../Shared/models/Player";
 import { iRoom } from "../../../Shared/models/Room";
 
 //COMPONENTS
@@ -77,7 +77,7 @@ export const HomePage: React.FC<IProps> = (props) => {
   );
 };
 
-const mapStateToProps = (store: IAppState) => {
+export const mapStateToProps = (store: IAppState) => {
   return {
     playerId: store.roomState.player.id,
     player: store.roomState.player,
@@ -88,9 +88,9 @@ const mapStateToProps = (store: IAppState) => {
   };
 };
 
-const mapDispatchToProps = {
+export const mapDispatchToProps = {
   onCreatePlayerId: () => actions.createPlayerId(),
-  onFormValidated: (formData: Player) => actions.checkRoom(formData),
+  onFormValidated: (formData: any) => actions.checkRoom(formData),
   onRoomNumber: () => actions.roomHomeInfos(),
   handleMusic: (music: any) => actions.music(music)
 };

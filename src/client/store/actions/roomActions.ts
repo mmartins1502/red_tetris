@@ -136,6 +136,20 @@ export const roomHomeInfos: ActionCreator<ThunkAction<
 
 ///////////////////////////////////////////////////////////////////////////
 
+
+interface leaveRoomReducerAction {
+  type: SocketActionTypes.LEAVE_ROOM_REDUCER;
+}
+
+export const leaveRoomReducer = () => {
+  return {
+    type: SocketActionTypes.LEAVE_ROOM_REDUCER,
+  };
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+
 interface leaveRoomAction {
   handle: {
     player: iPlayer;
@@ -144,18 +158,6 @@ interface leaveRoomAction {
   type: SocketActionTypes.LEAVE_ROOM;
 }
 
-interface leaveRoomReducerAction {
-  type: SocketActionTypes.LEAVE_ROOM_REDUCER;
-  player: iPlayer;
-  room: iRoom;
-}
-
-export const leaveRoomReducer = () => {
-  console.log("[leaveRoomReducer]")
-  return {
-    type: SocketActionTypes.LEAVE_ROOM_REDUCER,
-  };
-};
 
 export const leaveRoom = (me: iPlayer, room: iRoom) => {
   const data = {
@@ -205,7 +207,7 @@ export const refreshRoom: ActionCreator<ThunkAction<
   null,
   any
 >> = () => {
-  // console.log("[refreshRoom] action creator");
+  console.log("[refreshRoom] action creator");
   return async (dispatch) => {
     return new Promise<any>((resolve) => {
       dispatch({
@@ -229,28 +231,6 @@ export const refreshRoom: ActionCreator<ThunkAction<
 ///////////////////////////////////////////////////////////////////////////
 
 
-// interface ResetRoomParamsAction {
-//   type: SocketActionTypes.RESET_ROOM;
-//   player: iPlayer
-//   room: iRoom
-// }
-
-
-// export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
-//   let newRoom: iRoom = new Room(room.id)
-//   room.players.map((play: iPlayer) => {
-//      return newRoom.addPlayer(play.id, play.name, play.room)
-//   })
-//   newRoom.resetRoom()
-//   let newPlayer = newRoom.players.find((play: iPlayer) => play.id === player.id)
-//   return {
-//     type: SocketActionTypes.RESET_ROOM,
-//     player: newPlayer,
-//     room: newRoom
-//   }
-// }
-
-
 interface ResetRoomParamsAction {
   type: SocketActionTypes.RESET_ROOM;
 }
@@ -259,6 +239,7 @@ interface ResetRoomParamsAction {
 export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
   console.log("[onResetRoomParams]")
   return {
+    type: SocketActionTypes.RESET_ROOM,
     event: "ResetRoom",
     emit: true,
     handle: {player, room}
@@ -269,30 +250,17 @@ export const onResetRoomParams = (player: iPlayer, room: iRoom) => {
 
 interface startGameAction {
   type: SocketActionTypes.START_GAME;
-  handle: iRoom
 }
 
 export const startGame = (room: iRoom) => {
   return {
+    type: SocketActionTypes.START_GAME,
     event: "StartGame",
     emit: true,
     handle: room
   };
 };
 
-///////////////////////////////////////////////////////////////////////////
-
-// interface readyAction {
-//   type: SocketActionTypes.READY;
-// }
-
-// export const ready = (me: iPlayer, room: iRoom) => {
-//   return {
-//     event: "Ready",
-//     emit: true,
-//     handle: { player: me, room: room }
-//   };
-// };
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -302,6 +270,7 @@ interface refreshPlayerAskAction {
 
 export const refreshPlayerAsk = (player: iPlayer, room: iRoom, move: string) => {
   return {
+    type: SocketActionTypes.REFRESH_PLAYER_ASK,
     event: "Board",
     emit: true,
     handle: {player: player, room: room, move: move}
@@ -313,17 +282,20 @@ export const refreshPlayerAsk = (player: iPlayer, room: iRoom, move: string) => 
 
 interface initBoardAction {
   type: SocketActionTypes.INIT_BOARD;
-  // player: Player;
 }
 
 export const initBoard = (player: iPlayer, room: iRoom) => {
   console.log('[initBoard]')
   return {
+    type: SocketActionTypes.INIT_BOARD,
     event: "initialBoard",
     emit: true,
     handle: {player: player, room: room}
   };
 };
+
+
+///////////////////////////////////////////////////////////////////////////
 
 
 interface speedUpAction {
@@ -337,20 +309,8 @@ export const speedUp = (speed: number) => {
     newSpeed: speed
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////
-
-// interface resetPlayerAction {
-//   type: SocketActionTypes.RESET_PLAYER;
-//   player: iPlayer
-// }
-
-
-// export const resetPlayer = (player: iPlayer) => {
-//   return {
-//     type: SocketActionTypes.RESET_PLAYER,
-//     player: player
-//   }
-// }
 
 
 interface resetPlayerAction {

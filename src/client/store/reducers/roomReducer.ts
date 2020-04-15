@@ -34,6 +34,7 @@ export const roomReducer: Reducer<iState, RoomActions> = (
   action
 ) => {
   switch (action.type) {
+    
     case actionTypes.CREATE_PLAYER_ID:
       return {
         ...state,
@@ -42,8 +43,10 @@ export const roomReducer: Reducer<iState, RoomActions> = (
           id: action.payload
         }
       };
+
     case actionTypes.CHECK_ROOM:
       return state;
+
     case actionTypes.ROOM_AND_PLAYER:
       return {
         ...state,
@@ -52,6 +55,7 @@ export const roomReducer: Reducer<iState, RoomActions> = (
         error: action.error,
         redirect: true
       };
+
     case actionTypes.SETTINGS:
         return {
           ...state,
@@ -60,28 +64,33 @@ export const roomReducer: Reducer<iState, RoomActions> = (
             settingsRoom: action.settingsRoom
           }
         };
+
     case actionTypes.LEAVE_ROOM:
       return state;
+
     case actionTypes.LEAVE_ROOM_REDUCER:
       return initialState
+
     case actionTypes.REFRESH_ROOM:
       return {
         ...state,
         room: action.room,
         error: action.error
       };
+
     case actionTypes.START_GAME:
       return state;
-    // case actionTypes.READY:
-    //   return state;
+
     case actionTypes.REFRESH_PLAYER_ASK:
       return state;
+
     case actionTypes.REFRESH_PLAYER:
         return {
           ...state,
           player: action.player,
           error: action.error
         };
+
     case actionTypes.SPEED_UP:
       return {
         ...state,
@@ -90,18 +99,22 @@ export const roomReducer: Reducer<iState, RoomActions> = (
           speed: action.newSpeed
         }
       };
+
     case actionTypes.RESET_ROOM:
         return state
+
     case actionTypes.MUSIC:
       return {
         ...state,
         music: action.music
       }
+
     case actionTypes.RESET_PLAYER:
       return {
         ...state,
         player: action.player
       }
+
     default:
       return state;
   }

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.67% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.67% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,32 +89,32 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,29 +123,29 @@
 import { Room, iRoom } from "../../Shared/models/Room";
 import { iPlayer } from 'Shared/models/Player';
 &nbsp;
-export const createNewRoom = <span class="fstat-no" title="function not covered" >(i</span>d: string, rooms: Room[]) =&gt; {
-  let room = <span class="cstat-no" title="statement not covered" >new Room(id);</span>
-<span class="cstat-no" title="statement not covered" >  rooms.push(room);</span>
-<span class="cstat-no" title="statement not covered" >  return room as Room</span>
+export const createNewRoom = (id: string, rooms: Room[]) =&gt; {
+  let room = new Room(id);
+  rooms.push(room);
+  return room as Room
 };
 &nbsp;
-export const findRoomById = <span class="fstat-no" title="function not covered" >(i</span>d: string, rooms: iRoom[]) =&gt; {
-  const room = <span class="cstat-no" title="statement not covered" >rooms.find(<span class="fstat-no" title="function not covered" >(r</span>oom) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return room.id === id;</span>
+export const findRoomById = (id: string, rooms: iRoom[]) =&gt; {
+  const room = rooms.find((room) =&gt; {
+    return room.id === id;
   });
-<span class="cstat-no" title="statement not covered" >  return room as iRoom</span>
+  return room as iRoom
 };
 &nbsp;
-export const refresh = <span class="fstat-no" title="function not covered" >(s</span>ocket: any, room: iRoom, error: string, all: boolean) =&gt; {
+export const refresh = (socket: any, room: iRoom, error: string, all: boolean) =&gt; {
   // console.log("[refresh : Room Infos]", room);
-<span class="cstat-no" title="statement not covered" >  if (room) {</span>
-<span class="cstat-no" title="statement not covered" >    room.players.map(<span class="fstat-no" title="function not covered" >(p</span>layer: iPlayer) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      return socket</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (room) {
+    room.players.map((player: iPlayer) =&gt; {
+      return socket
         .to(player.id)
         .emit("RefreshRoom", { room: room, error: error });
     });
-<span class="cstat-no" title="statement not covered" >    if (all) {</span>
-<span class="cstat-no" title="statement not covered" >      socket.emit("RefreshRoom", { room: room, error: error });</span>
+    if (all) {
+      socket.emit("RefreshRoom", { room: room, error: error });
     }
   }
 };
@@ -157,7 +157,7 @@ export const refresh = <span class="fstat-no" title="function not covered" >(s</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Apr 12 2020 16:18:11 GMT+0200 (CEST)
+                at Tue Apr 14 2020 17:11:48 GMT+0200 (CEST)
             </div>
         </div>
         <script src="../../prettify.js"></script>

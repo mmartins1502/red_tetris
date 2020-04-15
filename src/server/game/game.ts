@@ -112,7 +112,7 @@ const indestructiblesLines = (score: iScore, room: iRoom, socket: any, rooms: iR
     newRoom.players = room.players
     newRoom.malus = score.lines -1
     newRoom.settingsRoom = room.settingsRoom
-    utils.refresh(socket, newRoom, "", false)
+    utils.refresh(socket, newRoom, "", true)
 }
 
 
@@ -182,7 +182,7 @@ export const play = (socket: any, rooms: iRoom[]) => {
                     if (!room.piecesList[player.listIdx + 3]) {
                         room.piecesList = generator(room.piecesList)  
                     }
-                    
+
                     if (score.lines > 1 && room.players.length > 1) indestructiblesLines(score, room, socket, rooms)
                     
                     let p = new Piece(room.piecesList[player.listIdx])
@@ -201,6 +201,10 @@ export const play = (socket: any, rooms: iRoom[]) => {
     })
 }
 
+interface iData {
+    room: iRoom
+}
+
 export const resetRoom = (socket: any) => {
     socket.on("ResetRoom", (data: iData) => {
         const { room } = data
@@ -211,7 +215,7 @@ export const resetRoom = (socket: any) => {
                 return newRoom.addPlayer(play.id, play.name, play.room)
             } else return play
         })
-        newRoom.resetRoom()
+        // newRoom.resetRoom()
         utils.refresh(socket, newRoom, "", true)
 
         newRoom.players.map((player: iPlayer) => {
