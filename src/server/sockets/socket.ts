@@ -90,14 +90,8 @@ export const socketConfig = (rooms: iRoom[], server: any) => {
     game.play(socket, rooms)
     game.resetRoom(socket)
 
-    // socket.on("disconnect", () => console.log("Client disconnected"));
-    socket.on('disconnect', (reason: string) => {
-      if (reason === 'io server disconnect') {
-        // console.log("Client disconnected, we try to reconnect him")
-        // the disconnection was initiated by the server, you need to reconnect manually
-        socket.connect();
-      }
-      // else the socket will automatically try to reconnect
+    socket.on("disconnect", () => {
+      leaveRoom(socket)
     });
   });
   return io;

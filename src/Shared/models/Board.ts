@@ -1,5 +1,5 @@
 import { Piece, iPiece } from './Piece';
-import  {POINTS}  from '../../Server/game/game';
+import  {POINTS}  from '../../server/game/game';
 
 
 export interface iScore {

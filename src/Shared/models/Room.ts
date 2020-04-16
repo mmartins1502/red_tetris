@@ -1,5 +1,5 @@
 import { Player, iPlayer } from "./Player";
-import { randomizer } from '../../Server/utils/randomizer';
+import { randomizer } from '../../server/utils/randomizer';
 import { iGame, Game } from './Game';
 
 

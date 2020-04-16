@@ -38,7 +38,6 @@ interface IProps extends RouteComponentProps {
   onRefreshPlayer: () => void;
   onleaveRoom: (me: iPlayer, room: iRoom) => void;
   onStartGame: (room: iRoom) => void;
-  // onReady: (me: iPlayer, room: iRoom) => void;
   onleaveRoomReducer: () => void
   onSettingsChanged: (settings: iSettings) => void
   handleMusic: (music: any) => void
@@ -51,14 +50,6 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
   const { onRereshRoom, onFormValidated, onRoomNumber, onCreatePlayerId, onRefreshPlayer, resetPlayer } = props;
   const {room, player} = props
   const params = useParams<{playerName: string, room: string}>()
-
-  // // const player = props.player.id ? room.players.find((play: iPlayer) => play.id === player.id) : props.player
-  // useEffect(() => {
-  //   if (props.player.id && room.id !== "") {
-  //     props.player = room.players.find((play: iPlayer) => play.id === props.player.id)
-  //   }
-  // })
-  // const {player} = props
 
 
   useEffect(() => {
@@ -93,10 +84,6 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
     props.onStartGame(props.room);
   };
 
-  // const ready = () => {
-  //   props.onReady(me, props.room);
-  // };
-
   let playersAndButtons = (
     <div className="BoxRoomHome">
       <h4>ROOM #{props.room ? props.room.id : null}</h4>
@@ -107,7 +94,6 @@ const RoomHome: FC<IProps & RouteComponentProps<{}>> = (props) => {
           me={me}
           leaveRoom={() => leaveRoom()}
           startGame={() => startGame()}
-          // ready={() => ready()}
         />
       </div>
     </div>
@@ -170,7 +156,6 @@ const mapDispatchToProps = {
   onRereshRoom: () => actions.refreshRoom(),
   onRefreshPlayer: () => actions.refreshPlayer(),
   onStartGame: (room: iRoom) => actions.startGame(room),
-  // onReady: (me: iPlayer, room: iRoom) => actions.ready(me, room),
   onSettingsChanged: (settings: iSettings) => actions.settingsChanged(settings),
   handleMusic: (music: any) => actions.music(music),
   resetPlayer: () => actions.resetPlayer()

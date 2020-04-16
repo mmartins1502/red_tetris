@@ -41,7 +41,7 @@ const Game: FC<IProps> = (props) => {
 const gamePage = useRef(null)
 const {onRefreshPlayer, onRereshRoom, resetPlayer} = props
 const {onRefreshPlayerAsk, player, room} = props
-console.log("[Game] props", props);
+// console.log("[Game] props", props);
   
   useEffect(() => {
     gamePage.current.focus()
