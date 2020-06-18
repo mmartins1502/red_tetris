@@ -3,6 +3,7 @@
 Premier projet React.js / TypeScript / Node.js
 
 Possibilité de jouer seul.
+
 En mode multi:
   - pour n lignes detruites, les adversaires reçoivent n-1 lignes indestructibles en bas de leur grille.
   - les spectres des adversaires sont visibles 
