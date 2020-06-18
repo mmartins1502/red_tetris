@@ -82,6 +82,8 @@ export const socketConfig = (rooms: iRoom[], server: any) => {
   };
 
   io.on("connection", (socket: any) => {
+    // console.log('socket.event', socket.event)
+    // console.log('socket', socket)
     socket.emit("CreatePlayerId", socket.id);
     joinCreateRoom(socket);
     leaveRoom(socket);

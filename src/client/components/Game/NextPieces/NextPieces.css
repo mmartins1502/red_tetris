@@ -41,7 +41,7 @@
     height: 15px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 500px) {
     .Next {
         height: 75%;
         width: 80%;

@@ -50,7 +50,7 @@
 }
 
 
-@media (max-width: 900px) {
+@media (max-width: 500px) {
     .Spectrum {
         flex-direction: row;
         justify-content: space-between;

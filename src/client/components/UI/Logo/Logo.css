@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 500px) {
   .Logo {
     width: 35%;
     margin-bottom: 2%;
