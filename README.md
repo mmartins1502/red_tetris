@@ -8,6 +8,11 @@ En mode multi:
   - pour n lignes detruites, les adversaires reçoivent n-1 lignes indestructibles en bas de leur grille.
   - les spectres des adversaires sont visibles 
   - 4 joueurs maximum par Room
+  - les joueurs reçoivent les mêmes tetriminos dans le même ordre
+  
+Tetriminos générés à la volé, via le véritable algorithme [Tetris: The Grand Master 3 - Terror-Instinct (2005)](https://simon.lc/the-history-of-tetris-randomizers)
+
+Affichage des 3 prochains Tetriminos.
 
 Contraintes : 
   - utilisation d'une hash based url
